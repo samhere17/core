@@ -11,7 +11,6 @@ import javax.servlet.ServletResponse;
 
 import org.iq.cache.CacheCleaner;
 import org.iq.cache.CacheEvictor;
-import org.iq.cache.SystemCache;
 import org.iq.config.ConfigFactory;
 import org.iq.config.SystemConfig;
 import org.iq.logger.LocalLogger;
@@ -117,7 +116,6 @@ public class StartupServlet extends GenericServlet {
 			}
 		}
 		
-		SystemCache.initialize();
 	    try {
 
 	       CacheEvictor.getEvictorInstance();

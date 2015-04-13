@@ -7,11 +7,34 @@ package org.iq.cache;
 
 /**
  * @author Sam
- *
+ * 
  */
 public interface CacheConstants {
-  
-  public static final String REGION_TYPES_REGION = "RegionTypesRegion";
-  public static final String DEFAULT_USER_REGION_TYPE = "DefaultRegionType";
 
+	public static final String REGION_TYPES_REGION = "RegionTypesRegion";
+	public static final String DEFAULT_USER_REGION_TYPE = "DefaultRegionType";
+
+	public enum CacheRegions {
+
+		/**
+		 * 
+		 */
+		UMS_SESSIONS("UMS_SESSIONS");
+
+		private final String cacheRegion;
+
+		/**
+		 * @param cacheRegion
+		 */
+		CacheRegions(String cacheRegion) {
+			this.cacheRegion = cacheRegion;
+		}
+
+		/**
+		 * @return String
+		 */
+		public String getCacheRegion() {
+			return cacheRegion;
+		}
+	}
 }

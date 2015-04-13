@@ -2,8 +2,7 @@ package org.iq.service.ums;
 
 import java.util.HashMap;
 
-import org.iq.cache.Cache;
-import org.iq.cache.regions.UserRegion;
+import org.iq.cache.CacheHelper;
 import org.iq.exception.CacheException;
 import org.iq.exception.ServiceException;
 import org.iq.logger.LocalLogger;
@@ -28,17 +27,15 @@ public class LogoutService extends BaseService {
 				.get(J_SESSION_ID_KEY));
 		try {
 
-			Cache cache = new Cache();
+			CacheHelper cacheHelper = new CacheHelper();
 
-			if (cache.isRegionExists("UMS", "UMS_SESSIONS") == false) {
-				cache.addRegionType("UMS", UserRegion.class);
-				cache.addRegion("UMS", "UMS_SESSIONS", new UserRegion(
-						"UMS_SESSIONS"));
+			if (cacheHelper.isRegionExists("UMS_SESSIONS") == false) {
+				cacheHelper.addRegion("UMS_SESSIONS", "Region to store user session details");
 			} else {
 				LocalLogger.logDebug("UMS_SESSIONS" + " Region Exists.");
 			}
 
-			cache.removeElement("UMS_SESSIONS~UMS", jSessionId);
+			cacheHelper.removeElement("UMS_SESSIONS", jSessionId);
 		} catch (CacheException e) {
 			throw new ServiceException(e);
 		}

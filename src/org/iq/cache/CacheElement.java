@@ -52,14 +52,6 @@ public class CacheElement {
     return creationTime;
   }
 
-/*  *//**
-   * @param creationTime
-   *          the creationTime to set
-   *//*
-  public void setCreationTime(Date creationTime) {
-    this.creationTime = creationTime;
-  }*/
-
   /**
    * @return the lastAccessTime
    */

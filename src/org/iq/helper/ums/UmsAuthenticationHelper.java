@@ -3,7 +3,6 @@ package org.iq.helper.ums;
 import java.util.Date;
 
 import org.iq.UmsConstants.SessionStatus;
-import org.iq.cache.regions.UserRegion;
 import org.iq.db.dao.ums.UmsLoginDetailsDao;
 import org.iq.db.dao.ums.UmsSessionDetailsDao;
 import org.iq.db.dao.ums.UmsUserDao;
@@ -127,7 +126,6 @@ public class UmsAuthenticationHelper extends BaseHelper {
 				//Inserting current login details
 				umsLoginDetailsDao.insert(currLoginDetails);
 
-				
 				umsSession.setAdditionalId(user.getAdditionalId());
 				umsSession.setInvalidMessage(null);
 				umsSession.setLastLoginDetails(lastLoginDetails);
@@ -141,15 +139,13 @@ public class UmsAuthenticationHelper extends BaseHelper {
 				umsSession.setUsername(username);
 				
 				
-				if (cache.isRegionExists("UMS", "UMS_SESSIONS") == false) {
-					cache.addRegionType("UMS", UserRegion.class);
-					cache.addRegion("UMS", "UMS_SESSIONS", new UserRegion(
-							"UMS_SESSIONS"));
+				if (cacheHelper.isRegionExists("UMS_SESSIONS") == false) {
+					cacheHelper.addRegion("UMS_SESSIONS", "Region to store user session details");
 				} else {
 					LocalLogger.logDebug("UMS_SESSIONS" + " Region Exists.");
 				}
 
-				cache.addElement("UMS", "UMS_SESSIONS", jSessionId, umsSession);
+				cacheHelper.addElement("UMS_SESSIONS", jSessionId, umsSession);
 				
 			} catch (DbException e) {
 				LocalLogger.logSevere(e);

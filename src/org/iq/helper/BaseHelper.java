@@ -1,7 +1,7 @@
 package org.iq.helper;
 
 import org.iq.Base;
-import org.iq.cache.Cache;
+import org.iq.cache.CacheHelper;
 import org.iq.db.DbSession;
 
 /**
@@ -14,7 +14,7 @@ public abstract class BaseHelper extends Base {
 	 */
 	private static final long serialVersionUID = 6278427302277154017L;
 
-	protected Cache cache = new Cache();
+	protected CacheHelper cacheHelper = new CacheHelper();
 
 	/**
 	 * @param dbSession

@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.iq.cache.regions.UserRegion;
+import org.iq.cache.regions.CacheRegion;
 import org.iq.exception.CacheException;
 
 /**
@@ -33,7 +33,7 @@ public class CacheEvictor implements Runnable {
    * 
    */
   private CacheEvictor() {
-    runner = new Thread(this, "Cache Evictor Thread");
+    runner = new Thread(this, "CacheHelper Evictor Thread");
     flag = true;
     runner.start();
   }
@@ -54,14 +54,14 @@ public class CacheEvictor implements Runnable {
    * @see java.lang.Runnable#run()
    */
   public void run() {
-    Set regionKeySet = null;
-    Cache cacheUtil = new Cache();
-    UserRegion userRegion = null;
+    Set<String> regionKeySet = null;
+    CacheHelper cacheUtil = new CacheHelper();
+    CacheRegion cacheRegion = null;
 
     // setting default interval value.
     int intervalMin = DEFAULT_INTERVAL;
 
-    // getting interval value from cache.
+    // getting interval value from cacheHelper.
     try {
       intervalMin =  getDefaultCacheEvictionInterval();
     }
@@ -81,24 +81,24 @@ public class CacheEvictor implements Runnable {
       }
 
       try {
-        // getting all regions in the cache.
-        regionKeySet = cacheUtil.getAllUserRegionIds();
-        logger.log(Level.INFO, "Cache has got " + regionKeySet.size()+ " regions.");
+        // getting all regions in the cacheHelper.
+        regionKeySet = cacheUtil.getAllUserRegionNames();
+        logger.log(Level.INFO, "CacheHelper has got " + regionKeySet.size()+ " regions.");
       }
       catch (CacheException e) {
         logger.log(Level.SEVERE,e.getMessage(),e);
       }
 
-      Iterator it = regionKeySet.iterator();
+      Iterator<String> it = regionKeySet.iterator();
       while (it.hasNext()) {
-        String regionId = (String)it.next();
+        String regionId = it.next();
         try {
-          userRegion = cacheUtil.getUserRegion(regionId);
+          cacheRegion = cacheUtil.getUserRegion(regionId);
         }
         catch (CacheException e) {
           logger.log(Level.SEVERE,e.getMessage(),e);
         }
-        startEviction(userRegion);
+        startEviction(cacheRegion);
       }
     }
   }
@@ -111,22 +111,22 @@ public class CacheEvictor implements Runnable {
     return 0;
   }
 
-  private void startEviction(UserRegion userRegion) {
+  private void startEviction(CacheRegion cacheRegion) {
     // code to check if the region itself needs to be removed
-    if (userRegion.getKeySet().isEmpty()) {
+    if (cacheRegion.getKeySet().isEmpty()) {
 
     }
     else {
-      logger.log(Level.INFO, "Eviction Value : " + userRegion.isEvictionAllowed());
-      if (userRegion.isEvictionAllowed()) {
-        EvictionMarker marker = new EvictionMarker(userRegion);
+      logger.log(Level.INFO, "Eviction Value : " + cacheRegion.isEvictionAllowed());
+      if (cacheRegion.isEvictionAllowed()) {
+        EvictionMarker marker = new EvictionMarker(cacheRegion);
         marker.start();
         logger.log(Level.INFO, "Eviction marker started for "
-            + userRegion.getRegionName() + " region.");
+            + cacheRegion.getRegionName() + " region.");
       }
       else {
         logger.log(Level.INFO, "Eviction not allowed for "
-            + userRegion.getRegionName() + " region.");
+            + cacheRegion.getRegionName() + " region.");
       }
     }
   }
@@ -140,14 +140,14 @@ public class CacheEvictor implements Runnable {
 
   private class EvictionMarker extends Thread {
 
-    private UserRegion userRegion;
+    private CacheRegion cacheRegion;
 
     /**
-     * @param userRegion
+     * @param cacheRegion
      */
-    private EvictionMarker(UserRegion userRegion) {
-      this.userRegion = userRegion;
-      this.setName(userRegion.getRegionName() + " Eviction Marker Thread");
+    private EvictionMarker(CacheRegion cacheRegion) {
+      this.cacheRegion = cacheRegion;
+      this.setName(cacheRegion.getRegionName() + " Eviction Marker Thread");
       this.setDaemon(true);
     }
 
@@ -157,29 +157,28 @@ public class CacheEvictor implements Runnable {
      * @see java.lang.Thread#run()
      */
     public void run() {
-      markEvictable(userRegion.getRegionName(), userRegion.getRegionType(),
-          userRegion.getRegionCache());
+      markEvictable(cacheRegion.getRegionName(),
+          cacheRegion.getRegionCache());
       logger.log(Level.INFO, this.getName() + " started...");
     }
 
-    public void markEvictable(String regionName, String regionType,
-        HashMap regionCache) {
+    public void markEvictable(String regionName, 
+        HashMap<String, CacheElement> regionCache) {
       boolean markedAny = false;
-      Iterator cacheEleKeySetIterator =
+      Iterator<String> cacheEleKeySetIterator =
         ((HashMap)regionCache.clone()).keySet().iterator();
       while (cacheEleKeySetIterator.hasNext()) {
         Object currKey = cacheEleKeySetIterator.next();
         CacheElement cacheElement = (CacheElement)regionCache.get(currKey);
-        if (new CacheEvictorHelper().markElement(cacheElement, regionType,
-            regionName)) {
+        if (new CacheEvictorHelper().markElement(cacheElement, regionName)) {
           cacheElement.setCleanable(true);
-          logger.log(Level.INFO, "Marked Cache Element in region : " + regionName);
+          logger.log(Level.INFO, "Marked CacheHelper Element in region : " + regionName);
           markedAny = true;
         }
       }
 
       if (markedAny) {
-        userRegion.setCleaningRequired(true);
+        cacheRegion.setCleaningRequired(true);
       }
     }
   }

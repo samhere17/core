@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.iq.ServiceConstants;
-import org.iq.cache.Cache;
+import org.iq.cache.CacheHelper;
 import org.iq.exception.BaseException;
 import org.iq.exception.CacheException;
 import org.iq.exception.ServiceException;
@@ -104,12 +104,10 @@ public class RequestProcessor extends BaseProcessor {
 
 		try {
 			if (isSessionCheckRequired()) {
-				//TODO Get UmsSession object PROPERLY from cache based on jSessionId
-				Cache cache = new Cache();
-				if(cache.isRegionExists("UMS", "UMS_SESSIONS")){
-					umsSession = (UmsSession) cache.getElement("UMS", "UMS_SESSIONS", jSessionId);
-				}
-//				umsSession = new UmsSession();//get from cache
+				//TODO Get UmsSession object PROPERLY from cacheHelper based on jSessionId
+				CacheHelper cacheHelper = new CacheHelper();
+				umsSession = (UmsSession) cacheHelper.getElement("UMS_SESSIONS", jSessionId);
+//				umsSession = new UmsSession();//get from cacheHelper
 
 				// If umsSession is not available, return to context, i.e. login page
 				if (umsSession == null) {
@@ -262,10 +260,8 @@ public class RequestProcessor extends BaseProcessor {
 //			Map<String, Object> menuInputMap = new HashMap<String, Object>();
 			inputMap.put(ServiceConstants.REQUESTED_SERVICE_NAME_KEY, "GetMenu");
 			
-			Cache cache = new Cache();
-			if(cache.isRegionExists("UMS", "UMS_SESSIONS")){
-				umsSession = (UmsSession) cache.getElement("UMS", "UMS_SESSIONS", jSessionId);
-			}
+			CacheHelper cacheHelper = new CacheHelper();
+			umsSession = (UmsSession) cacheHelper.getElement("UMS_SESSIONS", jSessionId);
 			
 			if (umsSession==null) {
 				return returnMap;

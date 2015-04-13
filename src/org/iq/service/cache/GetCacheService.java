@@ -3,8 +3,8 @@ package org.iq.service.cache;
 import java.util.HashMap;
 import java.util.Set;
 
-import org.iq.cache.Cache;
-import org.iq.cache.regions.UserRegion;
+import org.iq.cache.CacheHelper;
+import org.iq.cache.regions.CacheRegion;
 import org.iq.exception.CacheException;
 import org.iq.exception.ServiceException;
 import org.iq.logger.LocalLogger;
@@ -26,18 +26,15 @@ public class GetCacheService extends BaseService {
 		
 		
 		try {
-			Cache cache = new Cache();
-			Set<String> regionIds = cache.getAllUserRegionIds();
+			CacheHelper cacheHelper = new CacheHelper();
+			Set<String> regionIds = cacheHelper.getAllUserRegionNames();
 
 			for (String regionId : regionIds) {
-				UserRegion userRegion = cache.getUserRegion(regionId);
-				Set<String> keys = cache.getKeySet("UMS",
-						userRegion.getRegionName());
+				CacheRegion cacheRegion = cacheHelper.getUserRegion(regionId);
+				Set<String> keys = cacheHelper.getKeySet(cacheRegion.getRegionName());
 
 				for (String key : keys) {
-					Object object = cache.getElement(
-							"UMS",
-							userRegion.getRegionName(), key);
+					Object object = cacheHelper.getElement(cacheRegion.getRegionName(), key);
 				}
 			}
 		} catch (CacheException e) {

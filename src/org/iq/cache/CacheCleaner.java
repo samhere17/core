@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.iq.cache.regions.UserRegion;
+import org.iq.cache.regions.CacheRegion;
 import org.iq.exception.CacheException;
 
 
@@ -27,7 +27,7 @@ public class CacheCleaner implements Runnable {
    * 
    */
   private CacheCleaner() {
-    runner = new Thread(this, "Cache Cleaner Thread");
+    runner = new Thread(this, "CacheHelper Cleaner Thread");
     runnerFlag = true;
 //    logProcessor = new LogProcessor();
 //    logProcessor.setClassInstance(this.getClass());
@@ -47,12 +47,12 @@ public class CacheCleaner implements Runnable {
    * @see java.lang.Runnable#run()
    */
   public void run() {
-   Cache cacheUtil = new Cache();
+   CacheHelper cacheUtil = new CacheHelper();
     // setting default interval value.
     int sleepTime = DEFAULT_INTERVAL * SECOND_TO_MILLIS;
 
     try {
-      // getting interval value from cache.
+      // getting interval value from cacheHelper.
       int intervalMin = getCacheCleanerInterval();
       sleepTime = intervalMin * SECOND_TO_MILLIS;
     }
@@ -70,12 +70,12 @@ public class CacheCleaner implements Runnable {
       }
 
       try {
-        Iterator iterator = cacheUtil.getAllUserRegionIds().iterator();
+        Iterator iterator = cacheUtil.getAllUserRegionNames().iterator();
         while (iterator.hasNext()) {
           String regionName = (String)iterator.next();
-          UserRegion userRegion = cacheUtil.getUserRegion(regionName);
-          if (userRegion.isCleaningRequired()) {
-            new CleanerThread(userRegion);
+          CacheRegion cacheRegion = cacheUtil.getUserRegion(regionName);
+          if (cacheRegion.isCleaningRequired()) {
+            new CleanerThread(cacheRegion);
           }
         }
       }
@@ -102,15 +102,15 @@ public class CacheCleaner implements Runnable {
 
   private class CleanerThread extends Thread {
 
-    private UserRegion userRegion;
+    private CacheRegion cacheRegion;
     private String regionName;
 
     /**
      * 
      */
-    public CleanerThread(UserRegion userRegion) {
-      this.userRegion = userRegion;
-      this.regionName = userRegion.getRegionName();
+    public CleanerThread(CacheRegion cacheRegion) {
+      this.cacheRegion = cacheRegion;
+      this.regionName = cacheRegion.getRegionName();
       this.setName(regionName + " CleanerThread");
       this.setDaemon(true);
       this.start();
@@ -123,16 +123,16 @@ public class CacheCleaner implements Runnable {
      */
     @Override
     public void run() {
-      HashMap regionCache = userRegion.getRegionCache();
+      HashMap regionCache = cacheRegion.getRegionCache();
       Iterator iterator =
         ((HashMap)regionCache.clone()).keySet().iterator();
       while (iterator.hasNext()) {
         String curKey = (String)iterator.next();
         CacheElement cacheElement = (CacheElement)regionCache.get(curKey);
         if (cacheElement.isCleanable()) {
-          Cache cacheUtil = new Cache();
+          CacheHelper cacheUtil = new CacheHelper();
           try {
-            cacheUtil.removeElement(userRegion.getRegionName(), curKey);
+            cacheUtil.removeElement(cacheRegion.getRegionName(), curKey);
           }
           catch (CacheException e) {
             logger.log(Level.SEVERE,e.getMessage(),e);
@@ -143,7 +143,7 @@ public class CacheCleaner implements Runnable {
               + cacheElement.getLastAccessTime());
         }
       }
-      userRegion.setCleaningRequired(false);
+      cacheRegion.setCleaningRequired(false);
     }
   }
 }

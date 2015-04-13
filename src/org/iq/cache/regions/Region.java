@@ -15,7 +15,6 @@ public abstract class Region implements Serializable {
 	 */
 	private static final long serialVersionUID = -1564521261284602413L;
 	protected String regionName;
-	protected String regionType;
 	protected HashMap<String, CacheElement> regionCache;
 	protected String description;
 
@@ -27,12 +26,10 @@ public abstract class Region implements Serializable {
 
 	/**
 	 * @param regionName
-	 * @param regionType
 	 * @param description
 	 */
-	public Region(String regionName, String regionType, String description) {
+	public Region(String regionName, String description) {
 		this.regionName = regionName;
-		this.regionType = regionType;
 		this.regionCache = new HashMap<String, CacheElement>();
 		this.description = description;
 	}
@@ -117,19 +114,8 @@ public abstract class Region implements Serializable {
 	}
 
 	/**
-	 * @return the regionType
+	 * @return HashMap
 	 */
-	public String getRegionType() {
-		return regionType;
-	}
-
-	/**
-	 * @param regionType the regionType to set
-	 */
-	public void setRegionType(String regionType) {
-		this.regionType = regionType;
-	}
-
 	public HashMap<String, CacheElement> getRegionCache() {
 		return regionCache;
 	}
