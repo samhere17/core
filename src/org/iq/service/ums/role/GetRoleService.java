@@ -29,18 +29,28 @@ public class GetRoleService extends BaseService {
 
 		int roleId = Integer.valueOf(StringUtil.getStringValue(input
 				.get(RoleKeys.ROLE_ID_KEY)));
+		
+		int currUserRole = umsSession.getRoleId();
 
 		try {
 			resultAttributes.put(RoleKeys.ROLE_KEY,
 					new UmsRoleHelper().getRoleByRoleId(roleId));
 			
-			List<UmsOption> options = new UmsOptionHelper().getAllOptions();
+			List<UmsOption> options = null;
+			
+			if (currUserRole == RoleKeys.SUPER_ADMIN_ROLE_ID) {
+				options = new UmsOptionHelper().getAllOptions();
+			} else {
+				options = new UmsOptionHelper().getAppOptions();
+			}		
+
+//			List<UmsOption> options = new UmsOptionHelper().getAllOptions();
 
 			UmsRoleHelper umsRoleHelper = new UmsRoleHelper();
 			Map<Integer, Boolean> optionsMap = umsRoleHelper
 					.getOptionsMap(roleId);
 
-			if (optionsMap != null) {
+			if (options != null && optionsMap != null) {
 				for (UmsOption thisParentOption : options) {
 					if (optionsMap.get(thisParentOption.getOptionId()) != null
 							&& optionsMap.get(thisParentOption.getOptionId())) {

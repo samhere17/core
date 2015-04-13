@@ -3,6 +3,7 @@ package org.iq.valueobject.ums;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.iq.UmsConstants.AreaSpecifier;
 import org.iq.UmsConstants.OptionStatus;
 import org.iq.UmsConstants.OptionType;
 import org.iq.util.StringUtil;
@@ -18,7 +19,7 @@ public class UmsOption extends BaseVO {
 	private int optionId;
 	private String optionName;
 	private String optionDescription;
-//	private AreaSpecifier areaSpecifier;
+	private AreaSpecifier optionArea;
 	private OptionType optionType;
 	private OptionStatus optionStatus;
 	private String optionLink;
@@ -176,6 +177,27 @@ public class UmsOption extends BaseVO {
 	}
 
 	/**
+	 * @return the optionArea
+	 */
+	public AreaSpecifier getOptionArea() {
+		return optionArea;
+	}
+
+	/**
+	 * @param optionArea the optionArea to set
+	 */
+	public void setOptionArea(AreaSpecifier optionArea) {
+		this.optionArea = optionArea;
+	}
+
+	/**
+	 * @param optionArea the optionArea to set
+	 */
+	public void setOptionArea(int optionAreaValue) {
+		this.optionArea = AreaSpecifier.getAreaSpecifier(optionAreaValue);
+	}
+
+	/**
 	 * @return the optionType
 	 */
 	public OptionType getOptionType() {
@@ -237,31 +259,6 @@ public class UmsOption extends BaseVO {
 	public void setEnableToolbox(boolean enableToolbox) {
 		this.enableToolbox = enableToolbox;
 	}
-/*
-	*//**
-	 * @return the areaSpecifier
-	 *//*
-	public AreaSpecifier getAreaSpecifier() {
-		return areaSpecifier;
-	}
-
-	*//**
-	 * @param areaSpecifier
-	 *            the areaSpecifier to set
-	 *//*
-	public void setAreaSpecifier(AreaSpecifier areaSpecifier) {
-		this.areaSpecifier = areaSpecifier;
-	}
-
-	*//**
-	 * @param areaSpecifier
-	 *            the areaSpecifier to set
-	 *//*
-	public void setAreaSpecifier(int areaSpecifierValue) {
-		this.areaSpecifier = AreaSpecifier.getAreaSpecifier(areaSpecifierValue);
-	}
-	
-*/	
 
 	/**
 	 * @return the objectReferenceKey
@@ -271,7 +268,8 @@ public class UmsOption extends BaseVO {
 	}
 
 	/**
-	 * @param objectReferenceKey the objectReferenceKey to set
+	 * @param objectReferenceKey
+	 *            the objectReferenceKey to set
 	 */
 	public void setObjectReferenceKey(String objectReferenceKey) {
 		this.objectReferenceKey = objectReferenceKey;
@@ -337,6 +335,9 @@ public class UmsOption extends BaseVO {
 		buffer.append("    optionId=" + optionId + StringUtil.lineSeparator);
 		buffer.append("    optionName=" + optionName + StringUtil.lineSeparator);
 		buffer.append("    optionDescription=" + optionDescription
+				+ StringUtil.lineSeparator);
+		buffer.append("    optionArea=" + optionArea + "(Value:"
+				+ optionArea.getAreaSpecifierValue() + ")"
 				+ StringUtil.lineSeparator);
 		buffer.append("    optionType=" + optionType + "(Value:"
 				+ optionType.getOptionTypeValue() + ")"

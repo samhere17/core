@@ -11,14 +11,15 @@ import org.iq.valueobject.ums.UmsOption;
  * 
  */
 public interface UmsOptionDao extends BaseDao<UmsOption> {
-	
+
 	public int insertAndGetID(UmsOption t) throws DbException;
 
 	/**
 	 * @param parentOptionId
 	 * @return List<UmsOption>
 	 */
-	public List<UmsOption> selectByParentId(int parentOptionId) throws DbException;
+	public List<UmsOption> selectByParentId(int parentOptionId)
+			throws DbException;
 
 	public List<UmsOption> selectParentOptions() throws DbException;
 
@@ -28,5 +29,7 @@ public interface UmsOptionDao extends BaseDao<UmsOption> {
 
 	List<UmsOption> selectActiveByParentId(int parentOptionId)
 			throws DbException;
+
+	public List<UmsOption> selectParentAppOptions() throws DbException;
 
 }

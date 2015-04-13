@@ -33,16 +33,24 @@ public class ListPermissionsService extends BaseService {
 			roleId = Integer.valueOf(StringUtil.getStringValue(input
 					.get(OptionKeys.ROLE_ID_KEY)));
 		}
+		
+		int currUserRole = umsSession.getRoleId();
 
 		try {
+			List<UmsOption> options = null;
+			
+			if (currUserRole == RoleKeys.SUPER_ADMIN_ROLE_ID) {
+				options = new UmsOptionHelper().getAllOptions();
+			} else {
+				options = new UmsOptionHelper().getAppOptions();
+			}		
 
-			List<UmsOption> options = new UmsOptionHelper().getAllOptions();
+//			List<UmsOption> options = nullew UmsOptionHelper().getAllOptions();
 
-			UmsRoleHelper umsRoleHelper = new UmsRoleHelper();
-			Map<Integer, Boolean> optionsMap = umsRoleHelper
+			Map<Integer, Boolean> optionsMap = new UmsRoleHelper()
 					.getOptionsMap(roleId);
 
-			if (optionsMap != null) {
+			if (options != null && optionsMap != null) {
 				for (UmsOption thisParentOption : options) {
 					if (optionsMap.get(thisParentOption.getOptionId()) != null
 							&& optionsMap.get(thisParentOption.getOptionId())) {

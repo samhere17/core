@@ -124,6 +124,16 @@ public class UmsOptionHelper extends BaseHelper {
 		}
 	}
 
+	public List<UmsOption> getParentAppOptions() throws BusinessException {
+		// hitting UmsOptions DAO layer
+		UmsOptionDao umsOptionDao = new UmsOptionDaoImpl(dbSession);
+		try {
+			return umsOptionDao.selectParentAppOptions();
+		} catch (DbException e) {
+			throw new BusinessException(e);
+		}
+	}
+
 	public List<UmsOption> getActiveParentOptions() throws BusinessException {
 		// hitting UmsOptions DAO layer
 		UmsOptionDao umsOptionDao = new UmsOptionDaoImpl(dbSession);
@@ -266,6 +276,26 @@ public class UmsOptionHelper extends BaseHelper {
 	 */
 	public List<UmsOption> getAllOptions() throws BusinessException {
 		List<UmsOption> parentOptions = getParentOptions();
+		if (parentOptions != null && parentOptions.size() > 0) {
+			for (UmsOption umsParentOption : parentOptions) {
+				List<UmsOption> umsChildOptions = getOptionsByParentId(umsParentOption
+						.getOptionId());
+				if (umsChildOptions != null && umsChildOptions.size() > 0) {
+					for (UmsOption thisChildOption : umsChildOptions) {
+						umsParentOption.addChildOption(thisChildOption);
+					}
+				}
+			}
+		}
+		return parentOptions;
+	}
+
+	/**
+	 * @return List<UmsOption>
+	 * @throws BusinessException 
+	 */
+	public List<UmsOption> getAppOptions() throws BusinessException {
+		List<UmsOption> parentOptions = getParentAppOptions();
 		if (parentOptions != null && parentOptions.size() > 0) {
 			for (UmsOption umsParentOption : parentOptions) {
 				List<UmsOption> umsChildOptions = getOptionsByParentId(umsParentOption
