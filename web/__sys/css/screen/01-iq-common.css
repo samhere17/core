@@ -77,18 +77,20 @@ body {
 /*BODY STARTS*/
 .bodycontent {
 	/* border-top: 1px solid #570; */
-	height: 554px;
+	height: 550px;
 }
 /*BODY ENDS*/
 
 .toolboxarea {
+	border-right: 1px solid #057;
 	float: left;
 /*	background: #f00;*/
 	height: 100%;
-	overflow-x: hidden;
+/*	overflow-x: hidden;
 	overflow-y: scroll;
-	vertical-align: top;
+	vertical-align: top;*/
 	width: 275px;
+	position: relative;
 }
 
 /*WORKAREA STARTS*/

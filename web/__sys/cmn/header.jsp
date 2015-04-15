@@ -13,7 +13,7 @@
 		<form method="post" action="${pageContext.request.contextPath}/adapter" style="display: inline;">
 			<input type="hidden" name="serviceName" value="Logout" />
 			<input type="hidden" name="jSessionId" value="${pageContext.session.id}" />
-			<input type="image" src="${pageContext.request.contextPath}/__sys/img/logout-16-16.png" title="Logout" style="float: none; margin-bottom: 4px; width: 16px; height: 16px;"/>
+			<input type="image" id="btn-logout" src="${pageContext.request.contextPath}/__sys/img/logout-16-16.png" title="Logout" style="float: none; margin-bottom: 4px; width: 16px; height: 16px;"/>
 		</form>
 	</div>
 	<%
@@ -52,3 +52,10 @@
 	font-size: 14px;
 }
 </style>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#btn-logout').click(function() {
+		localStorage.clear();	
+	});
+});
+</script>
