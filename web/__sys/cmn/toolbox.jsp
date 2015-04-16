@@ -5,13 +5,15 @@
 
 <!--TOOLBOX SELECTION STARTS-->
 <div class="toolbox-selection">
+	<ul style="border-right: 1px solid #057;">
+		<li><img id="minimize-all" src="${pageContext.request.contextPath}/__sys/img/minimize-all-16-16.png" title="Minimize All" /></li>
+		<li><img id="maximize-all" src="${pageContext.request.contextPath}/__sys/img/maximize-all-16-16.png" title="Maximize All" /></li>
+		<li><img id="refresh-context" src="${pageContext.request.contextPath}/__sys/img/refresh-context-16-16.png" title="Refresh Context" /></li>
+	</ul>
 	<ul>
 		<li><img class="launch" id="launch-org-in-context" src="${pageContext.request.contextPath}/__sys/img/org-16-16.png" /></li>
 		<li><img class="launch" id="launch-cust-in-context" src="${pageContext.request.contextPath}/img/cust-16-16.png" /></li>
 		<li><img class="launch" id="launch-role-in-context" src="${pageContext.request.contextPath}/__sys/img/role-16-16.png" /></li>
-		<li><img src="${pageContext.request.contextPath}/__sys/img/refresh-context-16-16.png" /></li>
-		<li><img id="minimize-all" src="${pageContext.request.contextPath}/__sys/img/arrow-up-double-16-16.png" /></li>
-		<li><img id="maximize-all" src="${pageContext.request.contextPath}/__sys/img/arrow-down-double-16-16.png" /></li>
 		<%-- <li class="more-toolbox"><img src="${pageContext.request.contextPath}/__sys/img/arrow-up-16-16.png" /></li> --%>
 	</ul>
 </div>
@@ -19,128 +21,129 @@
 
 <!--TOOLBOX HOLDER STARTS-->
 <div class="toolbox-holder">
-		<div id="org-in-context" class="toolbox">
-			<div class="toolbox-header">
-				<img
-					src="${pageContext.request.contextPath}/__sys/img/org-16-16.png"
-					alt="Organization" />
-				<h3>Organization</h3>
-				<span>
-					<img class="maximize" src="${pageContext.request.contextPath}/__sys/img/arrow-down-16-16.png" alt="Maximize" title="Maximize" />
-					<img class="minimize" src="${pageContext.request.contextPath}/__sys/img/arrow-up-16-16.png" alt="Minimize" title="Minimize" />
-				</span>
-			</div>
-			<div class="toolbox-content">
-			<c:choose>
-			<c:when test="${not empty organization}">
-				<table style="width: 100%;">
-					<tr>
-						<td colspan="2"><b>${organization.organizationName}</b></td>
-					</tr>
-					<tr>
-						<td>${organization.organizationId}</td>
-						<td>${organization.organizationStatus}</td>
-					</tr>
-					<tr></tr>
-					<!-- DO NOT DELETE this tr tag, this is for eliminating the white row -->
-					<tr>
-						<td colspan="2"><c:if
-								test="${not empty organization.organizationPrimaryPhone}">
-								<img alt="Phone"
-									src="${pageContext.request.contextPath}/__sys/img/phone-16-16.png">${organization.organizationPrimaryPhone}<br>
-							</c:if> <c:if test="${not empty organization.organizationPrimaryFax}">
-								<img alt="Phone"
-									src="${pageContext.request.contextPath}/__sys/img/fax-16-16.png">${organization.organizationPrimaryFax}<br>
-							</c:if> <c:if test="${not empty organization.organizationPrimaryEmail}">
-								<img alt="Phone"
-									src="${pageContext.request.contextPath}/__sys/img/mail-16-16.png">${organization.organizationPrimaryEmail}<br>
-							</c:if></td>
-					</tr>
-				</table>
-			</c:when>
-			<c:otherwise>No organization in context</c:otherwise>
-			</c:choose>
-			</div>
+	<div id="org-in-context" class="toolbox">
+		<div class="toolbox-header">
+			<img src="${pageContext.request.contextPath}/__sys/img/org-16-16.png"
+				alt="Organization" />
+			<h3>Organization</h3>
+			<c:if test="${not empty organization}"><span id="has-data"><img
+					src="${pageContext.request.contextPath}/__sys/img/asterisk-16-16.png" title="Has Data" /></span>
+			</c:if>
 		</div>
-
-
-		<div id="cust-in-context" class="toolbox">
-			<div class="toolbox-header">
-				<img src="${pageContext.request.contextPath}/img/cust-16-16.png"
-					alt="Customer" />
-				<h3>Customer</h3>
-				<span>
-					<img class="maximize" src="${pageContext.request.contextPath}/__sys/img/arrow-down-16-16.png" alt="Maximize" title="Maximize" />
-					<img class="minimize" src="${pageContext.request.contextPath}/__sys/img/arrow-up-16-16.png" alt="Minimize" title="Minimize" />
-				</span>
-			</div>
-			<div class="toolbox-content">
+		<div class="toolbox-content" <c:if test="${not empty organization}">style="display: block;"</c:if>>
 			<c:choose>
-			<c:when test="${not empty customer}">
-				<table style="width: 100%;">
-					<tr>
-						<td colspan="3"><b>${customer.customerName}</b></td>
-					</tr>
-					<tr>
-						<td>${customer.customerId}</td>
-						<td>${customer.customerStatus}</td>
-						<td colspan="2">${fn:length(customer.contactDetailsIOList)}
-							contact(s)</td>
-					</tr>
-					<tr></tr>
-					<!-- DO NOT DELETE this tr tag, this is for eliminating the white row -->
-					<tr>
-						<td colspan="3"><c:if
-								test="${not empty customer.customerPrimaryPhone}">
-								<img alt="Phone"
-									src="${pageContext.request.contextPath}/__sys/img/phone-16-16.png">${customer.customerPrimaryPhone}<br>
-							</c:if> <c:if test="${not empty customer.customerPrimaryFax}">
-								<img alt="Phone"
-									src="${pageContext.request.contextPath}/__sys/img/fax-16-16.png">${customer.customerPrimaryFax}<br>
-							</c:if> <c:if test="${not empty customer.customerPrimaryEmail}">
-								<img alt="Phone"
-									src="${pageContext.request.contextPath}/__sys/img/mail-16-16.png">${customer.customerPrimaryEmail}<br>
-							</c:if></td>
-					</tr>
-				</table>			</c:when>
-			<c:otherwise>No customer in context</c:otherwise>
+				<c:when test="${not empty organization}">
+					<table style="width: 100%;">
+						<tr>
+							<td colspan="2"><b>${organization.organizationName}</b></td>
+						</tr>
+						<tr>
+							<td>${organization.organizationId}</td>
+							<td>${organization.organizationStatus}</td>
+						</tr>
+						<tr></tr>
+						<!-- DO NOT DELETE this tr tag, this is for eliminating the white row -->
+						<tr>
+							<td colspan="2"><c:if
+									test="${not empty organization.organizationPrimaryPhone}">
+									<img alt="Phone"
+										src="${pageContext.request.contextPath}/__sys/img/phone-16-16.png">${organization.organizationPrimaryPhone}<br>
+								</c:if> <c:if test="${not empty organization.organizationPrimaryFax}">
+									<img alt="Phone"
+										src="${pageContext.request.contextPath}/__sys/img/fax-16-16.png">${organization.organizationPrimaryFax}<br>
+								</c:if> <c:if test="${not empty organization.organizationPrimaryEmail}">
+									<img alt="Phone"
+										src="${pageContext.request.contextPath}/__sys/img/mail-16-16.png">${organization.organizationPrimaryEmail}<br>
+								</c:if></td>
+						</tr>
+					</table>
+				</c:when>
+				<c:otherwise>No organization in context</c:otherwise>
 			</c:choose>
-			</div>
 		</div>
+	</div>
 
 
-		<div id="role-in-context" class="toolbox">
-			<div class="toolbox-header">
-				<img
-					src="${pageContext.request.contextPath}/__sys/img/role-16-16.png"
-					alt="Role" />
-				<h3>Role</h3>
-				<span>
-					<img class="maximize" src="${pageContext.request.contextPath}/__sys/img/arrow-down-16-16.png" alt="Maximize" title="Maximize" />
-					<img class="minimize" src="${pageContext.request.contextPath}/__sys/img/arrow-up-16-16.png" alt="Minimize" title="Minimize" />
-				</span>
-			</div>
-			<div class="toolbox-content">
+	<div id="cust-in-context" class="toolbox">
+		<div class="toolbox-header">
+			<img src="${pageContext.request.contextPath}/img/cust-16-16.png"
+				alt="Customer" />
+			<h3>Customer</h3>
+			<c:if test="${not empty customer}">
+				<span id="has-data"><img
+					src="${pageContext.request.contextPath}/__sys/img/asterisk-16-16.png"
+					title="Has Data" /></span>
+			</c:if>
+		</div>
+		<div class="toolbox-content">
 			<c:choose>
-			<c:when test="${not empty role}">
-				<table style="width: 100%;">
-					<tr>
-						<td colspan="2"><b>${role.roleName}</b></td>
-					</tr>
-					<tr>
-						<td colspan="2">${role.roleDescription}</td>
-					</tr>
-					<tr></tr>
-					<tr>
-						<td>${role.roleId}</td>
-						<td>${role.roleStatus}</td>
-					</tr>
-				</table>
-			</c:when>
-			<c:otherwise>No role in context</c:otherwise>
+				<c:when test="${not empty customer}">
+					<table style="width: 100%;">
+						<tr>
+							<td colspan="3"><b>${customer.customerName}</b></td>
+						</tr>
+						<tr>
+							<td>${customer.customerId}</td>
+							<td>${customer.customerStatus}</td>
+							<td colspan="2">${fn:length(customer.contactDetailsIOList)}
+								contact(s)</td>
+						</tr>
+						<tr></tr>
+						<!-- DO NOT DELETE this tr tag, this is for eliminating the white row -->
+						<tr>
+							<td colspan="3"><c:if
+									test="${not empty customer.customerPrimaryPhone}">
+									<img alt="Phone"
+										src="${pageContext.request.contextPath}/__sys/img/phone-16-16.png">${customer.customerPrimaryPhone}<br>
+								</c:if> <c:if test="${not empty customer.customerPrimaryFax}">
+									<img alt="Phone"
+										src="${pageContext.request.contextPath}/__sys/img/fax-16-16.png">${customer.customerPrimaryFax}<br>
+								</c:if> <c:if test="${not empty customer.customerPrimaryEmail}">
+									<img alt="Phone"
+										src="${pageContext.request.contextPath}/__sys/img/mail-16-16.png">${customer.customerPrimaryEmail}<br>
+								</c:if></td>
+						</tr>
+					</table>
+				</c:when>
+				<c:otherwise>No customer in context</c:otherwise>
 			</c:choose>
-			</div>
 		</div>
+	</div>
+
+
+	<div id="role-in-context" class="toolbox">
+		<div class="toolbox-header">
+			<img
+				src="${pageContext.request.contextPath}/__sys/img/role-16-16.png"
+				alt="Role" />
+			<h3>Role</h3>
+			<c:if test="${not empty role}">
+				<span id="has-data"><img
+					src="${pageContext.request.contextPath}/__sys/img/asterisk-16-16.png"
+					title="Has Data" /></span>
+			</c:if>
+		</div>
+		<div class="toolbox-content">
+			<c:choose>
+				<c:when test="${not empty role}">
+					<table style="width: 100%;">
+						<tr>
+							<td colspan="2"><b>${role.roleName}</b></td>
+						</tr>
+						<tr>
+							<td colspan="2">${role.roleDescription}</td>
+						</tr>
+						<tr></tr>
+						<tr>
+							<td>${role.roleId}</td>
+							<td>${role.roleStatus}</td>
+						</tr>
+					</table>
+				</c:when>
+				<c:otherwise>No role in context</c:otherwise>
+			</c:choose>
+		</div>
+	</div>
 
 
 	<c:if test="false">
@@ -149,10 +152,6 @@
 				<img src="${pageContext.request.contextPath}/img/order-16-16.png"
 					alt="Account Information" title="Account Information" />
 				<h3>Order Information</h3>
-				<span>
-					<img class="maximize" src="${pageContext.request.contextPath}/__sys/img/arrow-down-16-16.png" alt="Maximize" title="Maximize" />
-					<img class="minimize" src="${pageContext.request.contextPath}/__sys/img/arrow-up-16-16.png" alt="Minimize" title="Minimize" />
-				</span>
 			</div>
 			<div class="toolbox-content">
 				<div style="float: left; width: 100px;">Order Id</div>
@@ -171,10 +170,6 @@
 				<img src="../images/trans-hist.png" alt="Transaction History"
 					title="Transaction History" />
 				<h3>Transaction History</h3>
-				<span>
-					<img class="maximize" src="${pageContext.request.contextPath}/__sys/img/arrow-down-16-16.png" alt="Maximize" title="Maximize" />
-					<img class="minimize" src="${pageContext.request.contextPath}/__sys/img/arrow-up-16-16.png" alt="Minimize" title="Minimize" />
-				</span>
 			</div>
 			<div class="toolbox-content">
 				<div style="float: left; width: 105px;">Current Balance</div>
@@ -243,10 +238,6 @@
 			<div class="toolbox-header">
 				<img src="../images/warning.png" alt="Warnings" title="Warnings" />
 				<h3>Warnings</h3>
-				<span>
-					<img class="maximize" src="${pageContext.request.contextPath}/__sys/img/arrow-down-16-16.png" alt="Maximize" title="Maximize" />
-					<img class="minimize" src="${pageContext.request.contextPath}/__sys/img/arrow-up-16-16.png" alt="Minimize" title="Minimize" />
-				</span>
 			</div>
 			<div class="toolbox-content">
 				Payment Due<br /> Next due date: 11/5/2014
@@ -278,11 +269,12 @@
 }
 
 .toolbox-selection>ul {
-	float: right;
+	display: inline-table;
+	padding: 0 1px;
 }
 
 .toolbox-selection>ul>li {
-	display: inline;
+	display: inline-table;
 }
 
 .toolbox-selection>ul>li>img {
@@ -320,6 +312,7 @@
 .toolbox>div.toolbox-header {
 	background: #8df;
 	padding: 5px;
+	cursor: pointer;
 }
 
 .toolbox>div.toolbox-header>img {
@@ -342,13 +335,13 @@
 	height: 16px;
 }
 
-.toolbox>div.toolbox-header>span>img:hover {
+/* .toolbox>div.toolbox-header>span>img:hover {
 	border: 1px solid #057;
 	border-radius: 3px;
 	box-shadow: 0px 0px 5px #057 inset;
 	padding: 3px;
 }
-
+ */
 /* .toolbox > div.toolbox-header > span {padding: 4px; float: right; margin: -20px -4px; width: 16px; height: 16px;}
 .toolbox > div.toolbox-header > span:hover {border: 1px solid #057; border-radius: 3px; box-shadow: 0px 0px 5px #057 inset; padding: 3px;}
 
@@ -371,80 +364,76 @@
 $(document).ready(function() {
 	$(".toolbox").each(function(index) {
 		if(localStorage.getItem($(this).attr('id'))=="true") {
-			expand($(this));
-		}
-		else {
-			collapse($(this));
+			$(this).find("div.toolbox-content").slideDown(200);
 		}
 	});
 
 	$('#minimize-all').click(function() {
-		collapseAll();
+		$(".toolbox").each(function(index) {
+			localStorage.setItem($(this).attr('id'),false);
+			$(this).find("div.toolbox-content").slideUp(200);
+		});
 	});
 	
 	$('#maximize-all').click(function() {
-		expandAll();
+		$(".toolbox").each(function(index) {
+			localStorage.setItem($(this).attr('id'),true);
+			$(this).find("div.toolbox-content").slideDown(200);
+		});
 	});
 	
-	$('.minimize').click(function() {
-		collapse($(this).parent().parent().parent());
-	});
-	
-	$('.maximize').click(function() {
-		expand($(this).parent().parent().parent());
+	$('.toolbox-header').click(function() {
+		var toolbox = $(this).parent();
+		var toolboxContent = $(this).parent().find("div.toolbox-content");
+		if(toolboxContent.is(":visible")) {
+			localStorage.setItem(toolbox.attr('id'),false);
+			toolboxContent.slideUp(200);
+		}
+		else {
+			localStorage.setItem(toolbox.attr('id'),true);
+			toolboxContent.slideDown(200);
+		}
 	});
 	
 	$('.launch').click(function() {
 		var toExpand = $('#'+$(this).attr('id').substring(7));
 		$(".toolbox").each(function(index) {
+			var toolboxContent = $(this).find("div.toolbox-content");
 			if($(this).is(toExpand)) {
-				expand($(this));
+				localStorage.setItem($(this).attr('id'),true);
+				toolboxContent.slideDown(200);
 			}
 			else {
-				collapse($(this));
+				localStorage.setItem($(this).attr('id'),false);
+				toolboxContent.slideUp(200);
 			}
 		});
 	});
+	
+	$('#refresh-context').click(function() {
+		$.ajax({
+			type:"post",
+			url:"${pageContext.request.contextPath}/adapter",
+			data:{
+		        serviceName: "RefreshContext",
+		    },
+		    beforeSend:function(xhr) {
+//		    	alert("before send called");
+		    },
+		    success:function(result,status,xhr) {
+//		    	alert("success called");
+//		    	alert(result);
+		    },
+		    error:function (xhr, status, error) {
+//		    	alert("error called");
+//		    	alert(xhr.status);
+//		    	alert(error);
+		    },
+		    complete:function(xhr,status) {
+//		    	alert("complete called");
+		    }
+		});
+	});
 });
-
-function expand(toolbox) {
-	$(toolbox).find("div.toolbox-content").slideDown(200);
-	localStorage.setItem($(toolbox).attr('id'),true);
-	$(toolbox).find("img.minimize").show();
-	$(toolbox).find("img.maximize").hide();
-}
-
-function collapse(toolbox) {
-	$(toolbox).find("div.toolbox-content").slideUp(200);
-	localStorage.setItem($(toolbox).attr('id'),false);
-	$(toolbox).find("img.minimize").hide();
-	$(toolbox).find("img.maximize").show();
-}
-
-function expandAll() {
-	$(".toolbox").each(function(index) {
-		$(this).find("div.toolbox-content").slideDown(200);
-		localStorage.setItem($(this).attr('id'),true);
-	});
-	$(".minimize").each(function(index) {
-		$(this).show();
-	});
-	$(".maximize").each(function(index) {
-		$(this).hide();
-	});
-}
-
-function collapseAll() {
-	$(".toolbox").each(function(index) {
-		$(this).find("div.toolbox-content").slideUp(200);
-		localStorage.setItem($(this).attr('id'),false);
-	});
-	$(".minimize").each(function(index) {
-		$(this).hide();
-	});
-	$(".maximize").each(function(index) {
-		$(this).show();
-	});
-}
 </script>
 <!--TOOLBOX ENDS-->
