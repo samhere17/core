@@ -72,11 +72,11 @@ This means that a menu item available to EXECUTIVE is available to all, where in
 											<li>
 												<c:choose>
 													<c:when test="${currentChild.menuItemEnabled}">
-														<img src="${pageContext.request.contextPath}/${currentChild.optionImageLink}" alt="${currentChild.optionImageAlt}" />
+														<img src="${pageContext.request.contextPath}/<c:choose><c:when test="${not empty currentChild.optionImageLink}">${currentChild.optionImageLink}</c:when><c:otherwise>__sys/img/no-icon-16-16.png</c:otherwise></c:choose>" alt="${currentChild.optionImageAlt}" />
 														<a href="${pageContext.request.contextPath}/adapter?path=${currentChild.optionLink}" <%-- title="${currentChild.optionDescription}" --%> accesskey="">${currentChild.optionName}</a>
 													</c:when>
 													<c:otherwise>
-														<img src="${pageContext.request.contextPath}/${currentChild.optionImageLink}" alt="${currentChild.optionImageAlt}" style="-webkit-filter: grayscale(100%);"/>
+														<img src="${pageContext.request.contextPath}/<c:choose><c:when test="${not empty currentChild.optionImageLink}">${currentChild.optionImageLink}</c:when><c:otherwise>__sys/img/no-icon-16-16.png</c:otherwise></c:choose>" alt="${currentChild.optionImageAlt}" style="-webkit-filter: grayscale(100%);"/>
 														<div>${currentChild.optionName}</div>
 													</c:otherwise>
 												</c:choose>
