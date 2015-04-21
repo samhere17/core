@@ -1,0 +1,17 @@
+<project name="core jsp test build" default="start" basedir=".">
+	<target name="start">
+		
+		<property environment="env"/>
+		<property file="build.properties" />
+		<property name="context.dir" value="oms" />
+		
+		<echo message="${env.CATALINA_HOME}"/>
+		<echo message="${web.dir}"/>
+
+		<copy todir="${env.CATALINA_HOME}/webapps/${context.dir}" verbose="true">
+			<fileset dir="${web.dir}">
+				<include name="**/*"/>
+			</fileset>
+		</copy>
+	</target>
+</project>
