@@ -76,7 +76,7 @@ public class CacheHelper {
 		Cache cache = Cache.getInstance();
 		CacheRegion cacheRegion = cache.get(regionName);
 		if (cacheRegion == null) {
-			/* throw new CacheException("Not a valid cacheHelper region"); */
+			/* throw new CacheException("Not a valid cache region"); */
 			cacheRegion = new CacheRegion(regionName, "", false,
 					false, false, false);
 			cacheRegion.addElement(key, value);
@@ -113,11 +113,11 @@ public class CacheHelper {
 	/**
 	 * fetches the Region associated with the regionName and finds the value
 	 * from the Region which is associated with provided key If no Region found
-	 * in CacheHelper against the regionName then <code>CacheException</code> will be
+	 * in cache against the regionName then <code>CacheException</code> will be
 	 * thrown
 	 * 
 	 * @param regionName
-	 *            name by which the CacheHelper Region is associated
+	 *            name by which the cache Region is associated
 	 * @param key
 	 *            the value stored in the Region is associated with this key
 	 * @return value fetched from the Region which is stored against provided
@@ -129,7 +129,7 @@ public class CacheHelper {
 		Cache cache = Cache.getInstance();
 		CacheRegion cacheRegion = cache.get(regionName);
 		if (cacheRegion == null) {
-			throw new CacheException("Not a valid cacheHelper region");
+			throw new CacheException("Not a valid cache region");
 		}
 		Object value = cacheRegion.getElement(key);
 		return value;
@@ -173,7 +173,7 @@ public class CacheHelper {
 		Cache cache = Cache.getInstance();
 		CacheRegion cacheRegion = cache.get(regionKey);
 		if (cacheRegion == null) {
-			throw new CacheException("Not a valid cacheHelper region.");
+			throw new CacheException("Not a valid cache region.");
 		}
 		cacheRegion.deleteElement(key);
 	}
@@ -188,7 +188,7 @@ public class CacheHelper {
 		Cache cache = Cache.getInstance();
 		CacheRegion cacheRegion = cache.get(regionName);
 		if (cacheRegion == null) {
-			throw new CacheException("Not a valid cacheHelper region.");
+			throw new CacheException("Not a valid cache region.");
 		}
 		cacheRegion.deleteAllElement();
 	}
@@ -203,7 +203,7 @@ public class CacheHelper {
 		Cache cache = Cache.getInstance();
 		CacheRegion cacheRegion = cache.get(regionName);
 		if (cacheRegion == null) {
-			throw new CacheException("Not a valid cacheHelper region.");
+			throw new CacheException("Not a valid cache region.");
 		} else {
 			cacheRegion.setEvictionAllowed(evictionAllowed);
 		}
@@ -219,7 +219,7 @@ public class CacheHelper {
 		Cache cache = Cache.getInstance();
 		CacheRegion cacheRegion = cache.get(regionName);
 		if (cacheRegion == null) {
-			throw new CacheException("Not a valid cacheHelper region.");
+			throw new CacheException("Not a valid cache region.");
 		} else {
 			cacheRegion.setUserClearRegionAllowed(userClearRegionAllowed);
 		}
@@ -235,7 +235,7 @@ public class CacheHelper {
 		Cache cache = Cache.getInstance();
 		CacheRegion cacheRegion = cache.get(regionName);
 		if (cacheRegion == null) {
-			throw new CacheException("Not a valid cacheHelper region.");
+			throw new CacheException("Not a valid cache region.");
 		} else {
 			cacheRegion.setUserClearElementAllowed(userClearElementAllowed);
 		}
@@ -251,7 +251,7 @@ public class CacheHelper {
 		Cache cache = Cache.getInstance();
 		CacheRegion cacheRegion = cache.get(regionName);
 		if (cacheRegion == null) {
-			throw new CacheException("Not a valid cacheHelper region.");
+			throw new CacheException("Not a valid cache region.");
 		} else {
 			cacheRegion.setCleaningRequired(cleaningRequired);
 		}

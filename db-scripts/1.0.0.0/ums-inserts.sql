@@ -51,7 +51,7 @@ INSERT INTO UMS_OPTION (OPTION_NAME, OPTION_DESCRIPTION, OPTION_TYPE, OPTION_STA
 	('', NULL, 2, 1, '', NULL, NULL, 3, 6, 1, ''),
 	('Log Viewer', NULL, 1, 1, '__sys/dev/log/view', NULL, NULL, 4, 6, 1, ''),
 	('', NULL, 2, 1, '', NULL, NULL, 5, 6, 1, ''),
-	('Cache Viewer', NULL, 1, 1, '__sys/dev/cache/view', NULL, NULL, 6, 6, 1, ''),
+	('Cache Viewer', NULL, 1, 1, '__sys/dev/cache/view&serviceName=GetNewCustomer', NULL, NULL, 6, 6, 1, ''),
 	('Clear Cache', NULL, 1, 1, '__sys/dev/cache/clear', NULL, NULL, 7, 6, 1, '');
 
 INSERT INTO UMS_ROLE_OPTION_MAP (ROLE_ID, OPTION_ID, ENABLE) VALUES
