@@ -84,7 +84,7 @@ public class UmsAuthenticationHelper extends BaseHelper {
 				
 				//Fetching last login details
 				UmsLoginDetailsDao umsLoginDetailsDao = new UmsLoginDetailsDaoImpl(dbSession);
-				lastLoginDetails = umsLoginDetailsDao.getLoginDetailsByUserId(user.getUserId());
+				lastLoginDetails = umsLoginDetailsDao.getLastLoginDetailsByUserId(user.getUserId());
 				
 				String systemSessionId = UmsKeyGenerator.getRandomKey();
 				String nativeToken = umsSecurity.createNativeToken(username);

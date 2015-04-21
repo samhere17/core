@@ -12,5 +12,7 @@ public interface UmsLoginDetailsDao extends BaseDao<UmsLoginDetails> {
 	 * @throws DbException
 	 */
 	public UmsLoginDetails getLoginDetailsByUserId(int userId) throws DbException;
+
+	UmsLoginDetails getLastLoginDetailsByUserId(int userId) throws DbException;
 	
 }

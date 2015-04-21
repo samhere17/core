@@ -49,6 +49,7 @@ public class ServerAdapter extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		System.out.println(request.getContentType());
 		processRequest(request, response, RequestType.GET);
 	}
 
@@ -62,6 +63,7 @@ public class ServerAdapter extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		System.out.println(request.getContentType());
 		processRequest(request, response, RequestType.POST);
 	}
 
@@ -101,6 +103,13 @@ public class ServerAdapter extends HttpServlet {
 		resultMap.putAll(requestProcessor.processRequest(inputMap));
 
 		String requestedServiceName = StringUtil.getStringValue(inputMap.get(ServiceConstants.REQUESTED_SERVICE_NAME_KEY));
+
+		if (ServiceConstants.REFRESH_CONTEXT_SERVICE_NAME.equals(requestedServiceName)) {
+			httpSession.removeAttribute("organization");
+			httpSession.removeAttribute("customer");
+			httpSession.removeAttribute("role");
+		}
+
 		if (ServiceConstants.LOGOUT_SERVICE_NAME.equals(requestedServiceName)==false) {
 			//processing system request for building Menu, Toolbox etc.
 			HashMap<String, Object> systemInputMap = new HashMap<String, Object>();
