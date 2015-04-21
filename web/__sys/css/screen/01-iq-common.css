@@ -10,10 +10,10 @@ body {
 
 
 .wrapper {
-	background: #fff;
+/*	background: #fff;
 	border: 1px solid #057;
 	margin: 1px auto;
-	width: 1010px;
+	width: 1010px;*/
 }
 
 .clear {
@@ -77,7 +77,12 @@ body {
 /*BODY STARTS*/
 .bodycontent {
 	/* border-top: 1px solid #570; */
-	height: 550px;
+	/* height: 550px; */
+	position: absolute;
+	top: 82px;
+	right: 0px;
+	bottom: 16px;
+	left: 0px;
 }
 /*BODY ENDS*/
 

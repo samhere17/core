@@ -14,7 +14,7 @@
 		<li><img class="launch" id="launch-org-in-context" src="${pageContext.request.contextPath}/__sys/img/org-16-16.png" /></li>
 		<li><img class="launch" id="launch-cust-in-context" src="${pageContext.request.contextPath}/img/cust-16-16.png" /></li>
 		<li><img class="launch" id="launch-role-in-context" src="${pageContext.request.contextPath}/__sys/img/role-16-16.png" /></li>
-		<%-- <li class="more-toolbox"><img src="${pageContext.request.contextPath}/__sys/img/arrow-up-16-16.png" /></li> --%>
+		<%-- <li class="more-toolbox"><img src="${pageContext.request.contextPath}/__sys/img/arrow-right-16-16.png" /></li> --%>
 	</ul>
 </div>
 <!--TOOLBOX SELECTION ENDS-->
@@ -30,7 +30,7 @@
 					src="${pageContext.request.contextPath}/__sys/img/asterisk-16-16.png" title="Has Data" /></span>
 			</c:if>
 		</div>
-		<div class="toolbox-content" <c:if test="${not empty organization}">style="display: block;"</c:if>>
+		<div class="toolbox-content">
 			<c:choose>
 				<c:when test="${not empty organization}">
 					<table style="width: 100%;">
@@ -252,10 +252,11 @@
 .toolbox-holder {
 	overflow-x: hidden;
 	overflow-y: scroll;
-	width: 275px;
-	height: 522px;
 	position: absolute;
 	bottom: 0;
+	right: 0;
+	top: 28px;
+	left: 0;
 }
 
 .toolbox-selection {
@@ -362,6 +363,21 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+	<c:if test="${not empty organization}">if (localStorage.getItem("org-has-data") == null) {
+		localStorage.setItem("org-has-data",'');
+		localStorage.setItem("org-in-context",true);
+	}</c:if>
+	
+	<c:if test="${not empty customer}">if (localStorage.getItem("cust-has-data") == null) {
+		localStorage.setItem("cust-has-data",'');
+		localStorage.setItem("cust-in-context",true);
+	}</c:if>
+
+	<c:if test="${not empty role}">if (localStorage.getItem("role-has-data") == null) {
+		localStorage.setItem("role-has-data",'');
+		localStorage.setItem("role-in-context",true);
+	}</c:if>
+
 	$(".toolbox").each(function(index) {
 		if(localStorage.getItem($(this).attr('id'))=="true") {
 			$(this).find("div.toolbox-content").slideDown(200);
@@ -411,28 +427,35 @@ $(document).ready(function() {
 	});
 	
 	$('#refresh-context').click(function() {
-		$.ajax({
+		alert("Not implemented yet.");
+		/* $.ajax({
 			type:"post",
 			url:"${pageContext.request.contextPath}/adapter",
 			data:{
 		        serviceName: "RefreshContext",
 		    },
 		    beforeSend:function(xhr) {
-//		    	alert("before send called");
+		    	alert("before send called");
 		    },
 		    success:function(result,status,xhr) {
-//		    	alert("success called");
-//		    	alert(result);
+		    	alert("success called");
+		    	alert(result);
+	    		for ( var i = 0, len = localStorage.length; i < len; ++i ) {
+	    			var key = localStorage.key(i);
+	    			if(key !== null && key.indexOf("has-data") !== -1) {
+	    				localStorage.removeItem(key);
+	    			}
+	    		}
 		    },
 		    error:function (xhr, status, error) {
-//		    	alert("error called");
-//		    	alert(xhr.status);
-//		    	alert(error);
+		    	alert("error called");
+		    	alert(xhr.status);
+		    	alert(error);
 		    },
 		    complete:function(xhr,status) {
-//		    	alert("complete called");
+		    	alert("complete called");
 		    }
-		});
+		}); */
 	});
 });
 </script>

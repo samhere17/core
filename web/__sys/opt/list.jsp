@@ -19,7 +19,7 @@ div.configured-options>ul {
 
 div.configured-options>ul>li {
 	border: 1px solid #057;
-	margin: 2px;
+	/* margin: 2px; */
 	padding: 4px;
 }
 

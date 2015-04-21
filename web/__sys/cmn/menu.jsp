@@ -37,7 +37,7 @@ nav>ul>li>ul>li>span.super-admin:after {color: #f00; content:"Super Admin";}
 
 /* div.menubar > div.right > div#role-selector > select {margin: -4px 0 0 0;} */
 
-.toolbar {background-color: #ddd; border-bottom: 1px solid #057; /* display: table; */ padding: 1px 0px; width: 100%;}
+.toolbar {background-color: #ddd; border-bottom: 1px solid #057; display: table; padding: 1px 0px; width: 100%;}
 .toolbar > ul {border-right: 1px solid #057; display: inline-table; padding: 0 1px;}
 .toolbar > ul > li {display: inline-table;}
 .toolbar > ul > li > a {}

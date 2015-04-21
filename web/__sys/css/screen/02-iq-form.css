@@ -120,7 +120,7 @@ fieldset > legend {
 	width: 342px !important;
 }
 
-table {width: 700px; margin: 2px auto;}
+table {width: 100%;/* margin: 2px auto; */}
 table, th, td {border: 1px solid #057;}
 th, td {font-weight: normal; padding: 3px 4px;}
 th {vertical-align: middle;}
