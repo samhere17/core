@@ -48,11 +48,15 @@ nav>ul>li>ul>li>span.super-admin:after {color: #f00; content:"Super Admin";}
 
 </style>
 
+<script type="text/javascript">
+$(document).ready(function(){
+	$('div.toolbar img').error(function () {
+		$(this).unbind("error").attr("src", "${pageContext.request.contextPath}/__sys/img/no-icon-found-16-16.png");
+	});
+});
+</script>
 
 <!--MENUBAR STARTS-->
-<!-- Menu Items access permissions are through EXECUTIVE, MANAGER, ADMIN and SUPER ADMIN.
-This means that a menu item available to EXECUTIVE is available to all, where in,
- a menu item available to SUPER ADMIN is only available to SUPER ADMIN.-->
 <div class="menubar">
 	<c:if test="${not empty menuOptions}">
 	<div class="left">
