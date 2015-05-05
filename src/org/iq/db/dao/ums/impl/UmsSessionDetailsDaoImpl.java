@@ -23,6 +23,8 @@ public class UmsSessionDetailsDaoImpl extends BaseDaoImpl implements
 	private static final String UMS_SESSION_DETAILS_SELECT_BY_USER_ID = "SELECT USER_ID, SYSTEM_SESSION_ID, SESSION_STATUS, NATIVE_TOKEN FROM UMS_SESSION_DETAILS WHERE USER_ID = ?";
 
 	private static final String UMS_SESSION_DETAILS_INSERT_ALL = "INSERT INTO UMS_SESSION_DETAILS (USER_ID, SYSTEM_SESSION_ID, SESSION_STATUS, NATIVE_TOKEN ) VALUES (?, ?, ?, ?)";
+	
+	private static final String UMS_SESSION_DETAILS_DELETE = "DELETE FROM UMS_SESSION_DETAILS WHERE USER_ID=? AND SYSTEM_SESSION_ID=? AND SESSION_STATUS=? AND NATIVE_TOKEN=?";
 
 /*	
 	USER_ID, SYSTEM_SESSION_ID, SESSION_STATUS, NATIVE_TOKEN
@@ -63,7 +65,7 @@ public class UmsSessionDetailsDaoImpl extends BaseDaoImpl implements
 				umsSessionDetails.getSessionStatus().getSessionStatusValue(),
 				umsSessionDetails.getNativeToken());
 	}
-
+	
 	@Override
 	public int update(UmsSessionDetails object) throws DbException {
 		// TODO Auto-generated method stub
@@ -86,9 +88,13 @@ public class UmsSessionDetailsDaoImpl extends BaseDaoImpl implements
 	}
 
 	@Override
-	public int delete(UmsSessionDetails object) throws DbException {
-		// TODO Auto-generated method stub
-		return 0;
+	public int delete(UmsSessionDetails umsSessionDetails) throws DbException {
+		
+		return dbSession.executeUpdate(UMS_SESSION_DETAILS_DELETE,
+				umsSessionDetails.getUserId(),
+				umsSessionDetails.getSystemSessionId(),
+				umsSessionDetails.getSessionStatus().getSessionStatusValue(),
+				umsSessionDetails.getNativeToken());
 	}
 
 	@Override
