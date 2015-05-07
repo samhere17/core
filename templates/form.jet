@@ -1,4 +1,4 @@
-<%@ jet package="org.iq.form.templates" imports="org.iq.form.DataField org.iq.form.Fieldset org.iq.form.Form org.iq.util.StringUtil" class="FormTemplate"%>
+<%@ jet package="org.iq.form.templates" imports="org.iq.form.DataField org.iq.form.Fieldset org.iq.form.Form org.iq.util.StringUtil org.iq.form.FormConstants.InputType" class="FormTemplate"%>
 <%
 	Form form = (Form)argument;
 %>
@@ -33,16 +33,11 @@
 <%
 	if(thisFieldset.getFields() != null && thisFieldset.getFields().size() > 0) {
 		for (DataField thisDataField : thisFieldset.getFields()) {
+			String fieldType = thisDataField.getInputType().toString();
+			String fieldName = thisDataField.getName();
 %>
 					<div class="field-col">
-						<label for="name">data fld label</label>
-						<input type="text" id="field-id" name="field-name" value="field-value" required />
-						<div class="field-info-container">
-							<div class="field-info">
-								<div class="info-content">This is field information</div>
-							</div>
-						</div>
-						<div id="field-id-error" class="-iq-error">This is field validation error</div>
+						<%@ include file="simplefield.inc" %>
 					</div>
 <%
 		}

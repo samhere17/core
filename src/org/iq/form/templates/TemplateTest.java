@@ -49,6 +49,8 @@ public class TemplateTest {
 		DataField dataField = new DataField();
 		dataField.setId(1);
 		dataField.setLabel("Field #1");
+		dataField.setName("Field #1");
+		dataField.setInfo("This is field information");
 		dataField.setInputType(InputType.TEXT);
 		
 		dataFields.add(dataField);
@@ -56,10 +58,11 @@ public class TemplateTest {
 		dataField = new DataField();
 		dataField.setId(2);
 		dataField.setLabel("Field #2");
+		dataField.setName("Field #2");
 		dataField.setInputType(InputType.PASSWORD);
 		
 		dataFields.add(dataField);
 		
-		return null;
+		return dataFields;
 	}
 }
