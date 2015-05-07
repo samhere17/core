@@ -15,6 +15,11 @@ public class Form extends BaseVO {
 	private String name;
 	private String action;
 	private Method method;
+
+	private String headerImage;
+	private String header;
+	private String helpLink;
+
 	private List<Fieldset> fieldsets;
 	private List<ActionField> actionFields;
 
@@ -26,8 +31,7 @@ public class Form extends BaseVO {
 	}
 
 	/**
-	 * @param id
-	 *            the id to set
+	 * @param id the id to set
 	 */
 	public void setId(int id) {
 		this.id = id;
@@ -41,8 +45,7 @@ public class Form extends BaseVO {
 	}
 
 	/**
-	 * @param name
-	 *            the name to set
+	 * @param name the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -56,8 +59,7 @@ public class Form extends BaseVO {
 	}
 
 	/**
-	 * @param action
-	 *            the action to set
+	 * @param action the action to set
 	 */
 	public void setAction(String action) {
 		this.action = action;
@@ -71,11 +73,52 @@ public class Form extends BaseVO {
 	}
 
 	/**
-	 * @param method
-	 *            the method to set
+	 * @param method the method to set
 	 */
 	public void setMethod(Method method) {
 		this.method = method;
+	}
+
+	/**
+	 * @return the headerImage
+	 */
+	public String getHeaderImage() {
+		return headerImage;
+	}
+
+	/**
+	 * @param headerImage the headerImage to set
+	 */
+	public void setHeaderImage(String headerImage) {
+		this.headerImage = headerImage;
+	}
+
+	/**
+	 * @return the header
+	 */
+	public String getHeader() {
+		return header;
+	}
+
+	/**
+	 * @param header the header to set
+	 */
+	public void setHeader(String header) {
+		this.header = header;
+	}
+
+	/**
+	 * @return the helpLink
+	 */
+	public String getHelpLink() {
+		return helpLink;
+	}
+
+	/**
+	 * @param helpLink the helpLink to set
+	 */
+	public void setHelpLink(String helpLink) {
+		this.helpLink = helpLink;
 	}
 
 	/**
@@ -86,8 +129,7 @@ public class Form extends BaseVO {
 	}
 
 	/**
-	 * @param fieldsets
-	 *            the fieldsets to set
+	 * @param fieldsets the fieldsets to set
 	 */
 	public void setFieldsets(List<Fieldset> fieldsets) {
 		this.fieldsets = fieldsets;
@@ -101,8 +143,7 @@ public class Form extends BaseVO {
 	}
 
 	/**
-	 * @param actionFields
-	 *            the actionFields to set
+	 * @param actionFields the actionFields to set
 	 */
 	public void setActionFields(List<ActionField> actionFields) {
 		this.actionFields = actionFields;

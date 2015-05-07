@@ -1,19 +1,39 @@
-<%@ jet package="org.iq.form.templates" imports="org.iq.form.Form" class="FormTemplate"%>
+<%@ jet package="org.iq.form.templates" imports="org.iq.form.DataField org.iq.form.Fieldset org.iq.form.Form org.iq.util.StringUtil" class="FormTemplate"%>
 <%
 	Form form = (Form)argument;
 %>
 <div class="form-container">
-	<form method="<%=form.getMethod().toString()%>" action="${pageContext.request.contextPath}/adapter">
+	<form method="<%=form.getMethod().toString()%>" action="${pageContext.request.contextPath}/<%=form.getAction()%>">
 		<input type="hidden" name="serviceName" value="InsertOrganization" />
 		<div class="form-header">
-			<img src="${pageContext.request.contextPath}/__sys/img/org-16-16.png" alt="New Organization" title="New Organization" />
-			<h3>Form Header</h3>
-			<a href=""><img src="${pageContext.request.contextPath}/__sys/img/help.png" alt="Help" title="Help"/></a>
+<%
+	if(StringUtil.isEmpty(form.getHeaderImage()) == false) {
+%>
+			<img src="${pageContext.request.contextPath}/<%=form.getHeaderImage()%>" alt="<%=form.getHeader()%>" title="<%=form.getHeader()%>" />
+<%
+	}
+%>
+			<h3><%=form.getHeader()%></h3>
+<%
+	if(StringUtil.isEmpty(form.getHelpLink()) == false) {
+%>
+			<a href="${pageContext.request.contextPath}/<%=form.getHelpLink()%>"><img src="${pageContext.request.contextPath}/__sys/img/help.png" alt="Help" title="Help"/></a>
+<%
+	}
+%>
 		</div>
 		<div class="form-content">
+<%
+	if(form.getFieldsets() != null && form.getFieldsets().size() > 0) {
+		for (Fieldset thisFieldset : form.getFieldsets()) {
+%>
 			<fieldset>
-				<legend>fieldset legend</legend>
+				<legend><%=thisFieldset.getLegend()%></legend>
 				<div class="fields-row">
+<%
+	if(thisFieldset.getFields() != null && thisFieldset.getFields().size() > 0) {
+		for (DataField thisDataField : thisFieldset.getFields()) {
+%>
 					<div class="field-col">
 						<label for="name">data fld label</label>
 						<input type="text" id="field-id" name="field-name" value="field-value" required />
@@ -24,8 +44,16 @@
 						</div>
 						<div id="field-id-error" class="-iq-error">This is field validation error</div>
 					</div>
+<%
+		}
+	}
+%>
 				</div>
 			</fieldset>
+<%
+		}
+	}
+%>
 			<div class="clear"></div>
 		</div>
 		<div class="form-actions">
