@@ -72,8 +72,7 @@ public class AuthenticationService extends BaseService {
 		if (umsSession.isSessionValid()) {
 			if (umsSession.getRoleId() == 1) {
 				redirectUrl = "home.jsp";
-			}
-			else{
+			} else {
 				redirectUrl = "error.jsp";
 			}
 		} else {

@@ -19,7 +19,6 @@ import org.iq.ServiceConstants;
 import org.iq.UmsConstants;
 import org.iq.processor.RequestProcessor;
 import org.iq.processor.RequestProcessor.RequestType;
-import org.iq.service.organization.OrganizationParamKeys;
 import org.iq.util.StringUtil;
 
 /**
@@ -206,7 +205,7 @@ public class ServerAdapter extends HttpServlet {
 					&& "customer".equals(attrName) == false
 					&& "role".equals(attrName) == false
 					&& "optionsList".equals(attrName) == false
-				&& OrganizationParamKeys.ORGANIZATION_KEY.equals(attrName) == false) {
+				&& "organization".equals(attrName) == false) {
 				httpSession.removeAttribute(attrName);
 			}
 		}

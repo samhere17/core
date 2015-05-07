@@ -1,4 +1,4 @@
-<%@page import="org.iq.valueobject.organization.Organization"%>
+<%@page import="com.iq.valueobject.organization.Organization"%>
 <%@page import="java.util.List"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
