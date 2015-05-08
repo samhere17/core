@@ -13,9 +13,10 @@ public class Field extends BaseVO {
 	 * 
 	 */
 	private int id = 0;
+	private String htmlId;
 	private String label;
 	private String name;
-	private String info;
+	private String fieldInfo;
 	private InputType inputType;
 	
 	/**
@@ -31,6 +32,20 @@ public class Field extends BaseVO {
 	 */
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	/**
+	 * @return the htmlId
+	 */
+	public String getHtmlId() {
+		return htmlId;
+	}
+
+	/**
+	 * @param htmlId the htmlId to set
+	 */
+	public void setHtmlId(String htmlId) {
+		this.htmlId = htmlId;
 	}
 
 	/**
@@ -62,18 +77,19 @@ public class Field extends BaseVO {
 		this.name = name;
 	}
 
+
 	/**
-	 * @return
+	 * @return the fieldInfo
 	 */
-	public String getInfo() {
-		return info;
+	public String getFieldInfo() {
+		return fieldInfo;
 	}
 
 	/**
-	 * @param info
+	 * @param fieldInfo the fieldInfo to set
 	 */
-	public void setInfo(String info) {
-		this.info = info;
+	public void setFieldInfo(String fieldInfo) {
+		this.fieldInfo = fieldInfo;
 	}
 
 	/**

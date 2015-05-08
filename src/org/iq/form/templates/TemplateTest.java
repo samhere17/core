@@ -2,6 +2,7 @@ package org.iq.form.templates;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.iq.form.DataField;
 import org.iq.form.Fieldset;
@@ -48,15 +49,17 @@ public class TemplateTest {
 		
 		DataField dataField = new DataField();
 		dataField.setId(1);
+		dataField.setHtmlId(Long.toHexString(UUID.randomUUID().getMostSignificantBits()));
 		dataField.setLabel("Field #1");
 		dataField.setName("Field #1");
-		dataField.setInfo("This is field information");
+		dataField.setFieldInfo("This is field #1 information");
 		dataField.setInputType(InputType.TEXT);
 		
 		dataFields.add(dataField);
 		
 		dataField = new DataField();
 		dataField.setId(2);
+		dataField.setHtmlId(Long.toHexString(UUID.randomUUID().getMostSignificantBits()));
 		dataField.setLabel("Field #2");
 		dataField.setName("Field #2");
 		dataField.setInputType(InputType.PASSWORD);
