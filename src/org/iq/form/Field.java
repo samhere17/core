@@ -18,6 +18,10 @@ public class Field extends BaseVO {
 	private String name;
 	private String fieldInfo;
 	private InputType inputType;
+	private boolean readonly;
+	private boolean required;
+	private boolean disabled;
+	private String maxLength;
 	
 	/**
 	 * @return the id
@@ -113,6 +117,63 @@ public class Field extends BaseVO {
 	 */
 	public void setInputType(int inputTypeValue) {
 		this.inputType = InputType.getInputType(inputTypeValue);
+	}
+
+	
+	/**
+	 * @return
+	 */
+	public boolean isReadonly() {
+		return readonly;
+	}
+
+	/**
+	 * @param readonly
+	 */
+	public void setReadonly(boolean readonly) {
+		this.readonly = readonly;
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isRequired() {
+		return required;
+	}
+
+	/**
+	 * @param required
+	 */
+	public void setRequired(boolean required) {
+		this.required = required;
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+	/**
+	 * @param disabled
+	 */
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getMaxLength() {
+		return maxLength;
+	}
+
+	/**
+	 * @param maxLength
+	 */
+	public void setMaxLength(String maxLength) {
+		this.maxLength = maxLength;
 	}
 
 	@Override

@@ -13,7 +13,7 @@ public class Fieldset extends BaseVO {
 
 	private int id = 0;
 	private String legend;
-	private List<DataField> dataFields;
+	private List<Field> dataFields;
 	private List<Fieldset> childFieldset;
 
 	/**
@@ -49,7 +49,7 @@ public class Fieldset extends BaseVO {
 	/**
 	 * @return the dataFields
 	 */
-	public List<DataField> getFields() {
+	public List<Field> getFields() {
 		return dataFields;
 	}
 
@@ -57,7 +57,7 @@ public class Fieldset extends BaseVO {
 	 * @param dataFields
 	 *            the dataFields to set
 	 */
-	public void setFields(List<DataField> dataFields) {
+	public void setFields(List<Field> dataFields) {
 		this.dataFields = dataFields;
 	}
 

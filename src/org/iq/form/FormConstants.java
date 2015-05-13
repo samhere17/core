@@ -78,7 +78,8 @@ public interface FormConstants {
 		TEXT(17),
 		TIME(18),
 		URL(19),
-		WEEK(20);
+		WEEK(20),
+		SELECT(21);
 
 		private final int inputType;
 

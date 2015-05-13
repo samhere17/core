@@ -1,4 +1,4 @@
-<%@ jet package="org.iq.form.templates" imports="org.iq.form.DataField org.iq.form.Fieldset org.iq.form.Form org.iq.form.FormConstants.InputType org.iq.util.StringUtil" class="FormTemplate"%>
+<%@ jet package="org.iq.form.templates" imports="org.iq.form.Field org.iq.form.Fieldset org.iq.form.Form org.iq.form.FormConstants.InputType org.iq.util.StringUtil org.iq.form.MultiValuedField" class="FormTemplate"%>
 <%
 	Form form = (Form)argument;
 %>
@@ -32,7 +32,7 @@
 				<div class="fields-row">
 <%
 			if(thisFieldset.getFields() != null && thisFieldset.getFields().size() > 0) {
-				for (DataField thisDataField : thisFieldset.getFields()) {
+				for (Field thisDataField : thisFieldset.getFields()) {
 					InputType fieldType = thisDataField.getInputType();
 					//Checking if field is simple type
 					if((InputType.DATE.equals(fieldType)) || (InputType.DATETIME_LOCAL.equals(fieldType)) || 
@@ -42,6 +42,10 @@
 %>
 <%@ include file="simplefield.inc" %>
 <%
+					}else if((InputType.SELECT.equals(fieldType)) || (InputType.RADIO.equals(fieldType)) || (InputType.CHECKBOX.equals(fieldType))){
+%>
+<%@ include file="multivaluedfield.inc" %>
+<%					
 					}
 				}
 			}
