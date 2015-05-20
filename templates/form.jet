@@ -35,10 +35,19 @@
 				for (Field thisDataField : thisFieldset.getFields()) {
 					InputType fieldType = thisDataField.getInputType();
 					//Checking if field is simple type
-					if((InputType.DATE.equals(fieldType)) || (InputType.DATETIME_LOCAL.equals(fieldType)) || 
-						(InputType.EMAIL.equals(fieldType)) || (InputType.NUMBER.equals(fieldType)) || 
-						(InputType.PASSWORD.equals(fieldType)) || (InputType.TEXT.equals(fieldType)) || 
-						(InputType.TIME.equals(fieldType)) || (InputType.URL.equals(fieldType))) {
+						if ((InputType.COLOR.equals(fieldType))
+								|| (InputType.DATE.equals(fieldType))
+								|| (InputType.DATETIME_LOCAL.equals(fieldType))
+								|| (InputType.EMAIL.equals(fieldType))
+								|| (InputType.MONTH.equals(fieldType))
+								|| (InputType.NUMBER.equals(fieldType))
+								|| (InputType.PASSWORD.equals(fieldType))
+								|| (InputType.RANGE.equals(fieldType))
+								|| (InputType.SEARCH.equals(fieldType))
+								|| (InputType.TEXT.equals(fieldType))
+								|| (InputType.TIME.equals(fieldType))
+								|| (InputType.URL.equals(fieldType))
+								|| (InputType.WEEK.equals(fieldType))) {
 %>
 <%@ include file="simplefield.inc" %>
 <%
