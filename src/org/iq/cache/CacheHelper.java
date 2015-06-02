@@ -2,7 +2,6 @@ package org.iq.cache;
 
 import java.util.Set;
 
-import org.iq.cache.regions.CacheRegion;
 import org.iq.exception.CacheException;
 
 /**
@@ -11,59 +10,127 @@ import org.iq.exception.CacheException;
  */
 public class CacheHelper {
 
+	/*
+	 * REGION RELATED CODE
+	 */
+
+	/**
+	 * @param cacheRegion
+	 * @throws CacheException
+	 */
+	public void addRegion(CacheRegion cacheRegion) throws CacheException {
+		if (cacheRegion == null) {
+			throw new CacheException("Cache Region is null");
+		}
+		if (cacheRegion.getRegionName() == null) {
+			throw new CacheException("Region Name is null");
+		}
+
+		synchronized (Cache.class) {
+			Cache cache = Cache.getInstance();
+			cache.put(cacheRegion.getRegionName(), cacheRegion);
+		}
+	}
+
+	/**
+	 * @param regionName
+	 * @throws CacheException
+	 */
+	public void addRegion(String regionName) throws CacheException {
+		CacheRegion cacheRegion = new CacheRegion(regionName);
+		addRegion(cacheRegion);
+	}
+
+	/**
+	 * @param regionName
+	 * @param description
+	 * @throws CacheException
+	 */
+	public void addRegion(String regionName, String description)
+			throws CacheException {
+		CacheRegion cacheRegion = new CacheRegion(regionName, description);
+		addRegion(cacheRegion);
+	}
+
+	/**
+	 * @param regionName
+	 * @param description
+	 * @param evictionAllowed
+	 * @throws CacheException
+	 */
+	public void addRegion(String regionName, String description,
+			boolean evictionAllowed) throws CacheException {
+		CacheRegion cacheRegion = new CacheRegion(regionName, description,
+				evictionAllowed);
+		addRegion(cacheRegion);
+	}
+
 	/**
 	 * @param regionName
 	 * @param description
 	 * @param evictionAllowed
 	 * @param userClearRegionAllowed
 	 * @param userClearElementAllowed
-	 * @param cleaningRequired
 	 * @throws CacheException
 	 */
 	public void addRegion(String regionName, String description,
 			boolean evictionAllowed, boolean userClearRegionAllowed,
-			boolean userClearElementAllowed, boolean cleaningRequired)
-			throws CacheException {
+			boolean userClearElementAllowed) throws CacheException {
 		CacheRegion cacheRegion = new CacheRegion(regionName, description,
 				evictionAllowed, userClearRegionAllowed,
-				userClearElementAllowed, cleaningRequired);
-		addRegion(regionName, cacheRegion);
-	}
-	
-	/**
-	 * @param regionName
-	 * @param description
-	 * @throws CacheException
-	 */
-	public void addRegion(String regionName,
-			String description) throws CacheException {
-		CacheRegion cacheRegion = new CacheRegion(regionName, 
-				description, false, false, false, false);
-		addRegion(regionName, cacheRegion);
-	}
-	
-	/**
-	 * @param regionName
-	 * @param cacheRegion
-	 * @throws CacheException
-	 */
-	private void addRegion(String regionName, CacheRegion cacheRegion)
-			throws CacheException {
-
-		synchronized (Cache.class) {
-			Cache cache = Cache.getInstance();
-			cache.put(regionName, cacheRegion);
-		}
+				userClearElementAllowed);
+		addRegion(cacheRegion);
 	}
 
 	/**
 	 * @param regionName
 	 * @return boolean
+	 * @throws CacheException
 	 */
-	public boolean isRegionExists(String regionName) {
+	public boolean isRegionExists(String regionName) throws CacheException {
+		if (regionName == null) {
+			throw new CacheException("Region Name is null");
+		}
+
 		Cache cache = Cache.getInstance();
 		return cache.containsKey(regionName);
 	}
+
+	/**
+	 * @return Set<String>
+	 */
+	public Set<String> getRegionKeySet() {
+		Cache cache = Cache.getInstance();
+		return cache.keySet();
+	}
+
+	/**
+	 * @param regionName
+	 * @return CacheRegion
+	 * @throws CacheException
+	 */
+	private CacheRegion getRegion(String regionName) throws CacheException {
+		if (regionName == null) {
+			throw new CacheException("Region Name is null");
+		}
+
+		Cache cache = Cache.getInstance();
+		CacheRegion cacheRegion = cache.get(regionName);
+		if (cacheRegion == null) {
+			throw new CacheException("Region: " + regionName + " not found.");
+		}
+		return cacheRegion;
+	}
+
+	public boolean isEvictionAllowed(String regionName) throws CacheException {
+		CacheRegion cacheRegion = getRegion(regionName);
+		return cacheRegion.evictionAllowed;
+	}
+	
+	
+	/*
+	 * ELEMENT RELATED CODE
+	 */
 
 	/**
 	 * @param regionName
@@ -71,43 +138,35 @@ public class CacheHelper {
 	 * @param value
 	 * @throws CacheException
 	 */
-	public void addElement(String regionName, String key,
-			Object value) throws CacheException {
-		Cache cache = Cache.getInstance();
-		CacheRegion cacheRegion = cache.get(regionName);
-		if (cacheRegion == null) {
-			/* throw new CacheException("Not a valid cache region"); */
-			cacheRegion = new CacheRegion(regionName, "", false,
-					false, false, false);
-			cacheRegion.addElement(key, value);
-			cache.put(regionName, cacheRegion);
-		}
-		cacheRegion.addElement(key, value);
+	public void addElement(String regionName, String key, Object value)
+			throws CacheException {
+		CacheRegion cacheRegion = getRegion(regionName);
+		cacheRegion.putData(key, value);
 	}
 
 	/**
 	 * @param regionName
 	 * @param key
-	 * @return
+	 * @return boolean
+	 * @throws CacheException
 	 */
-	public boolean isKeyExists(String regionName, String key) {
-		Cache cache = Cache.getInstance();
-		CacheRegion region = cache.get(regionName);
-		if (region == null) {
-			return false;
-		} else {
-			return region.isKeyExists(key);
+	public boolean isKeyExists(String regionName, String key)
+			throws CacheException {
+		CacheRegion cacheRegion = getRegion(regionName);
+		if (key == null) {
+			throw new CacheException("Key is null");
 		}
+		return cacheRegion.containsKey(key);
 	}
 
 	/**
 	 * @param regionName
-	 * @return
+	 * @return Set<String>
+	 * @throws CacheException
 	 */
-	public Set<String> getKeySet(String regionName) {
-		Cache cache = Cache.getInstance();
-		CacheRegion region = cache.get(regionName);
-		return region.getKeySet();
+	public Set<String> getKeySet(String regionName) throws CacheException {
+		CacheRegion cacheRegion = getRegion(regionName);
+		return cacheRegion.keySet();
 	}
 
 	/**
@@ -126,134 +185,37 @@ public class CacheHelper {
 	 */
 	public Object getElement(String regionName, String key)
 			throws CacheException {
-		Cache cache = Cache.getInstance();
-		CacheRegion cacheRegion = cache.get(regionName);
-		if (cacheRegion == null) {
-			throw new CacheException("Not a valid cache region");
-		}
-		Object value = cacheRegion.getElement(key);
-		return value;
-	}
-
-	/**
-	 * @return Set
-	 * @throws CacheException
-	 */
-	public Set<String> getAllUserRegionNames() throws CacheException {
-		Cache cache = Cache.getInstance();
-		return cache.keySet();
+		CacheRegion cacheRegion = getRegion(regionName);
+		return cacheRegion.getData(key);
 	}
 
 	/**
 	 * 
-	 * @param regionKey
-	 * @return CacheRegion
-	 * @throws CacheException
-	 */
-	public CacheRegion getUserRegion(String regionKey) throws CacheException {
-		Cache cache = Cache.getInstance();
-		CacheRegion cacheRegion = cache.get(regionKey);
-		if (cacheRegion == null) {
-			System.out
-					.println("No region found with Region Name::" + regionKey);
-			throw new CacheException("No region found with Region Name::"
-					+ regionKey);
-		}
-		return cacheRegion;
-	}
-
-	/**
-	 * regionKey is a combination of region type and regionName separated by a '~'
-	 * @param regionKey
+	 * @param regionName
 	 * @param key
 	 * @throws CacheException
 	 */
-	public void removeElement(String regionKey, Object key)
+	public void removeElement(String regionName, String key)
 			throws CacheException {
-		Cache cache = Cache.getInstance();
-		CacheRegion cacheRegion = cache.get(regionKey);
-		if (cacheRegion == null) {
-			throw new CacheException("Not a valid cache region.");
-		}
-		cacheRegion.deleteElement(key);
+		CacheRegion cacheRegion = getRegion(regionName);
+		cacheRegion.remove(key);
 	}
 
-	
 	/**
 	 * @param regionName
 	 * @throws CacheException
 	 */
-	public void removeAllElement(String regionName)
-			throws CacheException {
-		Cache cache = Cache.getInstance();
-		CacheRegion cacheRegion = cache.get(regionName);
-		if (cacheRegion == null) {
-			throw new CacheException("Not a valid cache region.");
-		}
-		cacheRegion.deleteAllElement();
+	public void removeAllElement(String regionName) throws CacheException {
+		CacheRegion cacheRegion = getRegion(regionName);
+		cacheRegion.clear();
 	}
-	
+
 	/**
 	 * @param regionName
-	 * @param evictionAllowed
 	 * @throws CacheException
 	 */
-	public void setEvictionAllowed(String regionName,
-			boolean evictionAllowed) throws CacheException {
-		Cache cache = Cache.getInstance();
-		CacheRegion cacheRegion = cache.get(regionName);
-		if (cacheRegion == null) {
-			throw new CacheException("Not a valid cache region.");
-		} else {
-			cacheRegion.setEvictionAllowed(evictionAllowed);
-		}
-	}
-	
-	/**
-	 * @param regionName
-	 * @param userClearRegionAllowed
-	 * @throws CacheException
-	 */
-	public void setUserClearRegionAllowed(String regionName,
-			boolean userClearRegionAllowed) throws CacheException {
-		Cache cache = Cache.getInstance();
-		CacheRegion cacheRegion = cache.get(regionName);
-		if (cacheRegion == null) {
-			throw new CacheException("Not a valid cache region.");
-		} else {
-			cacheRegion.setUserClearRegionAllowed(userClearRegionAllowed);
-		}
-	}
-	
-	/**
-	 * @param regionName
-	 * @param userClearElementAllowed
-	 * @throws CacheException
-	 */
-	public void setUserClearElementAllowed(String regionName,
-			boolean userClearElementAllowed) throws CacheException {
-		Cache cache = Cache.getInstance();
-		CacheRegion cacheRegion = cache.get(regionName);
-		if (cacheRegion == null) {
-			throw new CacheException("Not a valid cache region.");
-		} else {
-			cacheRegion.setUserClearElementAllowed(userClearElementAllowed);
-		}
-	}
-	
-	/**
-	 * @param regionName
-	 * @param cleaningRequired
-	 * @throws CacheException
-	 */
-	public void setCleaningRequired(String regionName,
-			boolean cleaningRequired) throws CacheException {
-		Cache cache = Cache.getInstance();
-		CacheRegion cacheRegion = cache.get(regionName);
-		if (cacheRegion == null) {
-			throw new CacheException("Not a valid cache region.");
-		} else {
-			cacheRegion.setCleaningRequired(cleaningRequired);
-		}
-	}
+	/*public void setCleaningRequired(String regionName) throws CacheException {
+		CacheRegion cacheRegion = getRegion(regionName);
+		cacheRegion.setCleaningRequired(true);
+	}*/
 }

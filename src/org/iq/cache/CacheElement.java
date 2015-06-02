@@ -1,69 +1,81 @@
 package org.iq.cache;
 
+import java.io.Serializable;
 import java.util.Date;
-
 
 /**
  * @author Sam
- *
+ * 
  */
-public class CacheElement {
+public class CacheElement implements Cloneable, Serializable {
 
-  private Date creationTime = new Date();
-  private Date lastAccessTime = new Date();
-  private Object value = null;
-  private Boolean cleanable=false;
-  
-  /**
-   * @return the cleanable
-   */
-  public Boolean isCleanable() {
-    return cleanable;
-  }
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2341735123648098135L;
+	
+	private Date creationTime = new Date();
+	private Date lastAccessTime = new Date();
+	private Object value = null;
+	private Boolean cleanable = false;
+	
+	public CacheElement() {
+		
+	}
 
-  /**
-   * @param cleanable
-   *          the cleanable to set
-   */
-  public void setCleanable(Boolean cleanable) {
-    this.cleanable = cleanable;
-  }
+	public CacheElement(Object value) {
+		this.value = value;
+	}
 
-  /**
-   * @return the value
-   */
-  
-  public Object getValue() {
-    return value;
-  }
+	/**
+	 * @return the lastAccessTime
+	 */
+	public Date getLastAccessTime() {
+		return lastAccessTime;
+	}
 
-  /**
-   * @param value
-   *          the value to set
-   */
-  public void setValue(Object value) {
-    this.value = value;
-  }
+	/**
+	 * @param lastAccessTime
+	 *            the lastAccessTime to set
+	 */
+	public void setLastAccessTime(Date lastAccessTime) {
+		this.lastAccessTime = lastAccessTime;
+	}
 
-  /**
-   * @return the creationTime
-   */
-  public Date getCreationTime() {
-    return creationTime;
-  }
+	/**
+	 * @return the value
+	 */
+	public Object getValue() {
+		return value;
+	}
 
-  /**
-   * @return the lastAccessTime
-   */
-  public Date getLastAccessTime() {
-    return lastAccessTime;
-  }
+	/**
+	 * @param value
+	 *            the value to set
+	 */
+	public void setValue(Object value) {
+		this.value = value;
+	}
 
-  /**
-   * @param lastAccessTime
-   *          the lastAccessTime to set
-   */
-  public void setLastAccessTime(Date lastAccessTime) {
-    this.lastAccessTime = lastAccessTime;
-  }
+	/**
+	 * @return the cleanable
+	 */
+	public Boolean isCleanable() {
+		return cleanable;
+	}
+
+	/**
+	 * @param cleanable
+	 *            the cleanable to set
+	 */
+	public void setCleanable(Boolean cleanable) {
+		this.cleanable = cleanable;
+	}
+
+	/**
+	 * @return the creationTime
+	 */
+	public Date getCreationTime() {
+		return creationTime;
+	}
 }

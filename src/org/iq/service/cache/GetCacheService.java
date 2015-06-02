@@ -6,7 +6,6 @@ import java.util.Set;
 import org.iq.cache.CacheHelper;
 import org.iq.cache.CacheRegionDataVO;
 import org.iq.cache.CacheVO;
-import org.iq.cache.regions.CacheRegion;
 import org.iq.exception.CacheException;
 import org.iq.exception.ServiceException;
 import org.iq.logger.LocalLogger;
@@ -25,26 +24,26 @@ public class GetCacheService extends BaseService {
 	public void execute(HashMap<String, Object> input) throws ServiceException {
 
 		LocalLogger.logMethodStart();
-		HashMap<String, Object> regionMap = new HashMap<>();
+//		HashMap<String, Object> regionMap = new HashMap<>();
 		CacheVO[] cacheVOs = null;
 		
 		try {
 			CacheHelper cacheHelper = new CacheHelper();
-			Set<String> regionNames = cacheHelper.getAllUserRegionNames();
+			Set<String> regionNames = cacheHelper.getRegionKeySet();
 			cacheVOs = new CacheVO[regionNames.size()];
 			int i=0;
 			for (String regionName : regionNames) {
 				cacheVOs[i] = new CacheVO();
 				cacheVOs[i].setRegionName(regionName);
-				CacheRegion cacheRegion = cacheHelper.getUserRegion(regionName);
-				Set<String> keys = cacheHelper.getKeySet(cacheRegion.getRegionName());
+//				CacheRegion cacheRegion = cacheHelper.getRegion(regionName);
+				Set<String> keys = cacheHelper.getKeySet(regionName);
 				CacheRegionDataVO[] cacheRegionDataVOs = new CacheRegionDataVO[keys.size()];
 				int j=0;
-				regionMap.put(regionName, cacheRegion);
+//				regionMap.put(regionName, cacheRegion);
 				for (String key : keys) {
 					cacheRegionDataVOs[j] = new CacheRegionDataVO();
 					cacheRegionDataVOs[j].setKey(key);
-					Object object = cacheHelper.getElement(cacheRegion.getRegionName(), key);
+					Object object = cacheHelper.getElement(regionName, key);
 					if (object != null) {
 						cacheRegionDataVOs[j].setValue(object.toString());
 					}

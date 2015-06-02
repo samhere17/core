@@ -88,7 +88,11 @@
 		
 		<!-- Zipping ${dist.dir} -->
 		<antcall target="zip.dist"></antcall>
-		
+
+		<!--FOR DEV-->
+		<antcall target="dev.copy.war" />
+		<!--FOR DEV-->
+
 	</target>
 	
 	<!-- Copying required supporting libraries to ${dist.dir}/lib -->
@@ -100,6 +104,25 @@
 				<!-- PUT JAR FILE ENTRIES THAT YOU INTEND TO USE FOR THIS PROJECT -->
 				<include name="com.mysql.jdbc_5.1.5.jar"/>
 				<include name="commons-validator-1.4.0.jar"/>
+				
+				<!-- jersey related -->
+				<include name="javax.ws.rs-api-2.0.1.jar"/>
+				<include name="hk2-api-2.4.0-b10.jar"/>
+				<include name="hk2-locator-2.4.0-b10.jar"/>
+				<include name="hk2-utils-2.4.0-b10.jar"/>
+				<include name="jackson-all-1.9.11.jar"/>
+				<include name="javassist-3.18.1-GA.jar"/>
+				<include name="javax.annotation-api-1.2.jar"/>
+				<include name="javax.inject-2.4.0-b10.jar"/>
+				<include name="jersey-client.jar"/>
+				<include name="jersey-common.jar"/>
+				<include name="jersey-container-servlet-core.jar"/>
+				<include name="jersey-container-servlet.jar"/>
+				<include name="jersey-guava-2.17.jar"/>
+				<include name="jersey-server.jar"/>
+				<include name="validation-api-1.1.0.Final.jar"/>
+				<!-- jersey related -->
+				
 				<include name="jstl-1.2.jar"/>
 			</fileset>
 		</copy>
@@ -114,8 +137,9 @@
 	        <fileset dir="${dist.dir}/lib">
 	        	<include name="**/*.jar"/>
 	        </fileset>
-	        <fileset dir="${lib.dir}">
-	        	<include name="javax.servlet-3.0.jar"/>
+			<fileset dir="${lib.dir}">
+				<include name="javax.servlet-api-3.0.1.jar"/>
+				<include name="javax.ws.rs-api-2.0.1.jar"/>
 	        </fileset>
 	    </path>
 
@@ -140,6 +164,7 @@
 
 		<!-- Building the jar -->
 		<jar destfile="${dist.dir}/jar/${proj.name}-${build.version}.jar" basedir="${dist.dir}/temp/bin">
+			<include name="com/iq/**" />
 			<include name="org/iq/**" />
 			<manifest>
 				<attribute name="Implementation-Title" value="${proj.name}-${build.version}.jar" />
@@ -195,7 +220,7 @@
 		</copy>
 
 		<!-- Building the war -->
-		<war warfile="${dist.dir}/war/${proj.name}-${build.version}.war" webxml="${server.config.dir}/web.xml">
+		<war warfile="${dist.dir}/war/${proj.name}-${build.version}.war" needxmlfile="false">
 			<lib dir="${dist.dir}/temp/lib">
 				<include name="**/*.jar" />
 			</lib>
@@ -268,4 +293,12 @@
 	<target name="zip.dist">
 		<zip destfile="${dist.dir}/${proj.name}-release-${build.version}.zip" basedir="${dist.dir}"></zip>
 	</target>
+
+	<!--FOR DEV-->
+	<target name="dev.copy.war">
+		<property environment="env"/>
+		<delete dir="${env.CATALINA_HOME}/webapps/${proj.name}" />
+		<copy file="${dist.dir}/war/${proj.name}-${build.version}.war" tofile="${env.CATALINA_HOME}/webapps/${proj.name}.war" verbose="true" />
+	</target>
+	<!--FOR DEV-->
 </project>

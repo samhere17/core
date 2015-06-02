@@ -1,17 +1,8 @@
-/**
- * Copyright (c) 2009, Amdocs. -- All Rights Reserved
- * 
- */
-
 package org.iq.cache;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import org.iq.cache.regions.CacheRegion;
 import org.iq.exception.CacheException;
 
 /**
@@ -20,166 +11,191 @@ import org.iq.exception.CacheException;
  */
 public class CacheEvictor implements Runnable {
 
-  private static final int DEFAULT_INTERVAL = 5;
-  private static final int MINUTE_TO_MILLIS = 1000 * 60;
+	private static final int DEFAULT_INTERVAL = 5;
+	private static final int MINUTE_TO_MILLIS = 1000 * 60;
 
-  private static CacheEvictor evictorInstance;
-  private Thread runner;
-  private boolean flag;
-  
-  private Logger logger = Logger.getLogger(CacheEvictor.class.getName());
+	private static CacheEvictor evictorInstance;
+	private Thread runner;
+	private boolean flag;
 
-  /**
-   * 
-   */
-  private CacheEvictor() {
-    runner = new Thread(this, "CacheHelper Evictor Thread");
-    flag = true;
-    runner.start();
-  }
+	/**
+	 * 
+	 */
+	private CacheEvictor() {
+		runner = new Thread(this, "Cache Evictor Thread");
+	}
 
-  /**
-   * @return CacheManager
-   */
-  public static CacheEvictor getEvictorInstance() {
-    if (evictorInstance == null) {
-      evictorInstance = new CacheEvictor();
-    }
-    return evictorInstance;
-  }
+	/**
+	 * @return CacheEvictor
+	 */
+	public static CacheEvictor getEvictorInstance() {
+		if (evictorInstance == null) {
+			evictorInstance = new CacheEvictor();
+		}
+		return evictorInstance;
+	}
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see java.lang.Runnable#run()
-   */
-  public void run() {
-    Set<String> regionKeySet = null;
-    CacheHelper cacheUtil = new CacheHelper();
-    CacheRegion cacheRegion = null;
+	/**
+	 * 
+	 */
+	public void startCacheEvictor() {
+		flag = true;
+		runner.start();
+	}
 
-    // setting default interval value.
-    int intervalMin = DEFAULT_INTERVAL;
+	/**
+	 * 
+	 */
+	public void stopCacheEvictor() {
+		flag = false;
+	}
 
-    // getting interval value from cacheHelper.
-    try {
-      intervalMin =  getDefaultCacheEvictionInterval();
-    }
-    catch (NumberFormatException e) {
-      logger.log(Level.SEVERE,e.getMessage(),e);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Runnable#run()
+	 */
+	public void run() {
 
-    while (flag == true) {
-      try {
-        logger.log(Level.INFO, "interval::" + intervalMin);
-        logger.log(Level.INFO, "Before sleep");
-        Thread.sleep(intervalMin * MINUTE_TO_MILLIS);
-        logger.log(Level.INFO, "After sleep");
-      }
-      catch (InterruptedException e) {
-        logger.log(Level.SEVERE,e.getMessage(),e);
-      }
+		// setting default interval value.
+		int intervalMin = DEFAULT_INTERVAL;
 
-      try {
-        // getting all regions in the cacheHelper.
-        regionKeySet = cacheUtil.getAllUserRegionNames();
-        logger.log(Level.INFO, "CacheHelper has got " + regionKeySet.size()+ " regions.");
-      }
-      catch (CacheException e) {
-        logger.log(Level.SEVERE,e.getMessage(),e);
-      }
+		while (flag == true) {
+			try {
+				System.out.println("[" + runner.getName() + "] "
+						+ "Sleeping for " + intervalMin + " minutes...");
+				Thread.sleep(intervalMin * MINUTE_TO_MILLIS);
+				System.out.println("[" + runner.getName() + "] " + "Sleep for "
+						+ intervalMin + " minutes over.");
+			} catch (InterruptedException e) {
+				System.err.println(e.getMessage());
+			}
 
-      Iterator<String> it = regionKeySet.iterator();
-      while (it.hasNext()) {
-        String regionId = it.next();
-        try {
-          cacheRegion = cacheUtil.getUserRegion(regionId);
-        }
-        catch (CacheException e) {
-          logger.log(Level.SEVERE,e.getMessage(),e);
-        }
-        startEviction(cacheRegion);
-      }
-    }
-  }
+			Cache cache = Cache.getInstance();
+			Set<String> regionNamesSet = cache.keySet();
 
-  /**
-   * @return
-   */
-  private int getDefaultCacheEvictionInterval() {
-    // TODO Auto-generated method stub
-    return 0;
-  }
+			System.out.println("Cache has got " + regionNamesSet.size()
+					+ " regions.");
 
-  private void startEviction(CacheRegion cacheRegion) {
-    // code to check if the region itself needs to be removed
-    if (cacheRegion.getKeySet().isEmpty()) {
+			Iterator<String> regionNamesIterator = regionNamesSet.iterator();
+			while (regionNamesIterator.hasNext()) {
+				String regionName = regionNamesIterator.next();
+				CacheRegion cacheRegion = cache.get(regionName);
+				if (cacheRegion.evictionAllowed) {
+					EvictionMarker evictionMarker = new EvictionMarker(
+							regionName);
+					evictionMarker.start();
+				}
+			}
+		}
+	}
 
-    }
-    else {
-      logger.log(Level.INFO, "Eviction Value : " + cacheRegion.isEvictionAllowed());
-      if (cacheRegion.isEvictionAllowed()) {
-        EvictionMarker marker = new EvictionMarker(cacheRegion);
-        marker.start();
-        logger.log(Level.INFO, "Eviction marker started for "
-            + cacheRegion.getRegionName() + " region.");
-      }
-      else {
-        logger.log(Level.INFO, "Eviction not allowed for "
-            + cacheRegion.getRegionName() + " region.");
-      }
-    }
-  }
+	/**
+	 * @author Sam
+	 * 
+	 */
+	private class EvictionMarker extends Thread {
 
-  /**
-   * 
-   */
-  public void stopCacheEvictor() {
-    flag = false;
-  }
+		private String regionName;
 
-  private class EvictionMarker extends Thread {
+		/**
+		 * @param cacheRegion
+		 */
+		private EvictionMarker(String regionName) {
+			this.regionName = regionName;
+			this.setName(regionName + " Eviction Marker Thread");
+			this.setDaemon(true);
+		}
 
-    private CacheRegion cacheRegion;
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Thread#run()
+		 */
+		public void run() {
 
-    /**
-     * @param cacheRegion
-     */
-    private EvictionMarker(CacheRegion cacheRegion) {
-      this.cacheRegion = cacheRegion;
-      this.setName(cacheRegion.getRegionName() + " Eviction Marker Thread");
-      this.setDaemon(true);
-    }
+			int intervalMin = DEFAULT_INTERVAL;
+			int markedCount = 0;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Thread#run()
-     */
-    public void run() {
-      markEvictable(cacheRegion.getRegionName(),
-          cacheRegion.getRegionCache());
-      logger.log(Level.INFO, this.getName() + " started...");
-    }
+			Cache cache = Cache.getInstance();
+			CacheRegion cacheRegion = cache.get(regionName);
+			Set<String> elementKeysSet = cacheRegion.keySet();
+			Iterator<String> elementKeysIterator = elementKeysSet.iterator();
+			while (elementKeysIterator.hasNext()) {
+				String currKey = elementKeysIterator.next();
+				CacheElement cacheElement = cacheRegion.get(currKey);
 
-    public void markEvictable(String regionName, 
-        HashMap<String, CacheElement> regionCache) {
-      boolean markedAny = false;
-      Iterator<String> cacheEleKeySetIterator =
-        ((HashMap)regionCache.clone()).keySet().iterator();
-      while (cacheEleKeySetIterator.hasNext()) {
-        Object currKey = cacheEleKeySetIterator.next();
-        CacheElement cacheElement = (CacheElement)regionCache.get(currKey);
-        if (new CacheEvictorHelper().markElement(cacheElement, regionName)) {
-          cacheElement.setCleanable(true);
-          logger.log(Level.INFO, "Marked CacheHelper Element in region : " + regionName);
-          markedAny = true;
-        }
-      }
+				long lastAccessTime = cacheElement.getLastAccessTime()
+						.getTime();
+				long presentTime = System.currentTimeMillis();
 
-      if (markedAny) {
-        cacheRegion.setCleaningRequired(true);
-      }
-    }
-  }
+				if ((presentTime - lastAccessTime) > intervalMin
+						* MINUTE_TO_MILLIS) {
+					cacheElement.setCleanable(true);
+					markedCount++;
+				}
+			}
+
+			if (markedCount > 0) {
+				System.out.println("Marked " + markedCount + " elements in "
+						+ regionName + " region.");
+				startCleanerThread(regionName);
+			}
+		}
+	}
+
+	/**
+	 * @author Sam
+	 * 
+	 */
+	private class CleanerThread extends Thread {
+
+		private String regionName;
+
+		/**
+		 * 
+		 */
+		public CleanerThread(String regionName) {
+			this.regionName = regionName;
+			this.setName(regionName + " Cleaner Thread");
+			this.setDaemon(true);
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Thread#run()
+		 */
+		@Override
+		public void run() {
+			Cache cache = Cache.getInstance();
+			CacheRegion cacheRegion = cache.get(regionName);
+			Set<String> elementKeysSet = cacheRegion.keySet();
+			Iterator<String> elementKeysIterator = elementKeysSet.iterator();
+			while (elementKeysIterator.hasNext()) {
+				String currKey = elementKeysIterator.next();
+				CacheElement cacheElement = cacheRegion.get(currKey);
+				if (cacheElement.isCleanable()) {
+					CacheHelper cacheHelper = new CacheHelper();
+					try {
+						cacheHelper.removeElement(regionName, currKey);
+					} catch (CacheException e) {
+						System.err.println(e.getMessage());
+					}
+					System.out.println("Evicted an element : Region = "
+							+ regionName + ", Key = " + currKey
+							+ ", Last Access = "
+							+ cacheElement.getLastAccessTime());
+				}
+			}
+		}
+	}
+
+	/**
+	 * 
+	 */
+	private void startCleanerThread(String regionName) {
+		CleanerThread cleanerThread = new CleanerThread(regionName);
+		cleanerThread.start();
+	}
 }

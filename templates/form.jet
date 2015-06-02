@@ -1,7 +1,64 @@
-<%@ jet package="org.iq.form.templates" imports="org.iq.form.Field org.iq.form.Fieldset org.iq.form.Form org.iq.form.FormConstants.InputType org.iq.util.StringUtil org.iq.form.MultiValuedField" class="FormTemplate"%>
+<%@ jet package="org.iq.form.templates" imports="java.util.HashSet java.util.Properties java.util.Set org.iq.form.Field org.iq.form.Fieldset org.iq.form.Form org.iq.form.FormConstants.InputType org.iq.util.StringUtil org.iq.form.MultiValuedField" class="FormTemplate" skeleton="./form.skeleton" %>
 <%
-	Form form = (Form)argument;
+	Set<String> reqCssClassNames = new HashSet<String>();
+	
+	if (form != null) {
+		reqCssClassNames.add(".gf-container");
+		reqCssClassNames.add(".gf-header");
+		reqCssClassNames.add(".gf-content");
+		reqCssClassNames.add(".gf-actions");
 %>
+<div class="gf-container">
+	<form method="<%=form.getMethod().toString()%>" action="${pageContext.request.contextPath}/<%=form.getAction()%>">
+		<div class="gf-header">
+<%
+	if(StringUtil.isEmpty(form.getHeaderImage()) == false) {
+		reqCssClassNames.add(".gf-header-img");
+%>
+			<img class="gf-header-img" src="${pageContext.request.contextPath}/<%=form.getHeaderImage()%>" alt="<%=form.getHeader()%>" title="<%=form.getHeader()%>" />
+<%
+	}
+	reqCssClassNames.add(".gf-header-text");
+%>
+			<h3 class="gf-header-text"><%=form.getHeader()%></h3>
+<%
+	if(StringUtil.isEmpty(form.getHelpLink()) == false) {
+		reqCssClassNames.add("a>.gf-header-help");
+		reqCssClassNames.add("a:hover>.gf-header-help");
+%>
+			<a href="${pageContext.request.contextPath}/<%=form.getHelpLink()%>"><img class="gf-header-help" src="${pageContext.request.contextPath}/__sys/img/help.png" alt="Help" title="Help"/></a>
+<%
+	}
+%>
+		</div>
+		<div class="gf-content">
+<%
+		if(form.getFieldsets() != null && form.getFieldsets().size() > 0) {
+			for (Fieldset thisFieldset : form.getFieldsets()) {
+%>
+			<fieldset>
+				<legend><%=thisFieldset.getLegend()%></legend>
+			</fieldset>
+<%
+			}
+		}
+%>
+		</div>
+		<div class="gf-actions">
+		</div>
+	</form>
+</div>
+<%
+	}
+%>
+
+<%@ include file="formcss.inc" %>
+
+
+
+
+
+
 <div class="form-container">
 	<form method="<%=form.getMethod().toString()%>" action="${pageContext.request.contextPath}/<%=form.getAction()%>">
 		<input type="hidden" name="serviceName" value="InsertOrganization" />

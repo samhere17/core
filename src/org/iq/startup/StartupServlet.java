@@ -1,41 +1,42 @@
 package org.iq.startup;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Properties;
+import java.util.Set;
 
 import javax.servlet.GenericServlet;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebServlet;
 
-import org.iq.cache.CacheCleaner;
-import org.iq.cache.CacheEvictor;
 import org.iq.config.ConfigFactory;
 import org.iq.config.SystemConfig;
+import org.iq.exception.CoreException;
 import org.iq.logger.LocalLogger;
-import org.iq.startup.actions.BaseStartupAction;
+import org.iq.service.external.rest.JerseyApplication;
+import org.iq.startup.actions.CacheStartupAction;
+import org.iq.startup.actions.LoggerStartupAction;
+import org.iq.startup.actions.StartupAction;
+import org.iq.startup.actions.UmsStartupAction;
 import org.iq.util.StringUtil;
 
 /**
  * @author Sam
  */
+@WebServlet(value = "/", loadOnStartup = 0)
 public class StartupServlet extends GenericServlet {
 
 	/**
-   * 
-   */
+	 * 
+	 */
 	private static final long serialVersionUID = 375299886649118252L;
 
-	// private ServletContext servletContext = null;
-	// private ServletConfig servletConfig = null;
-	// private String applicationName = null;
+	private Set<String> destroyAction = new HashSet<>();
 
-	// private Boolean enableQueue = null;
-
-//	private Boolean enableUserStartupActions = null;
-	private String[] userStartupActionClassNames = null;
-	private HashMap<String, Object> startupAttributeMap = null;
+	private String applicationName = null;
 
 	/*
 	 * (non-Javadoc)
@@ -45,101 +46,84 @@ public class StartupServlet extends GenericServlet {
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		
+
 		System.out.println("INITIALIZING APPLICATION...");
-		
-//		new SystemContext(getServletContext().getRealPath("/"));
 
-		System.out.println(getServletContext().getContextPath());
+		// Loading system configuration files
+		SystemConfig systemConfig = (SystemConfig) ConfigFactory
+				.getConfig("org.iq.config.SystemConfig");
+		applicationName = systemConfig.getApplicationName();
+		System.out.println("Application Name = " + applicationName);
 
-		// Loading configuration files
-		SystemConfig systemConfig = (SystemConfig) ConfigFactory.getConfig("org.iq.config.SystemConfig");
-		// DatabaseConfig databaseConfig = (DatabaseConfig)
-		// ConfigFactory.getConfig("DatabaseConfig","core");
+		StartupAction startupAction = null;
+		try {
+			/*
+			 * Starting system actions
+			 */
+			// STARTING LOGGER
+			startupAction = new LoggerStartupAction();
+			startupAction.init();
 
-		System.out.println("Application Name = "
-				+ systemConfig.getApplicationName());
+			// STARTING CACHE
+			startupAction = new CacheStartupAction();
+			startupAction.init();
 
-		// LocalLogger.logDebug("Application Name = " +
-		// systemConfig.getApplicationName());
+			// STARTING UMS
+			startupAction = new UmsStartupAction();
+			startupAction.init();
 
-		// servletContext = getServletContext();
-		// servletConfig = getServletConfig();
-		// applicationName =
-		// servletContext.getInitParameter(APPLICATION_NAME_PARAM_KEY);
-		// System.out.println("Application Name = " + applicationName);
-		//
-		// applicationRoot = servletContext.getRealPath("/");
-		// System.out.println("##### = " + applicationRoot);
-
-		// enableQueue =
-		// Boolean.valueOf(servletConfig
-		// .getInitParameter(ENABLE_QUEUE_PARAM_KEY));
-		// System.out.println("enableQueue = " + enableQueue);
-
-		// if (enableQueue) {
-		// QueueMaster.startQueueService();
-		// }
-
-		/*
-		 * enableUserStartupActions = Boolean.valueOf(systemConfig
-		 * .getInitParameter(ENABLE_USER_STARTUP_ACTIONS_PARAM_KEY));
-		 * System.out.println("enableUserStartupActions = " +
-		 * enableUserStartupActions);
-		 */
-		if (systemConfig.isUserStartupActionsEnabled()) {
-			System.out.println("User Startup Actions Enabled");
-
-			String classNamesStr = systemConfig.getUserStartupActionsClasses();
-			if (StringUtil.isEmpty(classNamesStr) == false) {
-				userStartupActionClassNames = classNamesStr.split(",");
-				if (userStartupActionClassNames != null
-						&& userStartupActionClassNames.length > 0) {
-					startupAttributeMap = new HashMap<String, Object>();
-					for (String startupActionClassName : userStartupActionClassNames) {
-						BaseStartupAction startupAction = getActionClassInstance(startupActionClassName);
-						if (startupAction != null) {
-							Map<String, Object> returnMap;
-							try {
-								returnMap = startupAction.execute();
-								if(returnMap != null && returnMap.isEmpty() == false){
-									startupAttributeMap.putAll(returnMap);
-								}
-							} catch (/*Core*/Exception e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							System.out.println("Startup Action: "+ startupAction.getClass().getName()+ " executed successfully.");
-						}
-					}
+			/*
+			 * Starting user actions if any
+			 */
+			System.out.println("Loading startup-actions.properties...");
+			Properties startupActions = new Properties();
+			InputStream localInputStream = JerseyApplication.class
+					.getResourceAsStream("startup-actions.properties");
+			if (localInputStream != null) {
+				try {
+					startupActions.load(localInputStream);
+					System.out
+							.println("Loading startup-actions.properties... SUCCESS");
+				} catch (IOException localIOException) {
+					System.out
+							.println("Loading startup-actions.properties... ERROR");
+					System.out.println(localIOException);
 				}
 			}
-		}
-		
-	    try {
 
-	       CacheEvictor.getEvictorInstance();
-	       CacheCleaner.getCacheCleanerInstance();
-	    }
-	    catch (Exception e) {
-	    	// TODO Auto-generated catch block
+			Set<Object> startupActionNames = startupActions.keySet();
+
+			for (Object classNameObj : startupActionNames) {
+				// STARTING USER ACTION
+				String className = (String) classNameObj;
+				startupAction = getActionClassInstance(className);
+				startupAction.init();
+
+				Boolean destroyRequired = (Boolean) startupActions
+						.get(classNameObj);
+				if (destroyRequired) {
+					destroyAction.add(className);
+				}
+			}
+
+		} catch (CoreException e) {
 			e.printStackTrace();
-	    }
+			throw new ServletException(e);
+		}
 
-		LocalLogger.logDebug("APPLICATION STARTED SUCCESSFULLY");
+		System.out.println("APPLICATION STARTED SUCCESSFULLY");
 	}
 
 	/**
-   * 
-   */
-	private BaseStartupAction getActionClassInstance(String actionName) {
+	 * 
+	 */
+	private StartupAction getActionClassInstance(String actionName) {
 		if (StringUtil.isEmpty(actionName) == false) {
 			try {
 				Class<?> actionClass = Class.forName(actionName);
 				if (actionClass != null
-						&& BaseStartupAction.class
-								.isAssignableFrom(actionClass)) {
-					return (BaseStartupAction) actionClass.newInstance();
+						&& StartupAction.class.isAssignableFrom(actionClass)) {
+					return (StartupAction) actionClass.newInstance();
 				}
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -175,6 +159,34 @@ public class StartupServlet extends GenericServlet {
 	@Override
 	public void destroy() {
 		super.destroy();
-		// QueueMaster.stopQueueService();
+		System.out.println("STOPPING APPLICATION...");
+		System.out.println("Application Name = " + applicationName);
+
+		StartupAction startupAction = null;
+		/*
+		 * Stopping system actions
+		 */
+		// STOPPING UMS
+		startupAction = new UmsStartupAction();
+		startupAction.destroy();
+
+		// STOPPING CACHE
+		startupAction = new CacheStartupAction();
+		startupAction.destroy();
+
+		// STOPPING LOGGER
+		startupAction = new LoggerStartupAction();
+		startupAction.destroy();
+
+		/*
+		 * Stopping user actions if any
+		 */
+		if (destroyAction != null && destroyAction.size() > 0) {
+			for (String className : destroyAction) {
+				startupAction = getActionClassInstance(className);
+				startupAction.destroy();
+			}
+		}
+		LocalLogger.logDebug("APPLICATION STOPPED SUCCESSFULLY");
 	}
 }
