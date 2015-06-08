@@ -1,4 +1,4 @@
-<%@page import="org.iq.helper.ums.UmsHelper"%>
+<%@page import="org.iq.ums.helper.UmsHelper"%>
 <%
 	UmsHelper umsHelper = new UmsHelper();
 	if (umsHelper.isAdminUserConfigured()) {

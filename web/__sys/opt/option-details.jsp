@@ -1,4 +1,4 @@
-<%@page import="org.iq.valueobject.ums.UmsOption"%>
+<%@page import="org.iq.ums.vo.UmsOption"%>
 <%
 UmsOption umsOptionEdit = null;
 boolean showVal = false;

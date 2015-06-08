@@ -1,5 +1,5 @@
-<%@page import="org.iq.UmsConstants.OptionStatus"%>
-<%@page import="org.iq.UmsConstants.OptionType"%>
+<%@page import="org.iq.ums.UmsConstants.OptionStatus"%>
+<%@page import="org.iq.ums.UmsConstants.OptionType"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>

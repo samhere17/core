@@ -6,7 +6,7 @@ import java.util.HashMap;
 import org.iq.db.DbSession;
 import org.iq.exception.ServiceException;
 import org.iq.logger.LocalLogger;
-import org.iq.valueobject.ums.UmsSession;
+import org.iq.ums.vo.UmsSession;
 
 /**
  * @author Sam

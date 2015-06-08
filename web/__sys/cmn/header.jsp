@@ -1,7 +1,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<%@page import="org.iq.valueobject.ums.UmsSession"%>
+<%@page import="org.iq.ums.vo.UmsSession"%>
 <%@page import="org.iq.util.StringUtil"%>
 <div class="header">Operations Management System<%=StringUtil.isEmpty(header)?"":" - "+header%></div>
 

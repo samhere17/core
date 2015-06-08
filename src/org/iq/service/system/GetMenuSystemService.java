@@ -4,9 +4,9 @@ import java.util.HashMap;
 
 import org.iq.exception.BusinessException;
 import org.iq.exception.ServiceException;
-import org.iq.helper.ums.UmsOptionHelper;
 import org.iq.logger.LocalLogger;
 import org.iq.service.Service;
+import org.iq.ums.helper.UmsOptionHelper;
 
 @Service(name="GetMenu")
 public class GetMenuSystemService extends BaseSystemService {

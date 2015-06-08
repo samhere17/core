@@ -20,7 +20,7 @@ import org.iq.service.external.rest.JerseyApplication;
 import org.iq.startup.actions.CacheStartupAction;
 import org.iq.startup.actions.LoggerStartupAction;
 import org.iq.startup.actions.StartupAction;
-import org.iq.startup.actions.UmsStartupAction;
+import org.iq.ums.startup.UmsStartupAction;
 import org.iq.util.StringUtil;
 
 /**

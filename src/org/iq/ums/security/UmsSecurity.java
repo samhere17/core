@@ -1,10 +1,10 @@
 package org.iq.ums.security;
 
 import org.iq.config.ConfigFactory;
-import org.iq.config.UmsConfig;
 import org.iq.logger.LocalLogger;
+import org.iq.ums.config.UmsConfig;
+import org.iq.ums.vo.UmsUser;
 import org.iq.util.StringUtil;
-import org.iq.valueobject.ums.UmsUser;
 
 public abstract class UmsSecurity {
 

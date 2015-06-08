@@ -1,7 +1,7 @@
-<%@page import="org.iq.valueobject.ums.UmsRegistrationResult"%>
+<%@page import="org.iq.ums.vo.UmsRegistrationResult"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@page import="org.iq.UmsConstants.OptionType"%>
-<%@page import="org.iq.UmsConstants.OptionStatus"%>
+<%@page import="org.iq.ums.UmsConstants.OptionType"%>
+<%@page import="org.iq.ums.UmsConstants.OptionStatus"%>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />

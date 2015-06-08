@@ -1,12 +1,12 @@
 package org.iq.ums.security;
 
-import org.iq.db.dao.ums.UmsUserDao;
-import org.iq.db.dao.ums.impl.UmsUserDaoImpl;
 import org.iq.exception.BusinessException;
 import org.iq.exception.DbException;
-import org.iq.util.ums.UmsDbProvider;
-import org.iq.util.ums.UmsPasswordEncryptor;
-import org.iq.valueobject.ums.UmsUser;
+import org.iq.ums.dao.UmsUserDao;
+import org.iq.ums.dao.impl.UmsUserDaoImpl;
+import org.iq.ums.util.UmsDbProvider;
+import org.iq.ums.util.UmsPasswordEncryptor;
+import org.iq.ums.vo.UmsUser;
 
 public class UmsSecurityCallback extends UmsSecurity {
 

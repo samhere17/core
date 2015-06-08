@@ -1,4 +1,4 @@
-<%@page import="org.iq.valueobject.ums.UmsSession"%>
+<%@page import="org.iq.ums.vo.UmsSession"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <c:set var="browserURL" value="${pageContext.request.requestURI}" scope="session"></c:set>

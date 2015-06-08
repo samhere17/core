@@ -1,5 +1,5 @@
 <%@page import="org.iq.util.StringUtil"%>
-<%@page import="org.iq.valueobject.ums.UmsOption"%>
+<%@page import="org.iq.ums.vo.UmsOption"%>
 
 <style media="screen" type="text/css">
 div.configured-options {height: 300px; width: 350px; overflow-y: scroll;}

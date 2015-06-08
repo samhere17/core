@@ -52,7 +52,7 @@
 		<mkdir dir="${dist.dir}" />
 		<mkdir dir="${dist.dir}/lib" />
 		<mkdir dir="${dist.dir}/jar" />
-		<mkdir dir="${dist.dir}/war" />
+		<!-- <mkdir dir="${dist.dir}/war" /> -->
 		<mkdir dir="${dist.dir}/db" />
 		<mkdir dir="${dist.dir}/src" />
 		<mkdir dir="${dist.dir}/temp/bin" />
@@ -69,7 +69,7 @@
 		<antcall target="build.core.conf.jar"></antcall>
 		
 		<!-- Building core war to ${dist.dir}/war -->
-		<antcall target="build.core.war"></antcall>
+		<!-- <antcall target="build.core.war"></antcall> -->
 		
 		<!-- Copying db scripts (if any) to ${dist.dir}/db -->
 		<antcall target="copy.db.scripts"></antcall>
@@ -90,7 +90,7 @@
 		<antcall target="zip.dist"></antcall>
 
 		<!--FOR DEV-->
-		<antcall target="dev.copy.war" />
+		<!-- <antcall target="dev.copy.war" /> -->
 		<!--FOR DEV-->
 
 	</target>

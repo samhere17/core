@@ -16,9 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.iq.ServiceConstants;
-import org.iq.UmsConstants;
 import org.iq.processor.RequestProcessor;
 import org.iq.processor.RequestProcessor.RequestType;
+import org.iq.ums.UmsConstants;
 import org.iq.util.StringUtil;
 
 /**

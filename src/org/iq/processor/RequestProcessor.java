@@ -10,14 +10,14 @@ import org.iq.cache.CacheHelper;
 import org.iq.exception.BaseException;
 import org.iq.exception.CacheException;
 import org.iq.exception.ServiceException;
-import org.iq.exception.UmsException;
-import org.iq.helper.ums.UmsAuthenticationHelper;
 import org.iq.logger.LocalLogger;
 import org.iq.service.BaseService;
 import org.iq.service.ServicesDefinitions;
 import org.iq.service.system.BaseSystemService;
+import org.iq.ums.exception.UmsException;
+import org.iq.ums.helper.UmsAuthenticationHelper;
+import org.iq.ums.vo.UmsSession;
 import org.iq.util.StringUtil;
-import org.iq.valueobject.ums.UmsSession;
 
 /**
  * @author Sam

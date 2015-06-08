@@ -1,5 +1,5 @@
 <%@page import="org.iq.util.StringUtil"%>
-<%@page import="org.iq.valueobject.ums.UmsRegistrationResult"%>
+<%@page import="org.iq.ums.vo.UmsRegistrationResult"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <c:set var="browserURL" value="${pageContext.request.requestURI}" scope="session"></c:set>
