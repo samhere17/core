@@ -57,7 +57,8 @@
 		<mkdir dir="${dist.dir}/src" />
 		<mkdir dir="${dist.dir}/temp/bin" />
 		<mkdir dir="${dist.dir}/temp/lib" />
-		<mkdir dir="${dist.dir}/temp/conf" />
+		<mkdir dir="${dist.dir}/conf" />
+		<mkdir dir="${dist.dir}/setup" />
 		
 		<!-- Copying required supporting libraries to ${dist.dir}/lib -->
 		<antcall target="copy.libraries"></antcall>
@@ -65,8 +66,11 @@
 		<!-- Building core jar to ${dist.dir}/jar -->
 		<antcall target="build.core.jar"></antcall>
 		
-		<!-- Building core conf jar to ${dist.dir}/jar -->
-		<antcall target="build.core.conf.jar"></antcall>
+		<!-- Copying core conf files to ${dist.dir}/conf -->
+		<antcall target="copy.conf"></antcall>
+		
+		<!-- Copying third party setup files to ${dist.dir}/setup -->
+		<antcall target="copy.setupfiles"></antcall>
 		
 		<!-- Building core war to ${dist.dir}/war -->
 		<!-- <antcall target="build.core.war"></antcall> -->
@@ -139,7 +143,6 @@
 	        </fileset>
 			<fileset dir="${lib.dir}">
 				<include name="javax.servlet-api-3.0.1.jar"/>
-				<include name="javax.ws.rs-api-2.0.1.jar"/>
 	        </fileset>
 	    </path>
 
@@ -164,7 +167,6 @@
 
 		<!-- Building the jar -->
 		<jar destfile="${dist.dir}/jar/${proj.name}-${build.version}.jar" basedir="${dist.dir}/temp/bin">
-			<include name="com/iq/**" />
 			<include name="org/iq/**" />
 			<manifest>
 				<attribute name="Implementation-Title" value="${proj.name}-${build.version}.jar" />
@@ -176,29 +178,29 @@
 		</jar>
 	</target>
 
-	<!--Building core conf jar-->
-	<target name="build.core.conf.jar">
-		<!-- Copying conf files present in ${proj.name} project to ${dist.dir}/temp/conf -->
-		<echo message="Copying conf files present in ${proj.name} project to ${dist.dir}/temp/conf" />
-		<copy todir="${dist.dir}/temp/conf" verbose="true">
+	<!--Copying conf files-->
+	<target name="copy.conf">
+		<!-- Copying conf files present in ${proj.name} project to ${dist.dir}/conf -->
+		<echo message="Copying conf files present in ${proj.name} project to ${dist.dir}/conf" />
+		<copy todir="${dist.dir}" verbose="true">
 			<fileset dir="${res.dir}">
 				<include name="**/*.conf"/>
 				<type type="file"/>
 			</fileset>
 		</copy>
-
-		<!-- Building the jar -->
-		<jar destfile="${dist.dir}/jar/${proj.name}-${build.version}-conf.jar" basedir="${dist.dir}/temp/conf">
-			<include name="**/*.conf" />
-			<manifest>
-				<attribute name="Implementation-Title" value="${proj.name}-${build.version}-conf.jar" />
-				<attribute name="Implementation-Vendor" value="${comp.name}" />
-				<attribute name="Implementation-Version" value="${build.version}" />
-				<attribute name="Development-Version" value="${build.dev.version}" />
-				<attribute name="Implementation-Date" value="${build.date} ${build.time}" />
-			</manifest>
-		</jar>
 	</target>
+	
+	<!--Copying setup files-->
+		<target name="copy.setupfiles">
+			<!-- Copying setup files present in ${proj.name} project to ${dist.dir}/setup -->
+			<echo message="Copying conf files present in ${proj.name} project to ${dist.dir}/setup" />
+			<copy todir="${dist.dir}/setup" verbose="true">
+				<fileset dir="${setup.dir}">
+					<include name="**/*"/>
+					<type type="file"/>
+				</fileset>
+			</copy>
+		</target>
 
 	
 	<!--Building core war-->
@@ -295,10 +297,10 @@
 	</target>
 
 	<!--FOR DEV-->
-	<target name="dev.copy.war">
+	<!--target name="dev.copy.war">
 		<property environment="env"/>
 		<delete dir="${env.CATALINA_HOME}/webapps/${proj.name}" />
 		<copy file="${dist.dir}/war/${proj.name}-${build.version}.war" tofile="${env.CATALINA_HOME}/webapps/${proj.name}.war" verbose="true" />
-	</target>
+	</target-->
 	<!--FOR DEV-->
 </project>
