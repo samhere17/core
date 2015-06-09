@@ -1,0 +1,96 @@
+<project name="setup third party project" default="start" basedir=".">
+	<target name="start">
+		<echo message="setup third party project..." />
+
+		<property file="setup.properties" />
+		
+		<tstamp>
+			<format property="build.date" pattern="${build.date.pattern}" />
+			<format property="build.time" pattern="${build.time.pattern}"/>
+		</tstamp>
+
+		<echo message="Build Date   : ${build.date}" />
+		<echo message="Build Time   : ${build.time}hrs" />
+		<echo message="Build By     : ${build.user}" />
+		
+		<echo message=" " />
+
+		<mkdir dir=".././src" />
+		<mkdir dir=".././lib" />
+		<mkdir dir="${releasepkg.root}/temp" />
+		
+		<!--unzip core release package -->
+		<antcall target="unzip.setupfiles"></antcall>
+		
+		<!-- Copying required supporting libraries to ${proj.root}/lib -->
+		<antcall target="copy.libraries"></antcall>
+		
+		<!-- Copying conf jar to ${proj.root}/lib -->
+		<antcall target="copy.corejar"></antcall>
+		
+		<!-- Building core jar to ${dist.dir}/jar -->
+		<antcall target="copy.buildscripts"></antcall>
+		
+	</target>
+	<target name="unzip.setupfiles">	
+		<unzip src="${releasepkg.root}/core-release-1.0.0.0.zip" dest="${releasepkg.root}/temp"/>
+	</target>
+	
+	<!-- Copying required supporting libraries to ${proj.root}/lib -->
+	<target name="copy.libraries">
+		<!-- Copying required supporting libraries to ${proj.root}/lib -->
+		<echo message="Copying required supporting libraries to lib folder of the project"/>
+		<copy todir=".././lib" verbose="true">
+			<fileset dir="${releasepkg.root}/temp/lib">
+				<!-- PUT JAR FILE ENTRIES THAT YOU INTEND TO USE FOR THIS PROJECT -->
+				<include name="com.mysql.jdbc_5.1.5.jar"/>
+				<include name="commons-validator-1.4.0.jar"/>
+				
+				<!-- jersey related -->
+				<include name="javax.ws.rs-api-2.0.1.jar"/>
+				<include name="hk2-api-2.4.0-b10.jar"/>
+				<include name="hk2-locator-2.4.0-b10.jar"/>
+				<include name="hk2-utils-2.4.0-b10.jar"/>
+				<include name="jackson-all-1.9.11.jar"/>
+				<include name="javassist-3.18.1-GA.jar"/>
+				<include name="javax.annotation-api-1.2.jar"/>
+				<include name="javax.inject-2.4.0-b10.jar"/>
+				<include name="jersey-client.jar"/>
+				<include name="jersey-common.jar"/>
+				<include name="jersey-container-servlet-core.jar"/>
+				<include name="jersey-container-servlet.jar"/>
+				<include name="jersey-guava-2.17.jar"/>
+				<include name="jersey-server.jar"/>
+				<include name="validation-api-1.1.0.Final.jar"/>
+				<!-- jersey related -->
+				
+				<include name="jstl-1.2.jar"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<!-- Copying required supporting libraries to ${proj.root}/lib -->
+	<target name="copy.corejar">
+		<!-- Copying required supporting libraries to ${proj.root}/lib -->
+		<echo message="Copying required supporting libraries to lib folder of the project"/>
+		<copy todir=".././lib" verbose="true">
+			<fileset dir="${releasepkg.root}/temp/jar">
+				<!-- PUT JAR FILE ENTRIES THAT YOU INTEND TO USE FOR THIS PROJECT -->
+				<include name="*.*"/>
+			</fileset>
+		</copy>
+	</target>
+		
+	<!-- Copying required supporting libraries to ${proj.root}/lib -->
+	<target name="copy.buildscripts">
+		<!-- Copying required supporting libraries to ${proj.root}/lib -->
+		<echo message="Copying required supporting libraries to lib folder of the project"/>
+		<copy todir=".././build-scripts" verbose="true">
+			<fileset dir="${releasepkg.root}/temp/setup">
+				<!-- PUT JAR FILE ENTRIES THAT YOU INTEND TO USE FOR THIS PROJECT -->
+				<include name="build.properties"/>
+				<include name="build.xml"/>
+			</fileset>
+		</copy>
+	</target>
+</project>
