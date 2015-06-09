@@ -1,0 +1,238 @@
+<project name="oms admin build" default="start" basedir=".">
+	<target name="start">
+		<echo message="Reading basic properties..." />
+
+		<property file="build.properties" />
+
+		<tstamp>
+			<format property="build.date" pattern="${build.date.pattern}" />
+			<format property="build.time" pattern="${build.time.pattern}"/>
+		</tstamp>
+
+		<echo message="${msg.start}" />
+		<echo message="Location     : ${proj.root}/${proj.name}" />
+		<echo message="Build Date   : ${build.date}" />
+		<echo message="Build Time   : ${build.time}hrs" />
+		<echo message="Build By     : ${build.user}" />
+
+		<echo message=" " />
+		<echo message="Reading version properties..." />
+
+		<!--Reading the existing version number-->
+		<property file="${src.dir}/org/iq/util/version/version.properties" />
+
+		<echo message="Existing version : ${version.number}" />
+
+		<!--Updating the existing version's build number-->
+		<propertyfile file="${src.dir}/org/iq/util/version/version.properties">
+			<entry key="version.build.number" type="int" default="${version.build.number}" operation="+" />
+		</propertyfile>
+
+		<!--Creating new version's build number properties-->
+		<propertyfile file="new-build-number.properties">
+			<entry key="new.version.build.number" type="int" default="${version.build.number}" operation="+" />
+		</propertyfile>
+
+		<!--Reading the updated version number-->
+		<property file="new-build-number.properties" />
+
+		<!--Deleting new version's build number properties-->
+		<delete file="new-build-number.properties"/>
+
+		<property name="build.version" value="${version.major}.${version.minor}.${version.patch}.${version.hotfix}" />
+		<property name="build.dev.version" value="${version.major}.${version.minor}.${version.patch}.${version.hotfix}.${new.version.build.number}" />
+
+		<echo message=" " />
+		<echo message="Build Version: ${build.version}" />
+		<echo message=" " />
+
+		<delete dir="${dist.dir}" />
+
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${dist.dir}/war" />
+
+		 <!-- <mkdir dir="${dist.dir}/temp/core/war" /> -->
+
+		<mkdir dir="${dist.dir}/temp/bin" />
+		<mkdir dir="${dist.dir}/temp/lib" />
+		<mkdir dir="${dist.dir}/temp/conf" />
+		
+		<!-- Copying required supporting libraries to ${dist.dir}/temp/lib -->
+		<antcall target="copy.libraries">
+		</antcall>
+		
+		<!-- Building oms jar to ${dist.dir}/temp/lib -->
+		<antcall target="build.oms.admin.jar">
+		</antcall>
+		
+		<!-- Building oms conf jar to ${dist.dir}/temp/lib -->
+		<antcall target="build.oms.conf.jar">
+		</antcall>
+
+		<!-- Building oms war to ${dist.dir}/war -->
+		<antcall target="build.oms.admin.war">
+		</antcall>
+
+		<!-- Copying db scripts (if any) to ${dist.dir}/db -->
+		<antcall target="copy.db.scripts">
+		</antcall>
+
+		<!-- Copying readme.txt to ${dist.dir} -->
+		<antcall target="copy.readme.txt">
+		</antcall>
+
+		<!-- Copying license to ${dist.dir} -->
+		<antcall target="copy.license">
+		</antcall>
+
+		<delete dir="${dist.dir}/temp" />
+		
+		<!--FOR DEV-->
+		<antcall target="dev.copy.war" />
+		<!--FOR DEV-->
+		
+	</target>
+	
+	<!-- Copying required supporting libraries to ${dist.dir}/temp/lib -->
+		<target name="copy.libraries">
+			<!-- Copying required supporting libraries to ${dist.dir}/temp/lib -->
+			<echo message="Copying required supporting libraries to ${dist.dir}/temp/lib"/>
+			<copy todir="${dist.dir}/temp/lib" verbose="true">
+				<fileset dir="${lib.dir}">
+					<!-- PUT JAR FILE ENTRIES THAT YOU INTEND TO USE FOR THIS PROJECT -->
+					<include name="*.jar"/>
+				</fileset>
+			</copy>
+		</target>
+	
+	<!-- Building oms admin jar -->
+	<target name="build.oms.admin.jar">
+		<!-- Preparing classpath reference variable based on jars present in ${dist.dir}/temp/lib -->
+		<echo message="Preparing classpath reference variable based on jars present in ${dist.dir}/temp/lib"/>
+		<path id="project.classpath">
+			<fileset dir="${dist.dir}/temp/lib">
+				<include name="**/*.jar"/>
+			</fileset>
+		</path>
+
+		<!-- Compiling java files -->
+		<echo message="Using Java version ${ant.java.version}."/>
+		<echo message="Compiling java files present in ${src.dir}"/>
+		<javac srcdir="${src.dir}"
+			destdir="${dist.dir}/temp/bin"
+			classpathref="project.classpath"
+			debug="true"
+			debuglevel="lines,vars,source"
+			includeantruntime="false" />
+
+		<!-- Copying other resource files present in ${src.dir} to ${dist.dir}/temp/bin -->
+		<echo message="Copying other resource files present in ${src.dir} to ${dist.dir}/temp/bin"/>
+		<copy todir="${dist.dir}/temp/bin" verbose="true">
+			<fileset dir="${src.dir}">
+				<include name="**/**"/>
+				<exclude name="**/*.java"/>
+			</fileset>
+		</copy>
+
+	</target>
+
+	<!--Building oms conf jar-->
+		<target name="build.oms.conf.jar">
+
+			<!-- Copying conf files present in ${proj.name} project to ${dist.dir}/temp/conf -->
+			<echo message="Copying conf files present in ${proj.name} project to ${dist.dir}/temp/conf" />
+			<echo message="NOTE: THIS WILL OVERWRITE THE FILES OF CORE IF SAME NAME IS FOUND" />
+			<copy todir="${dist.dir}/temp/conf" overwrite="true" verbose="true">
+				<fileset dir="${res.dir}">
+					<include name="**/*.conf"/>
+					<type type="file"/>
+				</fileset>
+			</copy>
+
+			<!-- Building the jar -->
+			<jar destfile="${dist.dir}/temp/lib/${proj.name}-${build.version}-conf.jar" basedir="${dist.dir}/temp/conf">
+				<include name="**/*.conf" />
+				<manifest>
+					<attribute name="Implementation-Title" value="${proj.name}-${build.version}-conf.jar" />
+					<attribute name="Implementation-Vendor" value="${comp.name}" />
+					<attribute name="Implementation-Version" value="${build.version}" />
+					<attribute name="Development-Version" value="${build.dev.version}" />
+					<attribute name="Implementation-Date" value="${build.date} ${build.time}" />
+				</manifest>
+			</jar>
+		</target>
+	
+	<!--Building oms admin war-->
+	<target name="build.oms.admin.war">
+
+		<!-- Building the war -->
+		<war warfile="${dist.dir}/war/${proj.name}-${build.version}.war" needxmlfile="false">
+			<lib dir="${dist.dir}/temp/lib">
+				<include name="**/*.jar" />
+			</lib>
+			<fileset dir="${web.dir}">
+				<include name="**/*.html" />
+				<include name="**/*.jsp" />
+				<include name="**/*.css" />
+				<include name="**/*.js" />
+				<include name="**/*.png" />
+				<include name="**/*.gif" />
+			</fileset>
+			<classes dir="${dist.dir}/temp/bin" />
+			<manifest>
+				<attribute name="Implementation-Title" value="${proj.name}-${build.version}.war" />
+				<attribute name="Implementation-Vendor" value="${comp.name}" />
+				<attribute name="Implementation-Version" value="${build.version}" />
+				<attribute name="Development-Version" value="${build.dev.version}" />
+				<attribute name="Implementation-Date" value="${build.date} ${build.time}" />
+			</manifest>
+		</war>
+	</target>
+
+	<!--Copying db scripts (if any) to ${dist.dir}/db-->
+	<target name="copy.db.scripts" depends="db.scripts.dir.check, do.copy.db.scripts, dont.copy.db.scripts">
+	</target>
+
+	<target name="do.copy.db.scripts" depends="db.scripts.dir.check" if="db.scripts.dir.exists">
+		<copy todir="${dist.dir}/db" verbose="true">
+			<fileset dir="${db.script.dir}/${build.version}">
+				<include name="**/*.sql"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="dont.copy.db.scripts" depends="db.scripts.dir.check" unless="db.scripts.dir.exists">
+		<echo>${db.script.dir}/${build.version} missing</echo>
+		<echo file="${dist.dir}/db/no-db-changes.txt">Version ${build.version} do not have any database changes.</echo>
+	</target>
+
+	<target name="db.scripts.dir.check">
+		<condition property="db.scripts.dir.exists">
+			<available file="${db.script.dir}/${build.version}" type="dir"/>
+		</condition>
+	</target>
+
+	<target name="copy.readme.txt">
+		<copy todir="${dist.dir}" verbose="true">
+			<fileset dir=".">
+				<include name="readme.txt"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="copy.license">
+		<copy todir="${dist.dir}" verbose="true">
+			<fileset dir="..">
+				<include name="LICENSE"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<!--FOR DEV-->
+	<target name="dev.copy.war">
+		<property environment="env"/>
+		<delete dir="${env.CATALINA_HOME}/webapps/${proj.name}" />
+		<copy file="${dist.dir}/war/${proj.name}-${build.version}.war" tofile="${env.CATALINA_HOME}/webapps/${proj.name}.war" verbose="true" />
+	</target>
+	<!--FOR DEV-->
+</project>

@@ -27,9 +27,15 @@
 		<!-- Copying required supporting libraries to project /lib -->
 		<antcall target="copy.libraries"></antcall>
 		
-		<!-- Building core jar to ${dist.dir}/jar -->
+		<!--  Copying build scripts to project/build-scripts -->
 		<antcall target="copy.buildscripts"></antcall>
 		
+		<!--  Copying artifacts to project/web -->
+		<antcall target="copy.artifacts"></antcall>
+		
+		<!--  Copying resources to project/res -->
+		<antcall target="copy.resources"></antcall>
+	
 	</target>
 	
 	<target name="unzip.setupfiles">	
@@ -55,12 +61,37 @@
 	<target name="copy.buildscripts">
 		<!-- Copying required supporting libraries to ${proj.root}/lib -->
 		<echo message="Copying required supporting libraries to lib folder of the project"/>
-		<copy todir=".././build-scripts" verbose="true">
-			<fileset dir="${release.pkg.root}/temp/setup">
+		<copy todir="../build-scripts" verbose="true">
+			<fileset dir="${release.pkg.root}/setup/files">
 				<!-- PUT JAR FILE ENTRIES THAT YOU INTEND TO USE FOR THIS PROJECT -->
 				<include name="build.properties"/>
 				<include name="build.xml"/>
 			</fileset>
 		</copy>
 	</target>
+	
+	<!--  Copying artifacts to project/web -->
+		<target name="copy.artifacts">
+			<!-- Copying required supporting libraries to ${proj.root}/lib -->
+			<echo message="Copying required supporting libraries to lib folder of the project"/>
+			<copy todir="../web" verbose="true">
+				<fileset dir="${release.pkg.root}/setup/files">
+					<!-- PUT JAR FILE ENTRIES THAT YOU INTEND TO USE FOR THIS PROJECT -->
+					<include name="index.html"/>
+				</fileset>
+			</copy>
+		</target>
+	
+	<!-- Copying required resources to project/res  -->
+		<target name="copy.resources">
+			<!-- Copying required supporting libraries to ${proj.root}/lib -->
+			<echo message="Copying required supporting libraries to lib folder of the project"/>
+			<copy todir="../res/conf" verbose="true">
+				<fileset dir="${release.pkg.root}/conf">
+					<!-- PUT JAR FILE ENTRIES THAT YOU INTEND TO USE FOR THIS PROJECT -->
+					<include name="**/*.conf"/>
+					<type type="file"/>					
+				</fileset>
+			</copy>
+		</target>
 </project>

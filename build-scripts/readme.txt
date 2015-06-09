@@ -49,6 +49,7 @@ core framework.
 The setup directory will contain the following file(s):
 	a. setup.xml
 	b. setup.properties
+	c. files
 The setup files will help setting up projects that will be developed
 using the iquesters core framework. Details of how to use the setup
 files is mentioned below in the SETTING UP APPLICATION section.
@@ -80,7 +81,7 @@ following steps should be followed to setup the project:
 3. Copy setup.xml and setup.properties files from the core release
    package to the setup folder in your project.
    
-4. Open setup.peoperties file and specify the directory location of
+4. Open setup.properties file and specify the directory location of
    the extracted core zip against the property "release.pkg.root".
    For example,
       If the distribution zip is extracted at D:/iquesters/core
@@ -90,4 +91,4 @@ following steps should be followed to setup the project:
 
 5. Run the setup.xml (ant script).
    This will create the required folder structure and copy other
-   dependency files in your project.
+   dependency files in your project. 
