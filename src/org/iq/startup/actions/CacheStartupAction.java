@@ -8,7 +8,7 @@ import org.iq.exception.CoreException;
  */
 public class CacheStartupAction extends StartupAction {
 
-	private CacheEvictor cacheEvictor = null;
+	private static CacheEvictor cacheEvictor = null;
 	
 	@Override
 	public void init() throws CoreException {

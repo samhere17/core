@@ -1,4 +1,4 @@
-<%@page import="org.iq.util.version.Version"%>
+<%@page import="org.iq.version.Version"%>
 
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <jsp:useBean id="aboutNow" class="java.util.Date" />

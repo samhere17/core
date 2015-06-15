@@ -7,7 +7,7 @@ import org.iq.exception.CoreException;
  * 
  */
 public abstract class StartupAction {
-
+	
 	/**
 	 * 
 	 */
@@ -17,5 +17,4 @@ public abstract class StartupAction {
 	 * 
 	 */
 	public abstract void destroy();
-
 }

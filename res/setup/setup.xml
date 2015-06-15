@@ -6,92 +6,103 @@
 		<property name="build.date.pattern" value="MMM-dd-yyyy" />
 		<property name="build.time.pattern" value="HH:mm:ss" />
 		<property name="build.user" value="${user.name}" />
-		
+
 		<tstamp>
 			<format property="build.date" pattern="${build.date.pattern}" />
-			<format property="build.time" pattern="${build.time.pattern}"/>
+			<format property="build.time" pattern="${build.time.pattern}" />
 		</tstamp>
 
 		<echo message="Build Date   : ${build.date}" />
 		<echo message="Build Time   : ${build.time}hrs" />
 		<echo message="Build By     : ${build.user}" />
-		
+
 		<echo message=" " />
 
 		<mkdir dir="../src" />
 		<!-- <mkdir dir="../lib" /> -->
-		
+
 		<!--unzip core release package -->
 		<!--<antcall target="unzip.setupfiles"></antcall>-->
-		
+
 		<!-- Copying required supporting libraries to project /lib -->
-		<antcall target="copy.libraries"></antcall>
-		
+		<antcall target="copy.libraries">
+		</antcall>
+
 		<!--  Copying build scripts to project/build-scripts -->
-		<antcall target="copy.buildscripts"></antcall>
-		
+		<antcall target="copy.buildscripts">
+		</antcall>
+
 		<!--  Copying artifacts to project/web -->
-		<antcall target="copy.artifacts"></antcall>
-		
+		<antcall target="copy.artifacts">
+		</antcall>
+
 		<!--  Copying resources to project/res -->
-		<antcall target="copy.resources"></antcall>
-	
+		<antcall target="copy.resources">
+		</antcall>
+
 	</target>
-	
-	<target name="unzip.setupfiles">	
-		<unzip src="${release.pkg.root}/core-release-1.0.0.0.zip" dest="${release.pkg.root}/temp"/>
+
+	<target name="unzip.setupfiles">
+		<unzip src="${release.pkg.dir}/core-release-1.0.0.0.zip" dest="${release.pkg.dir}/temp" />
 	</target>
-	
+
 	<!-- Copying required supporting libraries to project /lib -->
 	<target name="copy.libraries">
-		<echo message="Copying required libraries to lib folder of the project"/>
+		<echo message="Copying required libraries to lib folder of the project" />
 		<copy todir="../lib" verbose="true">
 			<!-- Copying the core jar to project /lib -->
-			<fileset dir="${release.pkg.root}/jar">
-				<include name="*.jar"/>
+			<fileset dir="${release.pkg.dir}/jar">
+				<include name="*.jar" />
 			</fileset>
 			<!-- Copying required supporting jars to project /lib -->
-			<fileset dir="${release.pkg.root}/lib">
-				<include name="*.jar"/>
+			<fileset dir="${release.pkg.dir}/lib">
+				<include name="*.jar" />
 			</fileset>
 		</copy>
 	</target>
-	
+
 	<!-- Copying required supporting libraries to ${proj.root}/lib -->
 	<target name="copy.buildscripts">
 		<!-- Copying required supporting libraries to ${proj.root}/lib -->
-		<echo message="Copying required supporting libraries to lib folder of the project"/>
+		<echo message="Copying required supporting libraries to lib folder of the project" />
 		<copy todir="../build-scripts" verbose="true">
-			<fileset dir="${release.pkg.root}/setup/files">
+			<fileset dir="${release.pkg.dir}/setup/files">
 				<!-- PUT JAR FILE ENTRIES THAT YOU INTEND TO USE FOR THIS PROJECT -->
-				<include name="build.properties"/>
-				<include name="build.xml"/>
+				<include name="build.properties" />
+				<include name="build.xml" />
 			</fileset>
 		</copy>
 	</target>
-	
-	<!--  Copying artifacts to project/web -->
-		<target name="copy.artifacts">
-			<!-- Copying required supporting libraries to ${proj.root}/lib -->
-			<echo message="Copying required supporting libraries to lib folder of the project"/>
-			<copy todir="../web" verbose="true">
-				<fileset dir="${release.pkg.root}/setup/files">
-					<!-- PUT JAR FILE ENTRIES THAT YOU INTEND TO USE FOR THIS PROJECT -->
-					<include name="index.html"/>
-				</fileset>
-			</copy>
-		</target>
-	
+
+	<!-- Copying artifacts to project -->
+	<target name="copy.artifacts">
+		<!-- Copying example index.html to project/web -->
+		<echo message="Copying example index.html to project/web" />
+		<copy todir="../web" verbose="true">
+			<fileset dir="${release.pkg.dir}/setup/files">
+				<include name="index.html" />
+			</fileset>
+		</copy>
+
+		<!-- Copying version.properties to org/iq/version package -->
+		<echo message="Copying version.properties to org/iq/version package" />
+		<copy todir="../src/org/iq/version" verbose="true">
+			<fileset dir="${release.pkg.dir}/setup/files">
+				<include name="version.properties" />
+			</fileset>
+		</copy>
+	</target>
+
 	<!-- Copying required resources to project/res  -->
-		<target name="copy.resources">
-			<!-- Copying required supporting libraries to ${proj.root}/lib -->
-			<echo message="Copying required supporting libraries to lib folder of the project"/>
-			<copy todir="../res/conf" verbose="true">
-				<fileset dir="${release.pkg.root}/conf">
-					<!-- PUT JAR FILE ENTRIES THAT YOU INTEND TO USE FOR THIS PROJECT -->
-					<include name="**/*.conf"/>
-					<type type="file"/>					
-				</fileset>
-			</copy>
-		</target>
+	<target name="copy.resources">
+		<!-- Copying required supporting libraries to ${proj.root}/lib -->
+		<echo message="Copying required supporting libraries to lib folder of the project" />
+		<copy todir="../res/conf" verbose="true">
+			<fileset dir="${release.pkg.dir}/conf">
+				<!-- PUT JAR FILE ENTRIES THAT YOU INTEND TO USE FOR THIS PROJECT -->
+				<include name="**/*.conf" />
+				<type type="file" />
+			</fileset>
+		</copy>
+	</target>
 </project>

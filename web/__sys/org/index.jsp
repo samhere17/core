@@ -4,7 +4,7 @@
 <%@page import="org.iq.util.DateUtil.DateFormat"%>
 <%@page import="org.iq.util.DateUtil"%>
 <%@page import="java.util.Date"%>
-<%@page import="org.iq.util.version.Version"%>
+<%@page import="org.iq.version.Version"%>
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />

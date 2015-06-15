@@ -18,7 +18,7 @@ final public class SystemConfig extends BaseConfig {
 
 	private String applicationName;
 	private boolean userStartupActionsEnabled;
-	private String userStartupActionsClasses;
+//	private String userStartupActionsClasses;
 	
 	public SystemConfig() throws ConfigException {
 		super(SYSTEM_CONFIG_DIR + SYSTEM_CONFIG_NAME);
@@ -30,7 +30,7 @@ final public class SystemConfig extends BaseConfig {
 
 		private static final String APPLICATION_NAME_PARAM_KEY = "application.name";
 		private static final String USER_STARTUP_ACTIONS_ENABLED_PARAM_KEY = "user.startup.actions.enabled";
-		private static final String USER_STARTUP_ACTIONS_CLASSES_PARAM_KEY = "user.startup.actions.classes";
+//		private static final String USER_STARTUP_ACTIONS_CLASSES_PARAM_KEY = "user.startup.actions.classes";
 		
 		private static final String DEFAULT_APPLICATION_NAME = "Core Application::iquesters";
 		private static final String DEFAULT_USER_STARTUP_ACTIONS_ENABLED = "false";
@@ -49,7 +49,7 @@ final public class SystemConfig extends BaseConfig {
 			setUserStartupActionsEnabled(Boolean.parseBoolean(properties
 					.getProperty(USER_STARTUP_ACTIONS_ENABLED_PARAM_KEY,
 							DEFAULT_USER_STARTUP_ACTIONS_ENABLED)));
-			setUserStartupActionsClasses(properties.getProperty(USER_STARTUP_ACTIONS_CLASSES_PARAM_KEY));
+//			setUserStartupActionsClasses(properties.getProperty(USER_STARTUP_ACTIONS_CLASSES_PARAM_KEY));
 		}
 
 
@@ -96,15 +96,15 @@ final public class SystemConfig extends BaseConfig {
 	/**
 	 * @return the userStartupActionsClasses
 	 */
-	public String getUserStartupActionsClasses() {
+	/*public String getUserStartupActionsClasses() {
 		return userStartupActionsClasses;
-	}
+	}*/
 
 	/**
 	 * @param userStartupActionsClasses
 	 *            the userStartupActionsClasses to set
 	 */
-	public void setUserStartupActionsClasses(String userStartupActionsClasses) {
+	/*public void setUserStartupActionsClasses(String userStartupActionsClasses) {
 		this.userStartupActionsClasses = userStartupActionsClasses;
-	}
+	}*/
 }

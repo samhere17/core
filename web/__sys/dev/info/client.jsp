@@ -1,4 +1,4 @@
-<%@page import="org.iq.util.version.Version"%>
+<%@page import="org.iq.version.Version"%>
 <%@page import="org.iq.ui.useragents.UserAgent"%>
 <html>
 <head>

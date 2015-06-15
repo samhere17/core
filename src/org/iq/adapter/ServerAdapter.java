@@ -9,7 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +28,7 @@ import org.iq.util.StringUtil;
  * @author Sam
  * 
  */
+@WebServlet("/adapter")
 public class ServerAdapter extends HttpServlet {
 
 	/**
@@ -37,6 +40,12 @@ public class ServerAdapter extends HttpServlet {
 	private RequestProcessor requestProcessor = null;
 	private Map<String, Object> inputMap = null;
 	private Map<String, Object> resultMap = null;
+
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+		System.out.println("ADAPTER STARTED SUCCESSFULLY");
+	}
 
 	/*
 	 * (non-Javadoc)

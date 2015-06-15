@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013, iquesters - All Rights Reserved.
  */
-package org.iq.util.version;
+package org.iq.version;
 
 import java.io.IOException;
 import java.io.InputStream;
