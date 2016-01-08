@@ -193,15 +193,30 @@ public class UmsSession extends BaseVO {
 	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("UmsSession=[" + StringUtil.lineSeparator);
-		buffer.append("userAccessKey=" + userAccessKey + StringUtil.lineSeparator);
-		buffer.append("sessionValid=" + sessionValid + StringUtil.lineSeparator);
-		buffer.append("sessionId=" + systemSessionId + StringUtil.lineSeparator);
-		buffer.append("sessionTicket=" + nativeToken + StringUtil.lineSeparator);
-		buffer.append("invalidMessage=" + invalidMessage + StringUtil.lineSeparator);
-		buffer.append("userDetails=" + (userDetails != null ? userDetails.toString() : "null") + StringUtil.lineSeparator);
-		buffer.append("roleId=" + roleId + StringUtil.lineSeparator);
-		buffer.append("lastLoginDetails=" + (lastLoginDetails != null ? lastLoginDetails.toString() : "null") + StringUtil.lineSeparator);
+		buffer.append("UmsSession = [");
+		buffer.append(StringUtil.lineSeparator);
+		buffer.append("    userId = ").append(userId);
+		buffer.append(StringUtil.lineSeparator);
+		buffer.append("    userAccessKey = ").append(userAccessKey);
+		buffer.append(StringUtil.lineSeparator);
+		buffer.append("    username = ").append(username);
+		buffer.append(StringUtil.lineSeparator);
+		buffer.append("    additionalId = ").append(additionalId);
+		buffer.append(StringUtil.lineSeparator);
+		buffer.append("    roleId = ").append(roleId);
+		buffer.append(StringUtil.lineSeparator);
+		buffer.append("    sessionValid = ").append(sessionValid);
+		buffer.append(StringUtil.lineSeparator);
+		buffer.append("    systemSessionId = ").append(systemSessionId);
+		buffer.append(StringUtil.lineSeparator);
+		buffer.append("    nativeToken = ").append(nativeToken);
+		buffer.append(StringUtil.lineSeparator);
+		buffer.append("    invalidMessage = ").append(invalidMessage);
+		buffer.append(StringUtil.lineSeparator);
+		buffer.append("    userDetails = ").append(userDetails != null ? userDetails.toString() : "null");
+		buffer.append(StringUtil.lineSeparator);
+		buffer.append("    lastLoginDetails = ").append(lastLoginDetails != null ? lastLoginDetails.toString() : "null");
+		buffer.append(StringUtil.lineSeparator);
 		buffer.append("]");
 		return buffer.toString();
 	}

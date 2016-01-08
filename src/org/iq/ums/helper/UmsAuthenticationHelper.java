@@ -9,6 +9,7 @@ import org.iq.helper.BaseHelper;
 import org.iq.logger.LocalLogger;
 import org.iq.ui.useragents.UserAgent;
 import org.iq.ums.UmsConstants.SessionStatus;
+import org.iq.ums.UmsContext;
 import org.iq.ums.dao.UmsLoginDetailsDao;
 import org.iq.ums.dao.UmsSessionDetailsDao;
 import org.iq.ums.dao.UmsUserDao;
@@ -20,7 +21,6 @@ import org.iq.ums.dao.impl.UmsUserDaoImpl;
 import org.iq.ums.dao.impl.UmsUserDetailsDaoImpl;
 import org.iq.ums.dao.impl.UmsUserRoleMapDaoImpl;
 import org.iq.ums.exception.UmsException;
-import org.iq.ums.security.UmsSecurity;
 import org.iq.ums.util.UmsDbProvider;
 import org.iq.ums.util.UmsKeyGenerator;
 import org.iq.ums.vo.UmsLoginDetails;
@@ -43,6 +43,7 @@ public class UmsAuthenticationHelper extends BaseHelper {
 
 	/**
 	 * @throws BusinessException 
+	 * @throws DbException 
 	 * 
 	 */
 	public UmsAuthenticationHelper() throws BusinessException {
@@ -59,14 +60,13 @@ public class UmsAuthenticationHelper extends BaseHelper {
 	 * @param actualAccessIP
 	 * @param userAgentString
 	 * @return UmsSession
+	 * @throws UmsException 
 	 */
 	public UmsSession authenticate(String username, String password,
 			String jSessionId, String accessIp, String accessPort,
-			String accessGateway, String actualAccessIP, String userAgentString) {
+			String accessGateway, String actualAccessIP, String userAgentString) throws UmsException {
 
-		UmsSecurity umsSecurity = UmsSecurity.getUmsSecurityInstance();
-
-		UmsUser user = umsSecurity.authenticate(username, password.toCharArray());
+		UmsUser user = UmsContext.umsAnnexSecurity.authenticate(username, password.toCharArray());
 
 		UmsSession umsSession = new UmsSession();
 		if (user != null) {
@@ -87,7 +87,7 @@ public class UmsAuthenticationHelper extends BaseHelper {
 				lastLoginDetails = umsLoginDetailsDao.getLastLoginDetailsByUserId(user.getUserId());
 				
 				String systemSessionId = UmsKeyGenerator.getRandomKey();
-				String nativeToken = umsSecurity.createNativeToken(username);
+				String nativeToken = UmsContext.umsAnnexSecurity.createNativeToken(username);
 				
 				//Preparing current session details
 				UmsSessionDetails currSessionDetails = new UmsSessionDetails();
@@ -140,7 +140,7 @@ public class UmsAuthenticationHelper extends BaseHelper {
 				
 				
 				if (cacheHelper.isRegionExists("UMS_SESSIONS") == false) {
-					cacheHelper.addRegion("UMS_SESSIONS", "Region to store user session details");
+					cacheHelper.addRegion("UMS_SESSIONS", "Region to store user session details", true);
 				} else {
 					LocalLogger.logDebug("UMS_SESSIONS" + " Region Exists.");
 				}

@@ -11,48 +11,59 @@ import org.iq.util.StringUtil;
 
 public abstract class BaseException extends Exception {
 
-  /**
-   * 
-   */
-  private static final long serialVersionUID = -7381248083824421443L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7381248083824421443L;
 
-  /**
-   * 
-   */
-  public BaseException() {
-	super();
-  }
+	/**
+	 * 
+	 */
+	public BaseException() {
+		super();
+	}
 
-  /**
-   * @param msg
-   */
-  public BaseException(String msg) {
-	super(msg);
-  }
+	/**
+	 * @param msg
+	 */
+	public BaseException(String msg) {
+		super(msg);
+	}
 
-  /**
-   * @param th
-   */
-  public BaseException(Throwable th) {
-	super(th);
-  }
+	/**
+	 * @param th
+	 */
+	public BaseException(Throwable th) {
+		super(th);
+	}
 
-  /**
-   * @param msg
-   * @param th
-   */
-  public BaseException(String msg, Throwable th) {
-	super(msg, th);
-  }
+	/**
+	 * @param msg
+	 * @param th
+	 */
+	public BaseException(String msg, Throwable th) {
+		super(msg, th);
+	}
 
-  /**
-   * @param th
-   * @return String
-   */
-  protected static final String getErrorMessage(String message, Throwable th) {
-	return message != null ? message + " : "
-		: "" + th.getMessage() != null ? th.getMessage() : "";
-  }
+	/**
+	 * @param th
+	 * @return String
+	 */
+	protected static final String getErrorMessage(String message, Throwable th) {
+		return message != null ? message + " : " : "" + th.getMessage() != null ? th.getMessage() : "";
+	}
+
+	@Override
+	public String getMessage() {
+		String msg = super.getMessage();
+		if (StringUtil.isEmpty(msg) == false) {
+			if (msg.contains(":")) {
+				int index = msg.lastIndexOf(":");
+				msg = msg.substring(index+1).trim();
+			}
+		}
+		return msg;
+	}
 
 	/**
 	 * @param e

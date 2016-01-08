@@ -3,27 +3,29 @@ package org.iq.config;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import org.iq.exception.ConfigException;
+
 final public class ConfigFactory {
 
-	public static BaseConfig getConfig(String configClassName) {
+	public static BaseConfig getConfig(String configClassName) throws ConfigException {
 		BaseConfig baseConfig = null;
 		try {
 			Class<?> configClassDefinition = Class.forName(configClassName);
 			baseConfig = (BaseConfig) configClassDefinition.newInstance();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new ConfigException(e);
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new ConfigException(e);
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new ConfigException(e);
 		}
 		return baseConfig;
 	}
 
-	public static BaseConfig getConfig(String configClassName, Object... args) {
+	public static BaseConfig getConfig(String configClassName, Object... args) throws ConfigException {
 		BaseConfig baseConfig = null;
 
 		try {
@@ -38,26 +40,26 @@ final public class ConfigFactory {
 					.getConstructor(params);
 			baseConfig = (BaseConfig) constructor.newInstance(args);
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new ConfigException(e);
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new ConfigException(e);
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new ConfigException(e);
 		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new ConfigException(e);
 		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new ConfigException(e);
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new ConfigException(e);
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new ConfigException(e);
 		}
 
 		return baseConfig;

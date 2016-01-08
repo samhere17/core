@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.iq.ServiceConstants;
+import org.iq.SystemContext;
 import org.iq.cache.CacheHelper;
 import org.iq.exception.BaseException;
 import org.iq.exception.CacheException;
@@ -32,7 +33,7 @@ public class RequestProcessor extends BaseProcessor {
 	private static final String ERROR_MESSAGE_KEY = "errorMessage";
 	private static final String STACK_TRACE_KEY = "stackTrace";
 
-	private static final String ERROR_PAGE = "__sys/error.jsp";
+	private static final String ERROR_PAGE = "error.jsp";
 
 	/**
 	 * a unique identifier for each jSession
@@ -104,20 +105,18 @@ public class RequestProcessor extends BaseProcessor {
 
 		try {
 			if (isSessionCheckRequired()) {
-				//TODO Get UmsSession object PROPERLY from cacheHelper based on jSessionId
 				CacheHelper cacheHelper = new CacheHelper();
 				umsSession = (UmsSession) cacheHelper.getElement("UMS_SESSIONS", jSessionId);
-//				umsSession = new UmsSession();//get from cacheHelper
 
-				// If umsSession is not available, return to context, i.e. login page
+				// If umsSession is not available, return to web context
 				if (umsSession == null) {
-					resultMap.put(ServiceConstants.REDIRECT_URL, "index.jsp");
+					resultMap.put(ServiceConstants.REDIRECT_URL, SystemContext.systemConfig.getWebContextRoot());
 					return resultMap;
 				}
 
-				// If SystemSessionId is not valid, return to context, i.e. login page
+				// If SystemSessionId is not valid, return to web context
 				if (new UmsAuthenticationHelper().isTicketValid(umsSession.getSystemSessionId())==false) {
-					resultMap.put(ServiceConstants.REDIRECT_URL, "index.jsp");
+					resultMap.put(ServiceConstants.REDIRECT_URL, SystemContext.systemConfig.getWebContextRoot());
 					return resultMap;
 				}
 			}
@@ -197,7 +196,7 @@ public class RequestProcessor extends BaseProcessor {
 		String requestedServiceClassName = ServicesDefinitions.getServiceClassName(requestedServiceName);
 		if (StringUtil.isEmpty(requestedServiceClassName)) {
 			throw new ServiceException(
-					"Class name not found for requested service: "
+					"Class name not found for requested service = "
 							+ requestedServiceName);
 		}
 		Class<?> serviceClass = Class.forName(requestedServiceClassName);

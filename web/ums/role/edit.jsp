@@ -1,138 +1,146 @@
-<%@page import="java.util.Date"%>
-<%@page import="org.iq.util.DateUtil.DateFormat"%>
-<%@page import="org.iq.util.DateUtil"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ include file="../../cmn/head.jsp" %>
+<form method="post" action="${pageContext.request.contextPath}/adapter">
+	<input type="hidden" name="serviceName" value="UpdateRole">
+	<input type="hidden" name="roleId" value="${role.roleId}">
 
-<%-- <c:set var="browserURL" value="${pageContext.request.requestURI}" scope="session"></c:set> --%>
+	<div class="alert alert-warning">
+		You are editing the following role
+	</div>
 
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>OMS::iquesters</title>
-<%@include file="/__sys/cmn/styles.jsp"%>
-<%@include file="/__sys/cmn/scripts.jsp"%>
-<style media="screen" type="text/css">
-table#permissions div.child-contents {
-	margin: 4px 4px;
-	float: left;
-}
-
-table#permissions img {
-	width: 16px;
-	height: 16px;
-	float: left;
-	border: 1px solid #aaa;
-	padding: 2px;
-}
-</style>
-</head>
-<body>
-	<%
-		String header = "Edit Role";
-	%>
-	<div class="wrapper">
-		<%@include file="/__sys/cmn/header.jsp"%>
-		<%@include file="/__sys/cmn/menu.jsp"%>
-
-		<div class="bodycontent">
-			<div class="toolboxarea">
-				<%@include file="/__sys/cmn/toolbox.jsp"%>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<div class="panel-title">
+				Role Details
 			</div>
-			<div class="workarea">
-				<div class="form-container">
-					<form method="post" action="${pageContext.request.contextPath}/adapter">
-						<input type="hidden" name="serviceName" value="UpdateRole" />
-						<input type="hidden" name="roleId" value="${role.roleId}" />
-						<div class="form-header">
-							<img
-								src="${pageContext.request.contextPath}/__sys/img/role-edit-16-16.png"
-								alt="Edit Role" title="Edit Role" />
-							<h3>Edit Role</h3>
-						</div>
-						<div class="form-content">
-							<div class="fields-row">
-								<div class="field-col">
-									<label for="name">Role Name</label> <input type="text" name="roleName" value="${role.roleName}" required/>
-									<div class="field-info-container">
-										<div class="field-info">
-											<div class="info-content">Name for this role.</div>
-										</div>
-									</div>
-								</div>
-								<div class="field-col">
-									<label for="name">Role Description</label>
-									<textarea name="roleDesc">${role.roleDescription}</textarea>
-								</div>
-							</div>
-							<fieldset>
-								<legend>Permissions</legend>
-								<div class="fields-row">
-									<c:if test="${not empty optionsList}">
-										<c:set var="loopCount" value="1" />
-										<c:forEach items="${optionsList}" var="currentParent">
-											<div class="field-col">
-												<c:if test="${not empty currentParent.childOptions}">
-													<table id="permissions" class="input-width-double" style="margin: 2px;">
-														<thead>
-															<tr>
-																<script type="text/javascript">
-																	$(document).ready(function() {
-																		$('#select-all-${currentParent.optionId}').click(function(event) { //on click
-																			//alert("${currentParent.optionId} - ${currentParent.optionName}");
-																			if (this.checked) { // check select status
-																				$('.check-${currentParent.optionId}').each(function() { //loop through each checkbox
-																					this.checked = true; //select all checkboxes with class "checkbox1"
-																				});
-																			} else {
-																				$('.check-${currentParent.optionId}').each(function() { //loop through each checkbox
-																					this.checked = false; //deselect all checkboxes with class "checkbox1"
-																				});
-																			}
-																		});
-																	});
-																</script>
-
-																<th style="width: 20px;"><input id="select-all-${currentParent.optionId}" name="option-${currentParent.optionId}" type="checkbox" <c:if test="${currentParent.menuItemEnabled}">checked</c:if>></th>
-																<th><b>${currentParent.optionName} Menu</b></th>
-															</tr>
-														</thead>
-														<tbody>
-															<c:forEach items="${currentParent.childOptions}"
-																var="currentChild">
-																<c:if test="${currentChild.optionType == 'MENU_ITEM'}">
-																	<tr>
-																		<td><input class="check-${currentParent.optionId}" name="option-${currentChild.optionId}" type="checkbox" <c:if test="${currentChild.menuItemEnabled}">checked</c:if>></td>
-																		<td><img
-																			src="${pageContext.request.contextPath}/${currentChild.optionImageLink}"
-																			alt="${currentChild.optionImageAlt}" />
-																			<div class="child-contents">${currentChild.optionName}</div>
-																		</td>
-																	</tr>
-																</c:if>
-															</c:forEach>
-														</tbody>
-													</table>
-												</c:if>
-											</div>
-											<c:if test="${loopCount%2 eq 0}">
-												<div class="clear"></div>
-											</c:if>
-											<c:set var="loopCount" value="${loopCount+1}" />
-										</c:forEach>
-									</c:if>
-								</div>
-							</fieldset>
-							<div class="clear"></div>
-						</div>
-						<div class="form-actions">
-							<input type="submit" id="" value="Update Role" />
-						</div>
-					</form>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-2 form-group">
+					<label class="control-label" for="name">Role ID</label>
+					<input class="form-control" type="text" value="${role.roleId}" readonly />
+				</div>
+				<div class="col-md-4 form-group">
+					<label class="control-label" for="name">Role Area</label>
+					<input class="form-control" type="text" value="${role.roleArea}" readonly />
+				</div>
+				<div class="col-md-4 form-group">
+					<label class="control-label" for="name">Role Status</label>
+					<c:choose>
+						<c:when test="${umsSession.roleId == 1}">
+							<select class="form-control" name="roleStatus" required>
+								<option value="0" <c:if test="${role.roleStatus eq 'INACTIVE'}">selected</c:if> >Inactive</option>
+								<option value="1" <c:if test="${role.roleStatus eq 'ACTIVE'}">selected</c:if> >Active</option>
+								<option value="2" <c:if test="${role.roleStatus eq 'DELETED'}">selected</c:if> >Deleted</option>
+							</select>
+						</c:when>
+						<c:otherwise>
+							<input class="form-control" type="text" value="${role.roleStatus}" readonly />
+						</c:otherwise>
+					</c:choose>
+				</div>
+				<div class="col-md-2 form-group">
+					<label class="control-label" for="name">Additional ID</label>
+					<input class="form-control" type="text" value="${role.additionalId}" readonly />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6 form-group">
+					<label class="control-label" for="name">Role Name</label>
+					<input class="form-control" type="text" name="roleName" value="${role.roleName}" maxlength="50" required />
+				</div>
+				<div class="col-md-6 form-group">
+					<label class="control-label" for="name">Role Description</label>
+					<textarea class="form-control" name="roleDesc" maxlength="500">${role.roleDescription}</textarea>
 				</div>
 			</div>
 		</div>
-		<%@include file="/__sys/cmn/footer.jsp"%>
 	</div>
-</body>
-</html>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<div class="panel-title">
+				Permissions
+			</div>
+		</div>
+		<div class="panel-body">
+
+			<c:if test="${not empty optionsList}">
+				<c:set var="loopCount" value="0" />
+				<c:set var="optionsListSize" value="${fn:length(optionsList)}" />
+				<c:forEach items="${optionsList}" var="currentParent">
+					<c:if test="${loopCount%2 eq 0}"><div class="row"></c:if>
+
+					<div class="col-md-6">
+						<c:if test="${not empty currentParent.childOptions}">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<input type="checkbox" class="select-all" name="option-${currentParent.optionId}"<c:if test="${currentParent.menuItemEnabled}">checked</c:if>>
+									<b>${currentParent.optionName} Menu</b>
+								</div>
+								<div class="panel-body">
+									<c:forEach items="${currentParent.childOptions}" var="currentChild">
+										<c:if test="${currentChild.optionType == 'MENU_ITEM'}">
+											<div>
+												<input type="checkbox" id="option-${currentChild.optionId}" name="option-${currentChild.optionId}"<c:if test="${currentChild.menuItemEnabled}">checked</c:if>>
+												<label for="option-${currentChild.optionId}">${currentChild.optionName}</label>
+											</div>
+										</c:if>
+									</c:forEach>
+								</div>
+							</div>
+						</c:if>
+					</div>
+
+					<c:set var="loopCount" value="${loopCount+1}" />
+					<c:if test="${loopCount%2 eq 0 or loopCount eq optionsListSize}"></div></c:if>
+				</c:forEach>
+			</c:if>
+		</div>
+	</div>
+
+
+	<div class="row">
+		<div class="col-md-12">
+			<input class="btn btn-md btn-primary" type="submit" value="Update">
+		</div>
+	</div>
+	<br>
+</form>
+<c:if test="${umsSession.roleId == 1}">
+	<div class="panel panel-danger">
+		<div class="panel-heading">
+			<h1 class="panel-title">Super Admin Area</h1>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-3 form-group">
+					<label class="control-label" for="creation-date">Creation Date</label>
+					<input class="form-control" id="creation-date" type="text" value='<fmt:formatDate type="date" value="${role.roleCreation}" />' readonly>
+				</div>
+				<div class="col-md-3 form-group">
+					<label  class="control-label" for="creation-time">Creation Time</label>
+					<input class="form-control" id="creation-time" type="text" value='<fmt:formatDate type="time" value="${role.roleCreation}" />' readonly>
+				</div>
+				<div class="col-md-2 form-group">
+					<label class="control-label" for="created-by">Created By</label>
+					<input class="form-control" id="created-by" type="text" value="${role.roleCreatedBy}" readonly>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3 form-group">
+					<label for="last-updated-date">Last Updated Date</label>
+					<input class="form-control" id="last-updated-date" type="text" value='<fmt:formatDate type="date" value="${role.roleUpdated}" />' readonly>
+				</div>
+				<div class="col-md-3 form-group">
+					<label class="control-label" for="last-updated-time">Last Updated Time</label>
+					<input class="form-control" id="last-updated-time" type="text" value='<fmt:formatDate type="time" value="${role.roleUpdated}" />' readonly>
+				</div>
+				<div class="col-md-2 form-group">
+					<label class="control-label" for="last-update-by">Last Updated By</label>
+					<input class="form-control" id="last-update-by" type="text" value="${role.roleUpdatedBy}" readonly>
+				</div>
+			</div>
+		</div>
+	</div>
+</c:if>
+<%@ include file="../../cmn/tail.jsp" %>

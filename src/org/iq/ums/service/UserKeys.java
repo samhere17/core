@@ -20,10 +20,16 @@ public interface UserKeys {
 	static final String BIRTH_DAY_KEY = "birthday";
 	static final String ANNIVERSARY_KEY = "anniversary";
 
-	static final Object USER_ID_KEY = "userId";
+	static final String USER_ID_KEY = "userId";
+	static final String USER_ACCESS_KEY = "userAccessKey";
 	static final String USERNAME_KEY = "username";
 	static final String PASSWORD_KEY = "password";
 	static final String C_PASSWORD_KEY = "cpassword";
+	
+	static final String REMOTE_ADDRESS_KEY = "remote_addr";
+	static final String CAPTCHA_CHALLENGE_KEY = "recaptcha_challenge_field";
+	static final String CAPTCHA_RESPONSE_KEY = "recaptcha_response_field";
+
 
 	static final String SELECTED_ROLE_ID_KEY = "selectedRoleId";
 	static final String SELECTED_ORG_ID_KEY = "selectedOrgId";
@@ -34,4 +40,5 @@ public interface UserKeys {
 	static final String USER_KEY = "user";
 	static final String USER_DETAILS_KEY = "userDetails";
 	static final String USER_ROLE_KEY = "userRole";
+	static final String UMS_REGISTRATION_RESULT_KEY = "registrationResult";
 }

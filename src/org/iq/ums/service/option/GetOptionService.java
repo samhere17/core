@@ -32,7 +32,7 @@ public class GetOptionService extends BaseService {
 			throw new ServiceException(e);
 		}
 
-//		redirectUrl = "__sys/opt/details.jsp";
+		redirectUrl = "ums/opt/details.jsp";
 
 		LocalLogger.logMethodEnd();
 	}

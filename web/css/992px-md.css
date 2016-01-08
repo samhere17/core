@@ -1,0 +1,30 @@
+.navbar-brand {
+	line-height: 50px;
+}
+
+ul.nav > li > a > .fa {
+	font-size: 30px;
+	display: block;
+	margin: 0 auto;
+}
+
+ul.nav > li > a {
+	line-height: inherit;
+	text-align: center;
+}
+
+
+.dropdown .sub-dropdown .sub-dropdown-menu li a {
+	padding-left: 15px;
+}
+
+
+.has-inline-button {
+	display: flex;
+	align-items: stretch;
+}
+
+.inline-button-container {
+	display: flex;
+	align-items: flex-end;
+}

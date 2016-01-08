@@ -273,24 +273,24 @@ public class UmsLoginDetails extends BaseVO {
 	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("UmsLoginDetails=[" + StringUtil.lineSeparator);
-		buffer.append("    userId=" + userId + StringUtil.lineSeparator);
-		buffer.append("    systemSessionId=" + systemSessionId + StringUtil.lineSeparator);
-		buffer.append("    nativeToken=" + nativeToken + StringUtil.lineSeparator);
-		buffer.append("    loginTime=" + loginTime + StringUtil.lineSeparator);
-		buffer.append("    accessIP=" + accessIP + StringUtil.lineSeparator);
-		buffer.append("    accessPort=" + accessPort + StringUtil.lineSeparator);
-		buffer.append("    accessGateway=" + accessGateway + StringUtil.lineSeparator);
-		buffer.append("    actualAccessIP=" + actualAccessIP + StringUtil.lineSeparator);
-		buffer.append("    deviceType=" + deviceType + StringUtil.lineSeparator);
-		buffer.append("    operatingSystem=" + operatingSystem + StringUtil.lineSeparator);
-		buffer.append("    operatingSystemManufacturer=" + operatingSystemManufacturer + StringUtil.lineSeparator);
-		buffer.append("    browserName=" + browserName + StringUtil.lineSeparator);
-		buffer.append("    browserVersion=" + browserVersion + StringUtil.lineSeparator);
-		buffer.append("    browserManufacturer=" + browserManufacturer + StringUtil.lineSeparator);
-		buffer.append("    browserType=" + browserType + StringUtil.lineSeparator);
-		buffer.append("    browserRenderingEngine=" + browserRenderingEngine + StringUtil.lineSeparator);
-		buffer.append("  ]");
+		buffer.append("UmsLoginDetails = [" + StringUtil.lineSeparator);
+		buffer.append("    userId = " + userId + StringUtil.lineSeparator);
+		buffer.append("    systemSessionId = " + systemSessionId + StringUtil.lineSeparator);
+		buffer.append("    nativeToken = " + nativeToken + StringUtil.lineSeparator);
+		buffer.append("    loginTime = " + loginTime + StringUtil.lineSeparator);
+		buffer.append("    accessIP = " + accessIP + StringUtil.lineSeparator);
+		buffer.append("    accessPort = " + accessPort + StringUtil.lineSeparator);
+		buffer.append("    accessGateway = " + accessGateway + StringUtil.lineSeparator);
+		buffer.append("    actualAccessIP = " + actualAccessIP + StringUtil.lineSeparator);
+		buffer.append("    deviceType = " + deviceType + StringUtil.lineSeparator);
+		buffer.append("    operatingSystem = " + operatingSystem + StringUtil.lineSeparator);
+		buffer.append("    operatingSystemManufacturer = " + operatingSystemManufacturer + StringUtil.lineSeparator);
+		buffer.append("    browserName = " + browserName + StringUtil.lineSeparator);
+		buffer.append("    browserVersion = " + browserVersion + StringUtil.lineSeparator);
+		buffer.append("    browserManufacturer = " + browserManufacturer + StringUtil.lineSeparator);
+		buffer.append("    browserType = " + browserType + StringUtil.lineSeparator);
+		buffer.append("    browserRenderingEngine = " + browserRenderingEngine + StringUtil.lineSeparator);
+		buffer.append("]");
 		return buffer.toString();
 	}
 }

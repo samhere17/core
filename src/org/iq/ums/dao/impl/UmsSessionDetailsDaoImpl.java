@@ -10,9 +10,8 @@ import org.iq.exception.DbException;
 import org.iq.ums.dao.UmsSessionDetailsDao;
 import org.iq.ums.vo.UmsSessionDetails;
 
-public class UmsSessionDetailsDaoImpl extends BaseDaoImpl implements
-		UmsSessionDetailsDao {
-	
+public class UmsSessionDetailsDaoImpl extends BaseDaoImpl<UmsSessionDetails> implements UmsSessionDetailsDao {
+
 	/**
 	 * 
 	 */
@@ -23,18 +22,16 @@ public class UmsSessionDetailsDaoImpl extends BaseDaoImpl implements
 	private static final String UMS_SESSION_DETAILS_SELECT_BY_USER_ID = "SELECT USER_ID, SYSTEM_SESSION_ID, SESSION_STATUS, NATIVE_TOKEN FROM UMS_SESSION_DETAILS WHERE USER_ID = ?";
 
 	private static final String UMS_SESSION_DETAILS_INSERT_ALL = "INSERT INTO UMS_SESSION_DETAILS (USER_ID, SYSTEM_SESSION_ID, SESSION_STATUS, NATIVE_TOKEN ) VALUES (?, ?, ?, ?)";
-	
+
 	private static final String UMS_SESSION_DETAILS_DELETE = "DELETE FROM UMS_SESSION_DETAILS WHERE USER_ID=? AND SYSTEM_SESSION_ID=? AND SESSION_STATUS=? AND NATIVE_TOKEN=?";
 
-/*	
-	USER_ID, SYSTEM_SESSION_ID, SESSION_STATUS, NATIVE_TOKEN
-
-	USER_ID				INT NOT NULL,
-	SYSTEM_SESSION_ID	VARCHAR(50) NOT NULL,
-	SESSION_STATUS		INT(2) NOT NULL,
-	NATIVE_TOKEN		VARCHAR(100),
-
-*/
+	/*
+	 * USER_ID, SYSTEM_SESSION_ID, SESSION_STATUS, NATIVE_TOKEN
+	 * 
+	 * USER_ID INT NOT NULL, SYSTEM_SESSION_ID VARCHAR(50) NOT NULL,
+	 * SESSION_STATUS INT(2) NOT NULL, NATIVE_TOKEN VARCHAR(100),
+	 * 
+	 */
 	/**
 	 * @param dbSession
 	 */
@@ -43,10 +40,8 @@ public class UmsSessionDetailsDaoImpl extends BaseDaoImpl implements
 	}
 
 	@Override
-	public UmsSessionDetails getSessionDetailsByUserId(
-			int userId) throws DbException {
-		DataSet dataSet = dbSession.executeQuery(
-				UMS_SESSION_DETAILS_SELECT_BY_USER_ID, userId);
+	public UmsSessionDetails getSessionDetailsByUserId(int userId) throws DbException {
+		DataSet dataSet = dbSession.executeQuery(UMS_SESSION_DETAILS_SELECT_BY_USER_ID, userId);
 
 		UmsSessionDetails sessionDetails = null;
 		if (dataSet != null && dataSet.getRowCount() > 0) {
@@ -58,14 +53,12 @@ public class UmsSessionDetailsDaoImpl extends BaseDaoImpl implements
 
 	@Override
 	public int insert(UmsSessionDetails umsSessionDetails) throws DbException {
-		
-		return dbSession.executeUpdate(UMS_SESSION_DETAILS_INSERT_ALL,
-				umsSessionDetails.getUserId(),
-				umsSessionDetails.getSystemSessionId(),
-				umsSessionDetails.getSessionStatus().getSessionStatusValue(),
+
+		return dbSession.executeUpdate(UMS_SESSION_DETAILS_INSERT_ALL, umsSessionDetails.getUserId(),
+				umsSessionDetails.getSystemSessionId(), umsSessionDetails.getSessionStatus().getSessionStatusValue(),
 				umsSessionDetails.getNativeToken());
 	}
-	
+
 	@Override
 	public int update(UmsSessionDetails object) throws DbException {
 		// TODO Auto-generated method stub
@@ -74,8 +67,7 @@ public class UmsSessionDetailsDaoImpl extends BaseDaoImpl implements
 
 	@Override
 	public List<UmsSessionDetails> select() throws DbException {
-		DataSet dataSet = dbSession
-				.executeQuery(UMS_SESSION_DETAILS_SELECT_ALL);
+		DataSet dataSet = dbSession.executeQuery(UMS_SESSION_DETAILS_SELECT_ALL);
 
 		List<UmsSessionDetails> sessionDetails = null;
 		if (dataSet.getRowCount() > 0) {
@@ -88,30 +80,28 @@ public class UmsSessionDetailsDaoImpl extends BaseDaoImpl implements
 	}
 
 	@Override
-	public int delete(UmsSessionDetails umsSessionDetails) throws DbException {
-		
-		return dbSession.executeUpdate(UMS_SESSION_DETAILS_DELETE,
-				umsSessionDetails.getUserId(),
-				umsSessionDetails.getSystemSessionId(),
-				umsSessionDetails.getSessionStatus().getSessionStatusValue(),
-				umsSessionDetails.getNativeToken());
+	public UmsSessionDetails getSingleRow(DataSet dataSet, int rowNum) {
+
+		UmsSessionDetails sessionDetails = new UmsSessionDetails();
+		sessionDetails.setUserId(dataSet.getIntValue(rowNum, "USER_ACCESS_KEY"));
+		sessionDetails.setSystemSessionId(dataSet.getStringValue(rowNum, "SYSTEM_SESSION_ID"));
+		sessionDetails.setNativeToken(dataSet.getStringValue(rowNum, "NATIVE_TOKEN"));
+		sessionDetails.setSessionStatusValue(dataSet.getIntValue(rowNum, "SESSION_STATUS"));
+
+		return sessionDetails;
 	}
 
 	@Override
-	public UmsSessionDetails getSingleRow(DataSet dataSet, int rowNum) {
-		
-		UmsSessionDetails sessionDetails = new UmsSessionDetails();
-		sessionDetails.setUserId(dataSet.getIntValue(rowNum,
-				"USER_ACCESS_KEY"));
-		sessionDetails.setSystemSessionId(dataSet.getStringValue(rowNum,
-				"SYSTEM_SESSION_ID"));
-		sessionDetails.setNativeToken(dataSet.getStringValue(rowNum,
-				"NATIVE_TOKEN"));
-		sessionDetails.setSessionStatusValue(dataSet.getIntValue(rowNum,
-				"SESSION_STATUS"));
-		
-		return sessionDetails ;
+	public int softDelete(UmsSessionDetails t) throws DbException {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
+	@Override
+	public int hardDelete(UmsSessionDetails umsSessionDetails) throws DbException {
+		return dbSession.executeUpdate(UMS_SESSION_DETAILS_DELETE, umsSessionDetails.getUserId(),
+				umsSessionDetails.getSystemSessionId(), umsSessionDetails.getSessionStatus().getSessionStatusValue(),
+				umsSessionDetails.getNativeToken());
+	}
 
 }

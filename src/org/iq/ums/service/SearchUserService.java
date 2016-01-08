@@ -70,6 +70,7 @@ public class SearchUserService extends BaseService {
 			resultAttributes.put(UserKeys.USERS_LIST_KEY, new UmsHelper()
 					.getSearchedUsers(additionalId, userId, username,
 							firstname, lastname, phone, email, roleId));
+			
 		} catch (BusinessException e) {
 			throw new ServiceException(e);
 		}

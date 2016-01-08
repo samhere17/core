@@ -1,5 +1,6 @@
 package org.iq.ums.vo;
 
+import org.iq.util.StringUtil;
 import org.iq.valueobject.BaseVO;
 
 
@@ -26,9 +27,7 @@ public class UmsRegistrationResult extends BaseVO {
 	private String dateOfBirthValidationError = null;
 	private String genderValidationError = null;
 	private String emailValidationError = null;
-	private String alternateEmailValidationError = null;
 	private String phoneValidationError = null;
-	private String alternatePhoneValidationError = null;
 	private String captchaValidationError = null;
 	private String errorMessage = null;
 
@@ -215,38 +214,6 @@ public class UmsRegistrationResult extends BaseVO {
 	}
 
 	/**
-	 * @return the alternatePhoneValidationError
-	 */
-	public String getAlternatePhoneValidationError() {
-		return alternatePhoneValidationError;
-	}
-
-	/**
-	 * @param alternatePhoneValidationError the alternatePhoneValidationError to set
-	 */
-	public void setAlternatePhoneValidationError(
-			String alternatePhoneValidationError) {
-		this.alternatePhoneValidationError = alternatePhoneValidationError;
-	}
-	
-	
-	
-	/**
-	 * @return the alternateEmailValidationError
-	 */
-	public String getAlternateEmailValidationError() {
-		return alternateEmailValidationError;
-	}
-
-	/**
-	 * @param alternateEmailValidationError the alternateEmailValidationError to set
-	 */
-	public void setAlternateEmailValidationError(
-			String alternateEmailValidationError) {
-		this.alternateEmailValidationError = alternateEmailValidationError;
-	}
-
-	/**
 	 * @return the captchaValidationError
 	 */
 	public String getCaptchaValidationError() {
@@ -283,7 +250,39 @@ public class UmsRegistrationResult extends BaseVO {
 	 */
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuffer stringBuffer = new StringBuffer();
+		
+		stringBuffer.append("UmsRegistrationResult = [");
+		stringBuffer.append(StringUtil.lineSeparator);
+		stringBuffer.append("    registrationSuccess = ").append(registrationSuccess);
+		stringBuffer.append(StringUtil.lineSeparator);
+		stringBuffer.append("    umsUserDetails = ").append(umsUserDetails);
+		stringBuffer.append(StringUtil.lineSeparator);
+		stringBuffer.append("    successMessage = ").append(successMessage);
+		stringBuffer.append(StringUtil.lineSeparator);
+		stringBuffer.append("    firstnameValidationError = ").append(firstnameValidationError);
+		stringBuffer.append(StringUtil.lineSeparator);
+		stringBuffer.append("    lastnameValidationError = ").append(lastnameValidationError);
+		stringBuffer.append(StringUtil.lineSeparator);
+		stringBuffer.append("    usernameValidationError = ").append(usernameValidationError);
+		stringBuffer.append(StringUtil.lineSeparator);
+		stringBuffer.append("    passwordValidationError = ").append(passwordValidationError);
+		stringBuffer.append(StringUtil.lineSeparator);
+		stringBuffer.append("    confirmPasswordValidationError = ").append(confirmPasswordValidationError);
+		stringBuffer.append(StringUtil.lineSeparator);
+		stringBuffer.append("    dateOfBirthValidationError = ").append(dateOfBirthValidationError);
+		stringBuffer.append(StringUtil.lineSeparator);
+		stringBuffer.append("    genderValidationError = ").append(genderValidationError);
+		stringBuffer.append(StringUtil.lineSeparator);
+		stringBuffer.append("    emailValidationError = ").append(emailValidationError);
+		stringBuffer.append(StringUtil.lineSeparator);
+		stringBuffer.append("    phoneValidationError = ").append(phoneValidationError);
+		stringBuffer.append(StringUtil.lineSeparator);
+		stringBuffer.append("    captchaValidationError = ").append(captchaValidationError);
+		stringBuffer.append(StringUtil.lineSeparator);
+		stringBuffer.append("    errorMessage = ").append(errorMessage);
+		stringBuffer.append(StringUtil.lineSeparator);
+		stringBuffer.append("]");
+		return stringBuffer.toString();
 	}
 }

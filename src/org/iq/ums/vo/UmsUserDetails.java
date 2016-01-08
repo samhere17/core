@@ -242,27 +242,20 @@ public class UmsUserDetails extends BaseVO {
 	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("UmsUserDetails=[" + StringUtil.lineSeparator);
-		buffer.append("    userId=" + userId + StringUtil.lineSeparator);
-		buffer.append("    userFirstName=" + userFirstName
+		buffer.append("UmsUserDetails = [" + StringUtil.lineSeparator);
+		buffer.append("    userId = " + userId + StringUtil.lineSeparator);
+		buffer.append("    userFirstName = " + userFirstName + StringUtil.lineSeparator);
+		buffer.append("    userLastName = " + userLastName + StringUtil.lineSeparator);
+		buffer.append("    userAlias = " + userAlias + StringUtil.lineSeparator);
+		buffer.append("    address = " + address + StringUtil.lineSeparator);
+		buffer.append("    dateOfBirth = " + dateOfBirth + StringUtil.lineSeparator);
+		buffer.append("    gender = " + gender.toString() + "(Value:" + gender.getGenderValue() + ")"
 				+ StringUtil.lineSeparator);
-		buffer.append("    userLastName=" + userLastName + StringUtil.lineSeparator);
-		buffer.append("    userAlias=" + userAlias + StringUtil.lineSeparator);
-		buffer.append("    address=" + address + StringUtil.lineSeparator);
-		buffer.append("    dateOfBirth=" + dateOfBirth
-				+ StringUtil.lineSeparator);
-		buffer.append("    gender=" + gender.toString() + "(Value:"
-				+ gender.getGenderValue() + StringUtil.lineSeparator);
-		buffer.append("    primary email = " + primaryEmail
-				+ StringUtil.lineSeparator);
-		buffer.append("    alternateEmail = " + alternateEmail
-				+ StringUtil.lineSeparator);
-		buffer.append("    mobileNumber=" + primaryPhone
-				+ StringUtil.lineSeparator);
-		buffer.append("    alternatePhone =" + alternatePhone
-				+ StringUtil.lineSeparator);
-		buffer.append("    anniversary =" + anniversary
-				+ StringUtil.lineSeparator);
+		buffer.append("    primary email = " + primaryEmail + StringUtil.lineSeparator);
+		buffer.append("    alternateEmail = " + alternateEmail + StringUtil.lineSeparator);
+		buffer.append("    mobileNumber = " + primaryPhone + StringUtil.lineSeparator);
+		buffer.append("    alternatePhone = " + alternatePhone + StringUtil.lineSeparator);
+		buffer.append("    anniversary = " + anniversary + StringUtil.lineSeparator);
 		buffer.append("  ]");
 		return buffer.toString();
 	}

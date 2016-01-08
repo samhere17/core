@@ -32,4 +32,6 @@ public interface UmsOptionDao extends BaseDao<UmsOption> {
 
 	public List<UmsOption> selectParentAppOptions() throws DbException;
 
+	public int updateOptionOrder(int optId, int newOrderId) throws DbException;
+
 }

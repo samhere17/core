@@ -11,6 +11,8 @@ import org.iq.logger.LocalLogger;
 import org.iq.service.BaseService;
 import org.iq.service.Service;
 import org.iq.ums.UmsConstants;
+import org.iq.ums.UmsContext;
+import org.iq.ums.exception.UmsException;
 import org.iq.ums.helper.UmsAuthenticationHelper;
 import org.iq.ums.vo.UmsSession;
 import org.iq.util.StringUtil;
@@ -58,9 +60,10 @@ public class AuthenticationService extends BaseService {
 
 		UmsSession umsSession = null;
 		try {
-			umsSession = new UmsAuthenticationHelper().authenticate(
-					username, password, jSessionId, accessIp, accessPort, accessGateway,
-					actualAccessIP, userAgentString);
+			umsSession = new UmsAuthenticationHelper().authenticate(username, password, jSessionId, accessIp,
+					accessPort, accessGateway, actualAccessIP, userAgentString);
+		} catch (UmsException e) {
+			throw new ServiceException(e);
 		} catch (BusinessException e) {
 			throw new ServiceException(e);
 		}
@@ -70,13 +73,9 @@ public class AuthenticationService extends BaseService {
 		resultAttributes.put(UmsConstants.UMS_SESSION_KEY, umsSession);
 
 		if (umsSession.isSessionValid()) {
-			if (umsSession.getRoleId() == 1) {
-				redirectUrl = "home.jsp";
-			} else {
-				redirectUrl = "error.jsp";
-			}
+			redirectUrl = UmsContext.umsConfig.getLoginSuccessRedirectUrl();
 		} else {
-			redirectUrl = "";
+			redirectUrl = UmsContext.umsConfig.getLoginFailureRedirectUrl();
 		}
 		LocalLogger.logMethodEnd();
 	}

@@ -25,7 +25,7 @@ public class UserStartupActions {
 		 */
 		System.out.println("Loading startup-actions.properties...");
 		Properties startupActionsProps = new Properties();
-		InputStream localInputStream = UserStartupActions.class.getResourceAsStream("conf/__sys/startup-actions.properties");
+		InputStream localInputStream = UserStartupActions.class.getClassLoader().getResourceAsStream("conf/startup-actions.properties");
 		if (localInputStream != null) {
 			try {
 				startupActionsProps.load(localInputStream);
@@ -35,12 +35,15 @@ public class UserStartupActions {
 
 				for (Object classNameObj : startupActionNames) {
 					StartupAction startupAction = getStartupAction((String) classNameObj);
-					
-					initActions.add(startupAction);
 
-					Boolean destroyRequired = (Boolean) startupActionsProps.get(classNameObj);
-					if (destroyRequired) {
-						destroyActions.add(startupAction);
+					if (startupAction != null) {
+						initActions.add(startupAction);
+
+						Boolean destroyRequired = Boolean
+								.valueOf(StringUtil.getStringValue(startupActionsProps.get(classNameObj)));
+						if (destroyRequired) {
+							destroyActions.add(startupAction);
+						}
 					}
 				}
 

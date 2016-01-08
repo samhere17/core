@@ -110,7 +110,8 @@ public interface UmsConstants {
 		/**
 		 * 
 		 */
-		ACTIVE(2)/*,
+		ACTIVE(2),
+		DELETED(3)/*,
 		EXPIRING(9),
 		EXPIRED(1),
 		REJECTED(2),

@@ -23,6 +23,7 @@ public class CacheEvictor implements Runnable {
 	 */
 	private CacheEvictor() {
 		runner = new Thread(this, "Cache Evictor Thread");
+		runner.setDaemon(true);
 	}
 
 	/**

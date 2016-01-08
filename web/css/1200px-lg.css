@@ -1,0 +1,15 @@
+.switches {
+	display: flex;
+	margin-bottom: 5px;
+	justify-content: center;
+}
+
+.toggle-container {
+	margin-right: 5px !important;
+	margin-left: 5px !important;
+	padding-top: 5px;
+	padding-bottom: 10px;
+
+	border: 1px solid #dddddd  !important;
+	border-radius: 5px;
+}

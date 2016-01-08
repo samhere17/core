@@ -5,8 +5,11 @@ package org.iq.util;
 
 /**
  * @author Sam
+ * 
  */
 public interface UtilConstants {
 
-  
+  public enum IPVersion {
+	IPV4, IPV6;
+  }
 }

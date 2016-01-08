@@ -2,7 +2,6 @@ package org.iq.db.dao;
 
 import java.util.List;
 
-import org.iq.db.DataSet;
 import org.iq.exception.DbException;
 import org.iq.valueobject.BaseVO;
 
@@ -33,13 +32,13 @@ public interface BaseDao<T extends BaseVO> {
 	 * @return int
 	 * @throws DbException
 	 */
-	int delete(T t) throws DbException;
-
+	int softDelete(T t) throws DbException;
+	
 	/**
-	 * @param dataSet
-	 * @param rowNum
-	 * @return T
+	 * @param t
+	 * @return int
+	 * @throws DbException
 	 */
-	T getSingleRow(DataSet dataSet, int rowNum);
+	int hardDelete(T t) throws DbException;
 
 }

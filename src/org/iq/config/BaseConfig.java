@@ -16,7 +16,7 @@ public abstract class BaseConfig implements Cloneable, Serializable {
 	private static final long serialVersionUID = 4396100330724727796L;
 
 	private static final String CONFIG_DIR = "conf/";
-	private static final String CONF_EXT = "conf";
+	private static final String CONF_EXT = "properties";
 
 	protected InputStream confInputStream = null;
 
