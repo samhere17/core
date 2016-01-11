@@ -33,26 +33,23 @@ public class UmsRoleHelper extends BaseHelper {
 	}
 
 	public Map<Integer, Boolean> getOptionsMap(int roleId) throws BusinessException {
-		UmsRoleOptionMapDao umsRoleOptionMapDao = new UmsRoleOptionMapDaoImpl(
-				dbSession);
+		UmsRoleOptionMapDao umsRoleOptionMapDao = new UmsRoleOptionMapDaoImpl(dbSession);
 		Map<Integer, Boolean> retMap = null;
 		try {
-			List<UmsRoleOptionMap> umsRoleOptionMaps = umsRoleOptionMapDao
-					.selectOptionsByRoleId(roleId);
+			List<UmsRoleOptionMap> umsRoleOptionMaps = umsRoleOptionMapDao.selectOptionsByRoleId(roleId);
 
 			if (umsRoleOptionMaps != null && umsRoleOptionMaps.size() > 0) {
 				retMap = new HashMap<Integer, Boolean>();
 				for (UmsRoleOptionMap umsRoleOptionMap : umsRoleOptionMaps) {
-					retMap.put(umsRoleOptionMap.getOptionId(),
-							umsRoleOptionMap.isEnabled());
+					retMap.put(umsRoleOptionMap.getOptionId(), umsRoleOptionMap.isEnabled());
 				}
 			}
 		} catch (DbException e) {
 			throw new BusinessException(e);
-			}
+		}
 		return retMap;
 	}
-	
+
 	/**
 	 * @param roleArea
 	 * @param roleId
@@ -60,11 +57,15 @@ public class UmsRoleHelper extends BaseHelper {
 	 * @return List<UmsRole>
 	 * @throws BusinessException
 	 */
-	public List<UmsRole> getSearchedRoles(Integer roleArea, Integer roleId, String roleName)
-			throws BusinessException {
+	public List<UmsRole> getSearchedRoles(Integer roleArea, Integer roleId, String roleName) throws BusinessException {
 		UmsRoleDao umsRoleDao = new UmsRoleDaoImpl(dbSession);
+		
+		UmsRole umsRole = new UmsRole();
+		
+		umsRole.setRoleName(roleName);
+		
 		try {
-			return umsRoleDao.search(roleArea, roleId, roleName);
+			return umsRoleDao.search(umsRole);
 		} catch (DbException e) {
 			throw new BusinessException(e);
 		}
@@ -91,8 +92,7 @@ public class UmsRoleHelper extends BaseHelper {
 	 */
 	public UmsRole getRoleByUserId(int userId) throws BusinessException {
 		try {
-			UmsUserRoleMapDao umsUserRoleMapDao = new UmsUserRoleMapDaoImpl(
-					dbSession);
+			UmsUserRoleMapDao umsUserRoleMapDao = new UmsUserRoleMapDaoImpl(dbSession);
 			UmsUserRoleMap roleMap = umsUserRoleMapDao.selectByUserId(userId);
 
 			UmsRoleDao umsRoleDao = new UmsRoleDaoImpl(dbSession);
@@ -102,9 +102,8 @@ public class UmsRoleHelper extends BaseHelper {
 		}
 	}
 
-	public UmsRole createRole(String roleName, String roleDesc,
-			Map<Integer, Boolean> optionsMap, String additionalId, int userId)
-			throws BusinessException {
+	public UmsRole createRole(String roleName, String roleDesc, Map<Integer, Boolean> optionsMap, String additionalId,
+			int userId) throws BusinessException {
 		UmsRole umsRole = null;
 		try {
 			UmsRoleDao umsRoleDao = new UmsRoleDaoImpl(dbSession);
@@ -124,8 +123,7 @@ public class UmsRoleHelper extends BaseHelper {
 
 			umsRole.setRoleId(roleId);
 
-			UmsRoleOptionMapDao umsRoleOptionMapDao = new UmsRoleOptionMapDaoImpl(
-					dbSession);
+			UmsRoleOptionMapDao umsRoleOptionMapDao = new UmsRoleOptionMapDaoImpl(dbSession);
 
 			umsRoleOptionMapDao.insertMultiple(roleId, optionsMap);
 
@@ -135,8 +133,8 @@ public class UmsRoleHelper extends BaseHelper {
 		return umsRole;
 	}
 
-	public void updateRole(int roleId, String roleName, String roleDesc,
-			Map<Integer, Boolean> optionsMap, String additionalId, int userId) throws BusinessException {
+	public void updateRole(int roleId, String roleName, String roleDesc, Map<Integer, Boolean> optionsMap,
+			String additionalId, int userId) throws BusinessException {
 		UmsRole umsRole = null;
 		try {
 			UmsRoleDao umsRoleDao = new UmsRoleDaoImpl(dbSession);
@@ -155,9 +153,7 @@ public class UmsRoleHelper extends BaseHelper {
 
 			umsRoleDao.update(umsRole);
 
-
-			UmsRoleOptionMapDao umsRoleOptionMapDao = new UmsRoleOptionMapDaoImpl(
-					dbSession);
+			UmsRoleOptionMapDao umsRoleOptionMapDao = new UmsRoleOptionMapDaoImpl(dbSession);
 
 			umsRoleOptionMapDao.updateMultiple(roleId, optionsMap);
 
@@ -184,5 +180,21 @@ public class UmsRoleHelper extends BaseHelper {
 		} catch (DbException e) {
 			throw new BusinessException(e);
 		}
+	}
+
+	public void delete(int roleId, int userId) throws BusinessException {
+		UmsRoleDao umsRoleDao = new UmsRoleDaoImpl(dbSession);
+		
+		try {
+			UmsRole umsRole = new UmsRole();
+			umsRole.setRoleId(roleId);
+			umsRole.setRoleUpdated(new Date());
+			umsRole.setRoleUpdatedBy(userId);
+			
+			umsRoleDao.softDelete(umsRole);
+		} catch (DbException e) {
+			throw new BusinessException(e);
+		}
+		
 	}
 }

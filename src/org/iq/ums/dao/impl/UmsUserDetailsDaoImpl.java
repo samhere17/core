@@ -6,6 +6,7 @@ import java.util.List;
 import org.iq.db.DataSet;
 import org.iq.db.DbSession;
 import org.iq.db.dao.impl.BaseDaoImpl;
+import org.iq.db.dao.impl.SearchType;
 import org.iq.exception.DbException;
 import org.iq.ums.dao.UmsUserDetailsDao;
 import org.iq.ums.vo.UmsUserDetails;
@@ -15,7 +16,7 @@ import org.iq.util.StringUtil;
  * @author Sam
  * 
  */
-public class UmsUserDetailsDaoImpl extends BaseDaoImpl implements
+public class UmsUserDetailsDaoImpl extends BaseDaoImpl<UmsUserDetails> implements
 		UmsUserDetailsDao {
 
 	/**
@@ -130,12 +131,7 @@ public class UmsUserDetailsDaoImpl extends BaseDaoImpl implements
 		}
 		return null;
 	}
-
-	@Override
-	public int delete(UmsUserDetails object) throws DbException {
-		return dbSession.executeUpdate(/*UMS_USER_DETAILS_DELETE_BY_USER_ID*/"", object.getUserId());
-	}
-
+	
 	@Override
 	public UmsUserDetails getSingleRow(DataSet dataSet, int rowNum) {
 		UmsUserDetails userDetails = new UmsUserDetails();
@@ -185,28 +181,28 @@ public class UmsUserDetailsDaoImpl extends BaseDaoImpl implements
 		boolean hasOccured = false;
 
 		StringBuilder innerQuery = new StringBuilder();
-		if (StringUtil.hasText(additionalId) || StringUtil.hasText(userId)
-				|| StringUtil.hasText(username)) {
+		if (StringUtil.isEmpty(additionalId) == false || StringUtil.isEmpty(userId) == false
+				|| StringUtil.isEmpty(username) == false) {
 
 			innerQuery.append("SELECT USER_ID FROM UMS_USER");
 
 			boolean innerHasOccured = false;
 
-			if (StringUtil.hasText(additionalId)) {
+			if (StringUtil.isEmpty(additionalId) == false) {
 				innerQuery.append(getWhereOrAnd(innerHasOccured));
 				innerQuery.append(getCriteriaString("ADDITIONAL_ID",
 						additionalId, SearchType.EQUALS));
 				innerHasOccured = true;
 			}
 
-			if (StringUtil.hasText(userId)) {
+			if (StringUtil.isEmpty(userId) == false) {
 				innerQuery.append(getWhereOrAnd(innerHasOccured));
 				innerQuery.append(getCriteriaString("USER_ID", userId,
 						SearchType.CONTAINS));
 				innerHasOccured = true;
 			}
 
-			if (StringUtil.hasText(username)) {
+			if (StringUtil.isEmpty(username) == false) {
 				innerQuery.append(getWhereOrAnd(innerHasOccured));
 				innerQuery.append(getCriteriaString("USERNAME", username,
 						SearchType.CONTAINS));
@@ -214,7 +210,7 @@ public class UmsUserDetailsDaoImpl extends BaseDaoImpl implements
 			}
 		}		
 		
-		if (StringUtil.hasText(StringUtil.getStringValue(roleId))) {
+		if (StringUtil.isEmpty(StringUtil.getStringValue(roleId)) == false) {
 			String moreInner = innerQuery.toString();
 			innerQuery = new StringBuilder();
 			innerQuery.append("SELECT USER_ID FROM UMS_USER_ROLE_MAP WHERE USER_ID IN (");
@@ -225,7 +221,7 @@ public class UmsUserDetailsDaoImpl extends BaseDaoImpl implements
 		}
 		
 		
-		if (StringUtil.hasText(innerQuery.toString())) {
+		if (StringUtil.isEmpty(innerQuery.toString()) == false) {
 			query.append(" WHERE USER_ID IN (");
 			query.append(innerQuery);
 			query.append(")");
@@ -233,25 +229,25 @@ public class UmsUserDetailsDaoImpl extends BaseDaoImpl implements
 		}
 
 		
-		if (StringUtil.hasText(firstname)) {
+		if (StringUtil.isEmpty(firstname) == false) {
 			query.append(getWhereOrAnd(hasOccured));
 			query.append(getCriteriaString("USER_FIRST_NAME", firstname, SearchType.CONTAINS));
 			hasOccured = true;
 		}
 
-		if (StringUtil.hasText(lastname)) {
+		if (StringUtil.isEmpty(lastname) == false) {
 			query.append(getWhereOrAnd(hasOccured));
 			query.append(getCriteriaString("USER_LAST_NAME", lastname, SearchType.CONTAINS));
 			hasOccured = true;
 		}
 
-		if (StringUtil.hasText(phone)) {
+		if (StringUtil.isEmpty(phone) == false) {
 			query.append(getWhereOrAnd(hasOccured));
 			query.append(getCriteriaString("PRIMARY_PHONE", phone, SearchType.CONTAINS));
 			hasOccured = true;
 		}
 
-		if (StringUtil.hasText(email)) {
+		if (StringUtil.isEmpty(email) == false) {
 			query.append(getWhereOrAnd(hasOccured));
 			query.append(getCriteriaString("PRIMARY_EMAIL", email, SearchType.CONTAINS));
 			hasOccured = true;
@@ -264,23 +260,17 @@ public class UmsUserDetailsDaoImpl extends BaseDaoImpl implements
 		return hasOccured?" AND ":" WHERE ";
 	}
 	
-	private String getCriteriaString(String columnName, String criteria,
-			SearchType searchType) {
-		switch (searchType) {
-		case EQUALS:
-			return columnName + " = " + criteria;
-		case STARTS_WITH:
-			return columnName + " LIKE '" + criteria + "%'";
-		case ENDS_WITH:
-			return columnName + " LIKE '%" + criteria + "'";
-		case CONTAINS:
-		default:
-			return columnName + " LIKE '%" + criteria + "%'";
-		}
-	}
 	
-	enum SearchType {
-		STARTS_WITH, CONTAINS, ENDS_WITH, EQUALS;
+	@Override
+	public int softDelete(UmsUserDetails t) throws DbException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int hardDelete(UmsUserDetails t) throws DbException {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 

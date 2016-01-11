@@ -46,37 +46,6 @@ public class StringUtil extends BaseUtil {
 		return true;
 	}
 	
-	/**
-	 * @param inputString
-	 * @return
-	 */
-	public static boolean hasText(String inputString) {
-		if(isEmpty(inputString)){
-			return false;
-		}
-		if(isWhitespace(inputString)){
-			return false;
-		}
-	    return true;
-	  }
-	
-	/**
-	 * @param str
-	 * @return
-	 */
-	public static boolean isWhitespace(String str) {
-	      if (str == null) {
-	          return false;
-	      }
-	      int sz = str.length();
-	      for (int i = 0; i < sz; i++) {
-	          if ((Character.isWhitespace(str.charAt(i)) == false)) {
-	              return false;
-	          }
-	      }
-	      return true;
-	  }
-
   /**
    * Returns true if <code>inputStringBuffer</code> is null or length of
    * <code>inputStringBuffer</code> is 0
@@ -213,5 +182,22 @@ public class StringUtil extends BaseUtil {
       return stringBuffer.toString();
     }
     return null;
+  }
+
+  /**
+   * @param inputStr
+   * @return String
+   */
+  public static String addEscapeSequence(String inputStr) {
+	  if (inputStr.contains("\\")) {
+		  inputStr = inputStr.replace("\\", "\\\\");
+	  }
+	  if (inputStr.contains("\'")) {
+		  inputStr = inputStr.replace("\'", "\\\'");
+	  }
+	  if (inputStr.contains("\"")) {
+		  inputStr = inputStr.replace("\"", "\\\"");
+	  }
+	  return inputStr;
   }
 }

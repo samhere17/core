@@ -22,6 +22,7 @@ public class UmsUser extends BaseVO {
 	private UserStatus userStatus;
 	private String additionalId;
 	private Date userCreationTime;
+	private int userCreatedBy;
 	private Date userUpdatedTime;
 	private int userUpdatedBy;
 
@@ -146,6 +147,21 @@ public class UmsUser extends BaseVO {
 	}
 
 	/**
+	 * @return the userCreatedBy
+	 */
+	public int getUserCreatedBy() {
+		return userCreatedBy;
+	}
+
+	/**
+	 * @param userCreatedBy
+	 *            the userCreatedBy to set
+	 */
+	public void setUserCreatedBy(int userCreatedBy) {
+		this.userCreatedBy = userCreatedBy;
+	}
+
+	/**
 	 * @return the userUpdatedTime
 	 */
 	public Date getUserUpdatedTime() {
@@ -183,7 +199,8 @@ public class UmsUser extends BaseVO {
 	}
 
 	/**
-	 * @param decryptedPassword the decryptedPassword to set
+	 * @param decryptedPassword
+	 *            the decryptedPassword to set
 	 */
 	public void setDecryptedPassword(String decryptedPassword) {
 		this.decryptedPassword = decryptedPassword;
@@ -194,23 +211,18 @@ public class UmsUser extends BaseVO {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("UmsUser = [" + StringUtil.lineSeparator);
 		buffer.append("    userID = " + userId + StringUtil.lineSeparator);
-		buffer.append("    userAccessKey = " + userAccessKey
-				+ StringUtil.lineSeparator);
+		buffer.append("    userAccessKey = " + userAccessKey + StringUtil.lineSeparator);
 		buffer.append("    username = " + username + StringUtil.lineSeparator);
-		buffer.append("    password = " + StringUtil.mask(password)
+		buffer.append("    password = " + StringUtil.mask(password) + StringUtil.lineSeparator);
+		buffer.append(
+				"    userType = " + userType + "(Value:" + userType.getUerTypeValue() + ")" + StringUtil.lineSeparator);
+		buffer.append("    userStatus = " + userStatus + "(Value:" + userStatus.getUserStatusValue() + ")"
 				+ StringUtil.lineSeparator);
-		buffer.append("    userType = " + userType + "(Value:"
-				+ userType.getUerTypeValue() + StringUtil.lineSeparator);
-		buffer.append("    userStatus = " + userStatus + "(Value:"
-				+ userStatus.getUserStatusValue() + StringUtil.lineSeparator);
-		buffer.append("    additionalId =" + additionalId
-				+ StringUtil.lineSeparator);
-		buffer.append("    userCreationTime =" + userCreationTime
-				+ StringUtil.lineSeparator);
-		buffer.append("    userUpdatedTime =" + userUpdatedTime
-				+ StringUtil.lineSeparator);
-		buffer.append("    userUpdatedBy =" + userUpdatedBy
-				+ StringUtil.lineSeparator);
+		buffer.append("    additionalId =" + additionalId + StringUtil.lineSeparator);
+		buffer.append("    userCreationTime =" + userCreationTime + StringUtil.lineSeparator);
+		buffer.append("    userCreatedBy =" + userCreatedBy + StringUtil.lineSeparator);
+		buffer.append("    userUpdatedTime =" + userUpdatedTime + StringUtil.lineSeparator);
+		buffer.append("    userUpdatedBy =" + userUpdatedBy + StringUtil.lineSeparator);
 		buffer.append("  ]");
 		return buffer.toString();
 	}

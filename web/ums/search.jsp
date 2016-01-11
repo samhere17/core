@@ -1,352 +1,276 @@
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>OMS::iquesters</title>
-<%@include file="/__sys/cmn/styles.jsp"%>
-<%@include file="/__sys/cmn/scripts.jsp"%>
-</head>
-<body>
-	<%
-		String header = "Search User";
-	%>
-	<div class="wrapper">
-		<%@include file="/__sys/cmn/header.jsp"%>
-		<%@include file="/__sys/cmn/menu.jsp"%>
-
-		<div class="bodycontent">
-			<div class="toolboxarea">
-				<%@include file="/__sys/cmn/toolbox.jsp"%>
+<%@ include file="../cmn/head.jsp" %>
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+		<div class="panel panel-info">
+			<div id="criteria-heading" class="panel-heading" role="button" data-toggle="collapse" href="#criteria" aria-expanded="true" aria-controls="criteria">
+				<h1 class="panel-title">
+					Search Criteria
+				</h1>
 			</div>
-			<div class="workarea">
-				<div class="form-container">
-					<form method="post"
-						action="${pageContext.request.contextPath}/adapter">
-						<input type="hidden" name="serviceName" value="SearchUser" />
-						<div class="form-header">
-							<img
-								src="${pageContext.request.contextPath}/__sys/img/user-search-16-16.png"
-								alt="Search User" title="Search User" />
-							<h3>Search User</h3>
-						</div>
-						<div class="form-content">
 
-							<c:if test="${umsSession.roleId == 1}">
-								<fieldset class="first">
-									<legend>Organization Selection</legend>
-									<div class="fields-row">
-										<div class="field-col">
-											<label for="name">Organization Id</label> <input type="text"
-												id="org-id" name="selectedOrgId" style="text-align: right;"
-												readonly />
-										</div>
-										<div class="field-col">
-											<label for="name">Organization Name</label> <input
-												type="text" id="org-name" class="input-width-double"
-												readonly />
-										</div>
-										<div class="field-col">
-											<label for="name">&nbsp;</label> <input type="button"
-												id="btn-org-lookup" value="Lookup" />
-										</div>
+			<div id="criteria" class="panel-collapse collapse <c:if test="${!searchDone}">in</c:if>" role="tabpanel" aria-labelledby="criteria-heading">
+				<div class="panel-body">
+					<form method="post" action="${pageContext.request.contextPath}/adapter">
+						<input type="hidden" name="serviceName" value="SearchUser">
+						<h4>
+							<strong>User Details</strong>
+						</h4>
+
+						<div class="row">
+							<div class="col-md-6 form-group">
+								<label class="control-label" for="id">ID</label>
+								<input class="form-control" type="text" id="id" name="userId">
+							</div>
+							<div class="col-md-6 form-group">
+								<label class="control-label" for="username">Username</label>
+								<input class="form-control"type="text" id="username" name="username">
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-3 form-group">
+								<label class="control-label" for="firstname">First Name</label>
+								<input class="form-control"type="text" id="firstname" name="firstname">
+							</div>
+							<div class="col-md-3 form-group">
+								<label class="control-label" for="lastname">Last Name</label>
+								<input class="form-control" type="text" id="lastname" name="lastname">
+							</div>
+							<div class="col-md-3 form-group">
+								<label class="control-label" for="phone">Phone</label>
+								<input class="form-control"type="text" name="phone">
+							</div>
+							<div class="col-md-3 form-group">
+								<label class="control-label" for="email">Email</label>
+								<input class="form-control" type="text" name="email">
+
+								<c:if test="${not empty validation.emailError}">
+									<div class="${validation.emailError.level}">${validation.emailError.message}</div>
+								</c:if>
+							</div>
+						</div>
+						<hr>
+
+						<h4>
+							<strong>Role Selection</strong>
+						</h4>
+
+						<div class="row has-inline-button">
+							<div class="col-md-4 form-group">
+								<label class="control-label" for="name">Role ID</label>
+								<input class="form-control" type="text" id="role-id" name="selectedRoleId" readonly required />
+							</div>
+
+							<div class="col-md-4 form-group">
+								<label class="control-label" for="name">Role Name</label>
+								<input class="form-control" type="text" id="role-name" readonly required>
+							</div>
+
+							<div class="col-md-4 form-group inline-button-container">
+								<button type="button" class="btn btn-md btn-primary pull-right" data-toggle="modal" data-target="#role-modal">
+									Lookup Role
+								</button>
+							</div>
+						</div>
+
+						<div class="modal fade" role="dialog" id="role-modal" tabindex="-1">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+										<h4 class="modal-title">Choose A Role</h4>
 									</div>
-								</fieldset>
-								<script type="text/javascript">
-								$(document).ready(function() {
-									$('#btn-org-lookup').click(function(){
-										showDialog("orgs-dialog",false);
-									});
-									
-									$("#close-org-dialog").click(function (e) {
-										hideDialog("orgs-dialog");
-										e.preventDefault();
-									});
-									
-									$("#select-org").click(function(){
-										var org = $('input[name=orgRadio]:checked').val();
-										var arr = org.split(':');
-										$("#org-id").val(arr[0]);
-										$("#org-name").val(arr[1]);
-										hideDialog("orgs-dialog");
-									});
-									
-									$("#org-list-table").tablesorter({
-										// pass the headers argument and assing a object 
-										headers: {
-											// assign the first column (we start counting zero)
-											0: {
-												// disable it by setting the property sorter to false
-												sorter: false
-											}
-										},
-										// sort on the second column(1), order asc(0) and first column(0), order asc(0)
-										sortList: [[1,0]]
-									});
-								});
-								</script>
-								<div id="overlay" class="dialog-overlay"></div>
-								<div id="orgs-dialog" class="dialog-window">
-									<div class="dialog-header">
-										<img
-											src="${pageContext.request.contextPath}/__sys/img/org-16-16.png"
-											alt="Organizations" />
-										<h3>Organizations</h3>
-										<a href="#" id="close-org-dialog"><img
-											src="${pageContext.request.contextPath}/__sys/img/delete-16-16.png"
-											alt="Close" title="Close" /></a>
-									</div>
-									<div class="dialog-content">
-										<table id="org-list-table" class="table-sorter">
+									<div class="modal-body">
+										<table class="table table-hover">
 											<thead>
 												<tr>
-													<th style="width: 50px;">Select</th>
-													<th style="width: 50px;">Id</th>
+													<th>ID</th>
 													<th>Name</th>
-													<th style="width: 100px;">Status</th>
+													<th>Description</th>
 												</tr>
 											</thead>
-											<tbody>
+
+											<tbody id="roles-table">
 												<c:choose>
-													<c:when test="${not empty orgsListForLookup}">
-														<c:forEach items="${orgsListForLookup}" var="curOrg">
-															<tr>
-																<td style="text-align: center;"><input type="radio"
-																	name="orgRadio"
-																	value="${curOrg.organizationId}:${curOrg.organizationName}" /></td>
-																<td style="text-align: right;">${curOrg.organizationId}</td>
-																<td>${curOrg.organizationName}</td>
-																<td style="text-align: center;">${curOrg.organizationStatus}</td>
+													<c:when test="${not empty rolesListForLookup}">
+														<c:forEach items="${rolesListForLookup}" var="current">
+															<tr class="ui-widget-content">
+																<td>${current.roleId}</td>
+																<td>${current.roleName}</td>
+																<td>${current.roleDescription}</td>
 															</tr>
 														</c:forEach>
 													</c:when>
 													<c:otherwise>
 														<tr>
-															<td colspan="4" style="text-align: center;">No
-																organizations configured.</td>
+															<td colspan="3">No users found.</td>
 														</tr>
 													</c:otherwise>
 												</c:choose>
 											</tbody>
 										</table>
 									</div>
-									<div class="dialog-actions">
-										<input type="button" id="select-org" value="Select" />
-									</div>
-								</div>
-							</c:if>
 
-							<fieldset
-								<c:if test="${umsSession.roleId != 1}">class="first"</c:if>>
-								<legend>User Details</legend>
-								<div class="fields-row">
-									<div class="field-col">
-										<label for="username">User Id</label> <input type="text"
-											id="" name="userId" value="" />
+									<div class="modal-footer">
+										<button type="button" class="btn btn-primary" id="role-select-btn">Select</button>
+										<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 									</div>
-									<div class="field-col">
-										<label for="username">Username</label> <input type="text"
-											id="username" name="username" value="" />
-									</div>
-								</div>
-								<div class="fields-row">
-									<div class="field-col">
-										<label for="firstname">First Name</label> <input type="text"
-											id="firstname" name="firstname" value="" />
-									</div>
-									<div class="field-col">
-										<label for="lastname">Last Name</label> <input type="text"
-											id="lastname" name="lastname" value="" />
-									</div>
-									<div class="field-col">
-										<label for="phone">Phone</label> <input type="text"
-											name="phone" value="" />
-									</div>
-									<div class="field-col">
-										<label for="email">Email</label> <input type="text"
-											name="email" value="" />
-										<c:if test="${not empty validation.emailError}">
-											<div class="${validation.emailError.level}">${validation.emailError.message}</div>
-										</c:if>
-									</div>
-								</div>
-							</fieldset>
-							<fieldset>
-								<legend>Role Selection</legend>
-								<div class="fields-row">
-									<div class="field-col">
-										<label for="name">Role Id</label> <input type="text"
-											id="role-id" name="selectedRoleId" style="text-align: right;"
-											readonly />
-									</div>
-									<div class="field-col">
-										<label for="name">Role Name</label> <input type="text"
-											id="role-name" readonly />
-									</div>
-									<div class="field-col">
-										<label for="name">&nbsp;</label> <input type="button"
-											id="btnLookup" value="Lookup" />
-									</div>
-								</div>
-							</fieldset>
-							<script type="text/javascript">
-$(document).ready(function() {
-	$('#btnLookup').click(function(){
-		showDialog("roles-dialog",false);
-	});
-	
-	$("#close-dialog").click(function (e) {
-		hideDialog("roles-dialog");
-		e.preventDefault();
-	});
-	
-	$("#select-role").click(function(){
-		var role = $('input[name=roleRadio]:checked').val();
-		var arr = role.split(':');
-		$("#role-id").val(arr[0]);
-		$("#role-name").val(arr[1]);
-		hideDialog("roles-dialog");
-	});
-	$("#role-list-table").tablesorter({
-		// pass the headers argument and assing a object 
-		headers: {
-			// assign the first column (we start counting zero)
-			0: {
-				// disable it by setting the property sorter to false
-				sorter: false
-			}
-		},
-		// sort on the second column(1), order asc(0) and first column(0), order asc(0)
-		sortList: [[1,0]]
-	});
-});
-</script>
-
-							<div id="overlay" class="dialog-overlay"></div>
-							<div id="roles-dialog" class="dialog-window">
-								<div class="dialog-header">
-									<img
-										src="${pageContext.request.contextPath}/__sys/img/role-16-16.gif"
-										alt="Roles" />
-									<h3>Roles</h3>
-									<a href="#" id="close-dialog"><img
-										src="${pageContext.request.contextPath}/__sys/img/delete-16-16.png"
-										alt="Close" title="Close" /></a>
-								</div>
-								<div class="dialog-content">
-									<table id="role-list-table" class="table-sorter">
-										<thead>
-											<tr>
-												<th style="width: 50px;">Select</th>
-												<th style="width: 50px;">Id</th>
-												<th>Name</th>
-												<th style="width: 100px;">Status</th>
-											</tr>
-										</thead>
-										<tbody>
-											<c:choose>
-												<c:when test="${not empty rolesListForLookup}">
-													<c:forEach items="${rolesListForLookup}" var="currentRole">
-														<tr>
-															<td style="text-align: center;"><input type="radio"
-																name="roleRadio"
-																value="${currentRole.roleId}:${currentRole.roleName}" /></td>
-															<td style="text-align: right;">${currentRole.roleId}</td>
-															<td>${currentRole.roleName}</td>
-															<td style="text-align: center;">${currentRole.roleStatus}</td>
-														</tr>
-													</c:forEach>
-												</c:when>
-												<c:otherwise>
-													<tr>
-														<td colspan="10" style="text-align: center;">No roles
-															configured.</td>
-													</tr>
-												</c:otherwise>
-											</c:choose>
-										</tbody>
-									</table>
-								</div>
-								<div class="dialog-actions">
-									<input type="button" id="select-role" value="Select" />
 								</div>
 							</div>
-							<div class="clear"></div>
 						</div>
-						<div class="form-actions">
-							<input type="submit" id="role-search" value="Search" />
+						<hr>
+
+						<c:if test="${umsSession.roleId == 1}">
+							<h4 class="text-danger">
+								<strong>Additional ID Selection - Super Admin Area</strong>
+							</h4>
+
+							<div class="row has-inline-button">
+								<div class="col-md-4 form-group">
+									<label class="control-label" for="commu-id">Additional ID</label>
+									<input class="form-control" type="text" id="commu-id" name="selectedOrgId" readonly>
+								</div>
+
+								<div class="col-md-4 form-group">
+									<label class="control-label" for="name">Additional Name</label>
+									<input class="form-control" type="text" id="commu-name" readonly>
+								</div>
+
+								<div class="col-md-4 form-group inline-button-container">
+									<button type="button" class="btn btn-md btn-primary pull-right" data-toggle="modal" data-target="#commu-modal">
+										Lookup Additional Info
+									</button>
+								</div>
+							</div>
+
+							<div class="modal" role="dialog" id="commu-modal" tabindex="-1">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+											<h4 class="modal-title">Choose Addtional ID</h4>
+										</div>
+										<div class="modal-body">
+											<table class="table table-hover">
+												<thead>
+													<tr>
+														<th>ID</th>
+														<th>Name</th>
+														<th>Primary Phone Number</th>
+													</tr>
+												</thead>
+												<tbody id="commu-table">
+													<c:choose>
+														<c:when test="${not empty orgsListForLookup}">
+															<c:forEach items="${orgsListForLookup}" var="current">
+																<tr class="ui-widget-content">
+																	<td>${current.key}</td>
+																	<td>${current.value["commu-name"]}</td>
+																	<td>${current.value["commu-primary-phone"]}</td>
+																</tr>
+															</c:forEach>
+														</c:when>
+														<c:otherwise>
+															<tr>
+																<td colspan="3">No addtional information found.</td>
+															</tr>
+														</c:otherwise>
+													</c:choose>
+												</tbody>
+											</table>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-primary" id="commu-select-btn">Select</button>
+											<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</c:if>
+
+						<div class="row">
+							<div class="col-md-12">
+								<button class="btn btn-md btn-primary" type="submit">
+									<span class="fa fa-search"></span>
+									Search
+								</button>
+							</div>
 						</div>
 					</form>
 				</div>
-
-
-				<c:if test="${searchDone}">
-					<div id="searchResult" class="form-container">
-						<div class="form-header">
-							<img
-								src="${pageContext.request.contextPath}/__sys/img/search-result-16-16.png"
-								alt="Search Result" title="Search Result" />
-							<h3>Search Result</h3>
-						</div>
-						<div class="form-content">
-							<table id="list-table" class="table-sorter">
-								<thead>
-									<tr>
-										<th>Id</th>
-										<th>Name</th>
-										<th>Address</th>
-										<th>Contact</th>
-										<th style="width: 9px;"></th>
-									</tr>
-								</thead>
-								<tbody>
-									<c:choose>
-										<c:when test="${not empty usersList}">
-											<c:forEach items="${usersList}" var="current">
-												<tr>
-													<td>${current.userId}</td>
-													<td>${current.userFirstName} ${current.userLastName} <c:if test="${not empty current.userAlias}"> (${current.userAlias})</c:if></td>
-													<td>${current.address}</td>
-													<td>
-														<c:if test="${not empty current.primaryPhone}">
-															<img alt="Phone" src="${pageContext.request.contextPath}/__sys/img/phone-16-16.png">${current.primaryPhone}<br>
-														</c:if>
-														<c:if test="${not empty current.alternatePhone}">
-															<img alt="Phone" src="${pageContext.request.contextPath}/__sys/img/phone-16-16.png">${current.alternatePhone}<br>
-														</c:if>
-														<c:if test="${not empty current.primaryEmail}">
-															<img alt="Phone" src="${pageContext.request.contextPath}/__sys/img/mail-16-16.png">${current.primaryEmail}<br>
-														</c:if>
-														<c:if test="${not empty current.alternateEmail}">
-															<img alt="Phone" src="${pageContext.request.contextPath}/__sys/img/mail-16-16.png">${current.alternateEmail}
-														</c:if>
-													</td>
-													<td>
-														<form method="post"
-															action="${pageContext.request.contextPath}/adapter">
-															<input type="hidden" name="serviceName" value="GetUser" />
-															<input type="hidden" name="userId"
-																value="${current.userId}" /> <input type="image"
-																src="${pageContext.request.contextPath}/__sys/img/details-16-16.png"
-																alt="Details" title="Details" class="icon" />
-														</form>
-													</td>
-												</tr>
-											</c:forEach>
-										</c:when>
-										<c:otherwise>
-											<tr>
-												<td colspan="5" style="text-align: center;">No users found.</td>
-											</tr>
-										</c:otherwise>
-									</c:choose>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</c:if>
 			</div>
 		</div>
-		<%@include file="/__sys/cmn/footer.jsp"%>
+
+		<div class="panel panel-info">
+			<div id="results-heading" class="panel-heading collapsed" role="button" data-toggle="collapse" href="#results" aria-expanded="false" aria-controls="results">
+				<h1 class="panel-title">
+					Search Results
+				</h1>
+			</div>
+
+			<div id="results" class="panel-collapse collapse <c:if test="${searchDone}">in</c:if>" role="tabpanel" aria-labelledby="results-heading">
+				<div class="panel-body">
+					<table class="table" id="role-search-result-table">
+						<thead>
+							<tr>
+								<th style="width: 5%;">ID</th>
+								<th style="width: 20%;">Name</th>
+								<th>Alias</th>
+								<th style="width: 30%;" class="text-right">Action</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<c:choose>
+								<c:when test="${not empty usersList}">
+									<c:forEach items="${usersList}" var="current">
+										<tr>
+											<td>${current["userId"]}</td>
+											<td>${current["userFirstName"]} ${current["userLastName"]}</td>
+											<td>${current["userAlias"]}</td>
+
+											<td class="text-right">
+												<form method="get" action="${pageContext.request.contextPath}/adapter">
+													<input type="hidden" name="serviceName" value="GetUser">
+													<input type="hidden" name="path" value="ums/details">
+													<input type="hidden" name="userId" value="${current.userId}">
+													<button class="btn btn-xs btn-warning" type="submit" title="Details">
+														<span class="glyphicon glyphicon-th-list"></span>
+													</button>
+												</form>
+
+												<form method="get" action="${pageContext.request.contextPath}/adapter">
+													<input type="hidden" name="serviceName" value="GetUser">
+													<input type="hidden" name="path" value="ums/edit">
+													<input type="hidden" name="userId" value="${current.userId}">
+													<button class="btn btn-xs btn-warning" type="submit" title="Edit">
+														<span class="glyphicon glyphicon-pencil"></span>
+													</button>
+												</form>
+
+												<%-- Always displaying the delete button. This form is only for internal use --%>
+												<form method="get" action="${pageContext.request.contextPath}/adapter">
+													<input type="hidden" name="serviceName" value="GetUser">
+													<input type="hidden" name="path" value="ums/delete">
+													<input type="hidden" name="userId" value="${current.userId}">
+													<button class="btn btn-xs btn-warning" type="submit" title="Delete">
+														<span class="glyphicon glyphicon-remove"></span>
+													</button>
+												</form>
+											</td>
+										</tr>
+									</c:forEach>
+								</c:when>
+
+								<c:otherwise>
+									<tr>
+										<td colspan="4">No user found.</td>
+									</tr>
+								</c:otherwise>
+							</c:choose>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
 	</div>
-</body>
-</html>
+<%@ include file="../cmn/tail.jsp" %>

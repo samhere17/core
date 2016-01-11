@@ -10,7 +10,7 @@ import org.iq.service.Service;
 import org.iq.ums.helper.UmsOptionHelper;
 import org.iq.util.StringUtil;
 
-@Service(name="DeleteOption")
+@Service(name = "DeleteOption")
 public class DeleteOptionService extends BaseService {
 
 	/**
@@ -22,8 +22,7 @@ public class DeleteOptionService extends BaseService {
 	public void execute(HashMap<String, Object> input) throws ServiceException {
 		LocalLogger.logMethodStart();
 
-		int optionId = Integer.valueOf(StringUtil.getStringValue(input
-				.get(OptionKeys.OPTION_ID_KEY)));
+		int optionId = Integer.valueOf(StringUtil.getStringValue(input.get(OptionKeys.OPTION_ID_KEY)));
 
 		try {
 			new UmsOptionHelper().deleteOption(optionId);
@@ -31,7 +30,7 @@ public class DeleteOptionService extends BaseService {
 			throw new ServiceException(e);
 		}
 
-		redirectUrl = "adapter?path=__sys/opt/list&serviceName=ListOptions";
+		redirectUrl = "adapter?path=ums/opt/list&serviceName=ListOptions";
 
 		LocalLogger.logMethodEnd();
 	}

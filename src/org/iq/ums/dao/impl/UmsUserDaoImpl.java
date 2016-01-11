@@ -13,7 +13,7 @@ import org.iq.ums.dao.UmsUserDao;
 import org.iq.ums.util.UmsPasswordEncryptor;
 import org.iq.ums.vo.UmsUser;
 
-public class UmsUserDaoImpl extends BaseDaoImpl implements UmsUserDao {
+public class UmsUserDaoImpl extends BaseDaoImpl<UmsUser> implements UmsUserDao {
 
 	/**
 	 * 
@@ -27,10 +27,11 @@ public class UmsUserDaoImpl extends BaseDaoImpl implements UmsUserDao {
 	private static final String INSERT_ALL = "INSERT INTO UMS_USER (USER_ACCESS_KEY, USERNAME, PASSWORD, USER_TYPE, USER_STATUS, ADDITIONAL_ID, USER_CREATION_STAMP, USER_UPDATED_STAMP, USER_UPDATED_BY) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 //	private static final String UMS_USER_UPDATE_ALL_BY_USER_ACCESS_KEY = "UPDATE UMS_USER SET USERNAME=?, PASSWORD=?, USER_TYPE=?, USER_STATUS=? WHERE USER_ACCESS_KEY = ?";
-	private static final String UMS_USER_UPDATE_PASSWORD_BY_USER_ACCESS_KEY = "UPDATE UMS_USER SET PASSWORD=? WHERE USER_ACCESS_KEY = ?";
+	private static final String UPDATE_PASSWORD_BY_USER_ACCESS_KEY = "UPDATE UMS_USER SET PASSWORD=? WHERE USER_ACCESS_KEY = ?";
 
-	private static final String UMS_USER_DELETE_BY_USER_ACCESS_KEY = "DELETE FROM UMS_USER WHERE USER_ACCESS_KEY = ?";
-	private static final String UMS_USER_SELECT_BY_TYPE_SYSTEM = "SELECT USER_ID,USER_ACCESS_KEY ,USERNAME,PASSWORD ,USER_TYPE ,USER_STATUS,ADDITIONAL_ID FROM UMS_USER WHERE USER_TYPE="
+//	private static final String DELETE_HARD_BY_USER_ACCESS_KEY = "DELETE FROM UMS_USER WHERE USER_ACCESS_KEY = ?";
+	private static final String DELETE_SOFT_BY_USER_ACCESS_KEY = "UPDATE UMS_USER SET USER_STATUS = " + UserStatus.DELETED.getUserStatusValue() + " WHERE USER_ACCESS_KEY = ?";
+	private static final String SELECT_BY_TYPE_SYSTEM = "SELECT USER_ID,USER_ACCESS_KEY ,USERNAME,PASSWORD ,USER_TYPE ,USER_STATUS,ADDITIONAL_ID FROM UMS_USER WHERE USER_TYPE="
 			+ UserType.SYSTEM_USER.getUerTypeValue();
 	private static final String SELECT_LAST_USER_ID = "SELECT MAX(USER_ID) AS USER_ID FROM UMS_USER";
 	
@@ -64,7 +65,7 @@ public class UmsUserDaoImpl extends BaseDaoImpl implements UmsUserDao {
 	@Override
 	public List<UmsUser> getSystemUsers() throws DbException {
 		DataSet dataSet = dbSession
-				.executeQuery(UMS_USER_SELECT_BY_TYPE_SYSTEM);
+				.executeQuery(SELECT_BY_TYPE_SYSTEM);
 
 		List<UmsUser> umsUsers = null;
 		if (dataSet.getRowCount() > 0) {
@@ -121,7 +122,7 @@ public class UmsUserDaoImpl extends BaseDaoImpl implements UmsUserDao {
 	public int updatePassword(String userAccessKey, String password)
 			throws DbException {
 		return dbSession.executeUpdate(
-				UMS_USER_UPDATE_PASSWORD_BY_USER_ACCESS_KEY, password,
+				UPDATE_PASSWORD_BY_USER_ACCESS_KEY, password,
 				userAccessKey);
 	}
 	
@@ -177,12 +178,6 @@ public class UmsUserDaoImpl extends BaseDaoImpl implements UmsUserDao {
 	}
 
 	@Override
-	public int delete(UmsUser object) throws DbException {
-		return dbSession.executeUpdate(UMS_USER_DELETE_BY_USER_ACCESS_KEY,
-				object.getUserId());
-	}
-
-	@Override
 	public UmsUser getSingleRow(DataSet dataSet, int rowNum) {
 		UmsUser user = new UmsUser();
 		user.setUserId(dataSet.getIntValue(rowNum, "USER_ID"));
@@ -201,6 +196,18 @@ public class UmsUserDaoImpl extends BaseDaoImpl implements UmsUserDao {
 				"USER_UPDATED_STAMP"));
 		user.setUserUpdatedBy(dataSet.getIntValue(rowNum, "USER_UPDATED_BY"));
 		return user;
+	}
+
+	@Override
+	public int softDelete(UmsUser umsUser) throws DbException {
+		return dbSession.executeUpdate(DELETE_SOFT_BY_USER_ACCESS_KEY,
+				umsUser.getUserAccessKey());
+	}
+
+	@Override
+	public int hardDelete(UmsUser t) throws DbException {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

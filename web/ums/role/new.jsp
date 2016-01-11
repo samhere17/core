@@ -1,137 +1,72 @@
-<%@page import="java.util.Date"%>
-<%@page import="org.iq.util.DateUtil.DateFormat"%>
-<%@page import="org.iq.util.DateUtil"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-
-<%-- <c:set var="browserURL" value="${pageContext.request.requestURI}" scope="session"></c:set> --%>
-
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>OMS::iquesters</title>
-<%@include file="/__sys/cmn/styles.jsp"%>
-<%@include file="/__sys/cmn/scripts.jsp"%>
-<style media="screen" type="text/css">
-table#permissions div.child-contents {
-	margin: 4px 4px;
-	float: left;
-}
-
-table#permissions img {
-	width: 16px;
-	height: 16px;
-	float: left;
-	border: 1px solid #aaa;
-	padding: 2px;
-}
-</style>
-</head>
-<body>
-	<%
-		String header = "New Role";
-	%>
-	<div class="wrapper">
-		<%@include file="/__sys/cmn/header.jsp"%>
-		<%@include file="/__sys/cmn/menu.jsp"%>
-
-		<div class="bodycontent">
-			<div class="toolboxarea">
-				<%@include file="/__sys/cmn/toolbox.jsp"%>
+<%@ include file="../../cmn/head.jsp" %>
+<form method="post" action="${pageContext.request.contextPath}/adapter">
+	<input type="hidden" name="serviceName" value="InsertRole">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<div class="panel-title">
+				New Role
 			</div>
-			<div class="workarea">
-				<div class="form-container">
-					<form method="post" action="${pageContext.request.contextPath}/adapter">
-						<input type="hidden" name="serviceName" value="InsertRole" />
-						<div class="form-header">
-							<img
-								src="${pageContext.request.contextPath}/img/role-add-16-16.png"
-								alt="New Role" title="New Role" />
-							<h3>New Role</h3>
-						</div>
-						<div class="form-content">
-							<div class="fields-row">
-								<div class="field-col">
-									<label for="name">Role Name</label> <input type="text" name="roleName" required/>
-									<div class="field-info-container">
-										<div class="field-info">
-											<div class="info-content">Name for this role.</div>
-										</div>
-									</div>
-								</div>
-								<div class="field-col">
-									<label for="name">Role Description</label>
-									<textarea name="roleDesc"></textarea>
-								</div>
-							</div>
-							<fieldset>
-								<legend>Permissions</legend>
-								<div class="fields-row">
-									<c:if test="${not empty optionsList}">
-										<c:set var="loopCount" value="1" />
-										<c:forEach items="${optionsList}" var="currentParent">
-											<div class="field-col">
-												<c:if test="${not empty currentParent.childOptions}">
-													<table id="permissions" class="input-width-double" style="margin: 2px;">
-														<thead>
-															<tr>
-																<script type="text/javascript">
-																	$(document).ready(function() {
-																		$('#select-all-${currentParent.optionId}').click(function(event) { //on click
-																			//alert("${currentParent.optionId} - ${currentParent.optionName}");
-																			if (this.checked) { // check select status
-																				$('.check-${currentParent.optionId}').each(function() { //loop through each checkbox
-																					this.checked = true; //select all checkboxes with class "checkbox1"
-																				});
-																			} else {
-																				$('.check-${currentParent.optionId}').each(function() { //loop through each checkbox
-																					this.checked = false; //deselect all checkboxes with class "checkbox1"
-																				});
-																			}
-																		});
-																	});
-																</script>
-
-																<th style="width: 20px;"><input id="select-all-${currentParent.optionId}" name="option-${currentParent.optionId}" type="checkbox"></th>
-																<th><b>${currentParent.optionName} Menu</b></th>
-															</tr>
-														</thead>
-														<tbody>
-															<c:forEach items="${currentParent.childOptions}"
-																var="currentChild">
-																<c:if test="${currentChild.optionType == 'MENU_ITEM'}">
-																	<tr>
-																		<td><input class="check-${currentParent.optionId}" name="option-${currentChild.optionId}" type="checkbox"></td>
-																		<td><img
-																			src="${pageContext.request.contextPath}/${currentChild.optionImageLink}"
-																			alt="${currentChild.optionImageAlt}" />
-																			<div class="child-contents">${currentChild.optionName}</div>
-																		</td>
-																	</tr>
-																</c:if>
-															</c:forEach>
-														</tbody>
-													</table>
-												</c:if>
-											</div>
-											<c:if test="${loopCount%2 eq 0}">
-												<div class="clear"></div>
-											</c:if>
-											<c:set var="loopCount" value="${loopCount+1}" />
-										</c:forEach>
-									</c:if>
-								</div>
-							</fieldset>
-							<div class="clear"></div>
-						</div>
-						<div class="form-actions">
-							<input type="submit" id="" value="Save Role" />
-						</div>
-					</form>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-6 form-group">
+					<label class="control-label" for="name">Role Name</label>
+					<input class="form-control" type="text" name="roleName" maxlength="50" required/>
+				</div>
+				<div class="col-md-6 form-group">
+					<label class="control-label" for="name">Role Description</label>
+					<textarea class="form-control" name="roleDesc" maxlength="500"></textarea>
 				</div>
 			</div>
 		</div>
-		<%@include file="/__sys/cmn/footer.jsp"%>
 	</div>
-</body>
-</html>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<div class="panel-title">
+				Permissions
+			</div>
+		</div>
+
+		<div class="panel-body">
+			<c:if test="${not empty optionsList}">
+				<c:set var="loopCount" value="0" />
+				<c:set var="optionsListSize" value="${fn:length(optionsList)}" />
+				<c:forEach items="${optionsList}" var="currentParent">
+					<c:if test="${loopCount%2 eq 0}"><div class="row"></c:if>
+
+					<div class="col-md-6">
+						<c:if test="${not empty currentParent.childOptions}">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<input type="checkbox" class="select-all" id="option-${currentParent.optionId}" name="option-${currentParent.optionId}">
+									<label for="option-${currentParent.optionId}"><b>${currentParent.optionName} Menu</b></label>
+								</div>
+								<div class="panel-body">
+									<c:forEach items="${currentParent.childOptions}" var="currentChild">
+										<c:if test="${currentChild.optionType == 'MENU_ITEM'}">
+											<div>
+												<input type="checkbox" id="option-${currentChild.optionId}" name="option-${currentChild.optionId}">
+												<label for="option-${currentChild.optionId}">${currentChild.optionName}</label>
+											</div>
+										</c:if>
+									</c:forEach>
+								</div>
+							</div>
+						</c:if>
+					</div>
+
+					<c:set var="loopCount" value="${loopCount+1}" />
+					<c:if test="${loopCount%2 eq 0 or loopCount eq optionsListSize}"></div></c:if>
+				</c:forEach>
+			</c:if>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<input class="btn btn-md btn-primary" type="submit" value="Save">
+		</div>
+	</div>
+	<br>
+</form>
+<%@ include file="../../cmn/tail.jsp" %>

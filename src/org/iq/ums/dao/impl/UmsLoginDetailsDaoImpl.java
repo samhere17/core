@@ -14,7 +14,7 @@ import org.iq.ums.vo.UmsLoginDetails;
  * @author Sam
  * 
  */
-public class UmsLoginDetailsDaoImpl extends BaseDaoImpl implements
+public class UmsLoginDetailsDaoImpl extends BaseDaoImpl<UmsLoginDetails> implements
 		UmsLoginDetailsDao {
 
 	/**
@@ -129,12 +129,6 @@ public class UmsLoginDetailsDaoImpl extends BaseDaoImpl implements
 	}
 
 	@Override
-	public int delete(UmsLoginDetails object) throws DbException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public UmsLoginDetails getSingleRow(DataSet dataSet, int rowNum) {
 
 		UmsLoginDetails loginDetails = new UmsLoginDetails();
@@ -156,6 +150,18 @@ public class UmsLoginDetailsDaoImpl extends BaseDaoImpl implements
 		loginDetails.setBrowserRenderingEngine(dataSet.getStringValue(rowNum, "BROWSER_RENDERING_ENGINE"));
 
 		return loginDetails;
+	}
+
+	@Override
+	public int softDelete(UmsLoginDetails t) throws DbException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int hardDelete(UmsLoginDetails t) throws DbException {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

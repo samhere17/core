@@ -8,10 +8,11 @@ public interface OptionKeys {
 	static final String OPTION_DESCRIPTION_KEY = "optDesc";
 	static final String OPTION_TYPE_KEY = "optType";
 	static final String OPTION_STATUS_KEY = "optStatus";
+	static final String OPTION_AREA_KEY = "optArea";
 	
 	static final String OPTION_LINK_KEY = "optLink";
-	static final String OPTION_IMAGE_LINK_KEY = "optImgLink";
-	static final String OPTION_IMAGE_ALT_KEY = "optImgAlt";
+	static final String OPTION_ICON_KEY = "optIcon";
+
 	static final String OPTION_ORDER_KEY = "optOrder";
 	
 	static final String OPTION_PARENT_ID_KEY = "optParentId";

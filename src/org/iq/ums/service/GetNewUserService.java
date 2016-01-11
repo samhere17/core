@@ -7,6 +7,8 @@ import org.iq.exception.ServiceException;
 import org.iq.logger.LocalLogger;
 import org.iq.service.BaseService;
 import org.iq.service.Service;
+import org.iq.ums.UmsContext;
+import org.iq.ums.exception.UmsException;
 import org.iq.ums.helper.UmsRoleHelper;
 import org.iq.ums.service.role.RoleKeys;
 
@@ -26,25 +28,23 @@ public class GetNewUserService extends BaseService {
 		try {
 			int currUserRole = umsSession.getRoleId();
 
-			// Getting organization list for lookup on the screen
+			// Getting additional id list for lookup on the screen
 			if (currUserRole == RoleKeys.SUPER_ADMIN_ROLE_ID) {
-				resultAttributes.put(
-						UserKeys.ORGANIZATIONS_LIST_FOR_LOOKUP_KEY, null
-						/*new OrganizationHelper().getAllOrganization()*/);
+				resultAttributes.put(UserKeys.ORGANIZATIONS_LIST_FOR_LOOKUP_KEY,
+						UmsContext.umsAnnexSecurity.getAdditionalDetailsMap());
 			} else {
-				resultAttributes.put(
-						UserKeys.ORGANIZATIONS_LIST_FOR_LOOKUP_KEY, null);
+				resultAttributes.put(UserKeys.ORGANIZATIONS_LIST_FOR_LOOKUP_KEY, null);
 			}
 
 			// Getting roles list for lookup on the screen
 			if (currUserRole == RoleKeys.SUPER_ADMIN_ROLE_ID) {
-				resultAttributes.put(UserKeys.ROLES_LIST_FOR_LOOKUP_KEY,
-						new UmsRoleHelper().getAllRoles());
+				resultAttributes.put(UserKeys.ROLES_LIST_FOR_LOOKUP_KEY, new UmsRoleHelper().getAllRoles());
 			} else {
-				resultAttributes.put(UserKeys.ROLES_LIST_FOR_LOOKUP_KEY,
-						new UmsRoleHelper().getAppRoles());
+				resultAttributes.put(UserKeys.ROLES_LIST_FOR_LOOKUP_KEY, new UmsRoleHelper().getAppRoles());
 			}
 		} catch (BusinessException e) {
+			throw new ServiceException(e);
+		} catch (UmsException e) {
 			throw new ServiceException(e);
 		}
 

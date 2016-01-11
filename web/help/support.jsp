@@ -1,66 +1,70 @@
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>OMS::iquesters</title>
-<%@include file="/__sys/cmn/styles.jsp"%>
-<%@include file="/__sys/cmn/scripts.jsp"%>
-</head>
-<body>
-	<%
-		String header = "Contact Support";
-	%>
-	<div class="wrapper">
-		<%@include file="/__sys/cmn/header.jsp"%>
-		<%@include file="/__sys/cmn/menu.jsp"%>
-
-		<div class="bodycontent">
-			<div class="toolboxarea">
-				<%@include file="/__sys/cmn/toolbox.jsp"%>
+<%@include file="../cmn/head.jsp" %>
+<form class="" action="" method="post">
+	<input type="hidden" name="serviceName" value="">
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			<div class="panel-title">Contact AMS Support</div>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-12 form-group">
+					<p>Need help? Save time by sending your support request online. We'll connect you to an expert.</p>
+				</div>
 			</div>
-			<div class="workarea">
-				<div class="form-container">
-					<form method="post"
-						action="${pageContext.request.contextPath}/adapter">
-						<input type="hidden" name="serviceName" value="" />
-						<div class="form-header">
-							<img
-								src="${pageContext.request.contextPath}/__sys/img/support-16-16.png"
-								alt="Contact Support" title="Contact Support" />
-							<h3>Contact Support</h3>
+			<div class="row">
+				<div class="col-md-4">
+					<div class="row">
+						<div class="col-md-12 form-group">
+							<label for="" class="control-label">Name</label>
+							<input class="form-control" id="comm-name" type="text" value="${umsSession.userDetails.userFirstName} ${umsSession.userDetails.userLastName}" readonly>
 						</div>
-						<div class="form-content">
-							<div class="fields-row">
-								<div class="field-col">
-									<label for="name">From</label> <input type="text" name="from"
-										class="input-width-double" readonly
-										value="${umsSession.username}" />
-								</div>
-								<div class="field-col">
-								<label for="name">&nbsp;</label>
-								</div>
-								<div class="field-col">
-								<label for="name">&nbsp;</label>
-									<input type="checkbox" name="roleName" style="float: left;" /><label
-										for="name">Copy Admin</label>
-								</div>
-							</div>
-							<div class="fields-row">
-								<div class="field-col">
-									<label for="name">Detailed Message</label>
-									<textarea name="message"
-										style="height: 400px; width: 684px !important;"></textarea>
-								</div>
-							</div>
-							<div class="clear"></div>
+					</div>
+					<div class="row">
+						<div class="col-md-12 form-group">
+							<label for="" class="control-label">Primary Email</label>
+							<input class="form-control" id="comm-name" type="text" value="${umsSession.userDetails.primaryEmail}" readonly>
 						</div>
-						<div class="form-actions">
-							<input type="submit" id="" value="Send" />
+					</div>
+					<div class="row">
+						<div class="col-md-12 form-group">
+							<label for="" class="control-label">Secondary Email</label>
+							<input class="form-control" id="comm-name" type="text" value="${umsSession.userDetails.alternateEmail}" readonly>
 						</div>
-					</form>
+					</div>
+					<div class="row">
+						<div class="col-md-6 form-group">
+							<label for="" class="control-label">Primary Phone</label>
+							<input class="form-control" id="comm-name" type="text" value="${umsSession.userDetails.primaryPhone}" readonly>
+						</div>
+						<div class="col-md-6 form-group">
+							<label for="" class="control-label">Secondary Phone</label>
+							<input class="form-control" id="comm-name" type="text" value="${umsSession.userDetails.alternatePhone}" readonly>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-8">
+					<div class="row">
+						<div class="col-md-12 form-group">
+							<label for="" class="control-label">Subject</label>
+							<input class="form-control" id="comm-name" type="text" required>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12 form-group">
+							<label for="" class="control-label">Message</label>
+							<textarea class="form-control" rows="9" required></textarea>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-		<%@include file="/__sys/cmn/footer.jsp"%>
 	</div>
-</body>
-</html>
+	<div class="row">
+		<div class="col-md-12">
+			<button class="btn btn-primary" type="submit">
+				<span class="fa fa-send-o"></span> Send
+			</button>
+		</div>
+	</div>
+</form>
+<%@include file="../cmn/tail.jsp" %>

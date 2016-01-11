@@ -25,11 +25,6 @@ import org.xml.sax.SAXException;
  */
 final public class LoggerConfig extends ConfigXmlHandler<LoggerConfig> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5442729366402339667L;
-
 	private static final String DEFAULT_LOGGER_CONFIG_NAME = "logger";
 
 	private static final String LOGGING_CONF_Q_NAME = "logger-conf";

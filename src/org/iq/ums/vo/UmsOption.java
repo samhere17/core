@@ -23,23 +23,15 @@ public class UmsOption extends BaseVO {
 	private OptionType optionType;
 	private OptionStatus optionStatus;
 	private String optionLink;
-	private String optionImageLink;
-	private String optionImageAlt;
+	private String optionIcon;
 	private int optionOrder;
 	private int parentOptionId;
 	private boolean enableToolbox;
 	private String objectReferenceKey;
 	private List<UmsOption> childOptions;
-	
-	/*private String menuItemName = null;
-	private String menuItemTitle = null;
-	private String menuItemLink = null;
-	private String menuItemImageLink = null;
-	private String menuItemImageAlt = null;*/
+
 	private boolean menuItemSeparator = false;
 	private boolean menuItemEnabled = false;
-//	private boolean menuItemToolItem = false;
-
 
 	/**
 	 * @return the optionId
@@ -117,21 +109,6 @@ public class UmsOption extends BaseVO {
 	}
 
 	/**
-	 * @return the optionImageLink
-	 */
-	public String getOptionImageLink() {
-		return optionImageLink;
-	}
-
-	/**
-	 * @param optionImageLink
-	 *            the optionImageLink to set
-	 */
-	public void setOptionImageLink(String optionImageLink) {
-		this.optionImageLink = optionImageLink;
-	}
-
-	/**
 	 * @return the optionOrder
 	 */
 	public int getOptionOrder() {
@@ -184,14 +161,16 @@ public class UmsOption extends BaseVO {
 	}
 
 	/**
-	 * @param optionArea the optionArea to set
+	 * @param optionArea
+	 *            the optionArea to set
 	 */
 	public void setOptionArea(AreaSpecifier optionArea) {
 		this.optionArea = optionArea;
 	}
 
 	/**
-	 * @param optionArea the optionArea to set
+	 * @param optionArea
+	 *            the optionArea to set
 	 */
 	public void setOptionArea(int optionAreaValue) {
 		this.optionArea = AreaSpecifier.getAreaSpecifier(optionAreaValue);
@@ -231,18 +210,18 @@ public class UmsOption extends BaseVO {
 	}
 
 	/**
-	 * @return the optionImageAlt
+	 * @return the optionIcon
 	 */
-	public String getOptionImageAlt() {
-		return optionImageAlt;
+	public String getOptionIcon() {
+		return optionIcon;
 	}
 
 	/**
-	 * @param optionImageAlt
-	 *            the optionImageAlt to set
+	 * @param optionIcon
+	 *            the optionIcon to set
 	 */
-	public void setOptionImageAlt(String optionImageAlt) {
-		this.optionImageAlt = optionImageAlt;
+	public void setOptionIcon(String optionIcon) {
+		this.optionIcon = optionIcon;
 	}
 
 	/**
@@ -296,9 +275,7 @@ public class UmsOption extends BaseVO {
 		}
 		this.childOptions.add(thisChildOption);
 	}
-	
-	
-	
+
 	/**
 	 * @return the menuItemEnabled
 	 */
@@ -307,7 +284,8 @@ public class UmsOption extends BaseVO {
 	}
 
 	/**
-	 * @param menuItemEnabled the menuItemEnabled to set
+	 * @param menuItemEnabled
+	 *            the menuItemEnabled to set
 	 */
 	public void setMenuItemEnabled(boolean menuItemEnabled) {
 		this.menuItemEnabled = menuItemEnabled;
@@ -324,8 +302,7 @@ public class UmsOption extends BaseVO {
 	 * @return the menuItemToolItem
 	 */
 	public boolean isMenuItemToolItem() {
-		return (enableToolbox == true && (OptionType.SEPERATOR
-				.equals(optionType) == false));
+		return (enableToolbox == true && (OptionType.SEPERATOR.equals(optionType) == false));
 	}
 
 	@Override
@@ -334,28 +311,18 @@ public class UmsOption extends BaseVO {
 		buffer.append("UmsOptions=[" + StringUtil.lineSeparator);
 		buffer.append("    optionId=" + optionId + StringUtil.lineSeparator);
 		buffer.append("    optionName=" + optionName + StringUtil.lineSeparator);
-		buffer.append("    optionDescription=" + optionDescription
+		buffer.append("    optionDescription=" + optionDescription + StringUtil.lineSeparator);
+		buffer.append("    optionArea=" + optionArea + "(Value:" + optionArea.getAreaSpecifierValue() + ")"
 				+ StringUtil.lineSeparator);
-		buffer.append("    optionArea=" + optionArea + "(Value:"
-				+ optionArea.getAreaSpecifierValue() + ")"
+		buffer.append("    optionType=" + optionType + "(Value:" + optionType.getOptionTypeValue() + ")"
 				+ StringUtil.lineSeparator);
-		buffer.append("    optionType=" + optionType + "(Value:"
-				+ optionType.getOptionTypeValue() + ")"
-				+ StringUtil.lineSeparator);
-		buffer.append("    optionStatus=" + optionStatus + "(Value:"
-				+ optionStatus.getOptionStatusValue() + ")"
+		buffer.append("    optionStatus=" + optionStatus + "(Value:" + optionStatus.getOptionStatusValue() + ")"
 				+ StringUtil.lineSeparator);
 		buffer.append("    optionLink=" + optionLink + StringUtil.lineSeparator);
-		buffer.append("    optionImageLink=" + optionImageLink
-				+ StringUtil.lineSeparator);
-		buffer.append("    optionImageAlt=" + optionImageAlt
-				+ StringUtil.lineSeparator);
-		buffer.append("    optionOrder=" + optionOrder
-				+ StringUtil.lineSeparator);
-		buffer.append("    parentOptionId=" + parentOptionId
-				+ StringUtil.lineSeparator);
-		buffer.append("    enableToolbox=" + enableToolbox
-				+ StringUtil.lineSeparator);
+		buffer.append("    optionIcon=" + optionIcon + StringUtil.lineSeparator);
+		buffer.append("    optionOrder=" + optionOrder + StringUtil.lineSeparator);
+		buffer.append("    parentOptionId=" + parentOptionId + StringUtil.lineSeparator);
+		buffer.append("    enableToolbox=" + enableToolbox + StringUtil.lineSeparator);
 		buffer.append("  ]");
 		return buffer.toString();
 	}

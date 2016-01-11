@@ -21,7 +21,7 @@ public class ReCaptchaValidator {
 	private String privateKey = null;
 
 	//for testing from office
-	private String proxyHost = "proxy.msat";
+	private String proxyHost = "proxy.techm";
 	private String proxyPort = "80";
 
 	/**

@@ -1,330 +1,505 @@
-<%@page import="org.iq.ums.vo.UmsRegistrationResult"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@page import="org.iq.ums.UmsConstants.OptionType"%>
-<%@page import="org.iq.ums.UmsConstants.OptionStatus"%>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>OMS::iquesters</title>
-<%@include file="/__sys/cmn/styles.jsp"%>
-<%@include file="/__sys/cmn/scripts.jsp"%>
-</head>
-<body>
-	<%
-	String header = "New User";
-	%>
-	<div class="wrapper">
-		<%@include file="/__sys/cmn/header.jsp"%>
-		<%@include file="/__sys/cmn/menu.jsp"%>
+<%@include file="../cmn/head.jsp"%>
+	<form method="post" action="${pageContext.request.contextPath}/adapter">
+		<input type="hidden" name="serviceName" value="InsertUser">
 
-		<div class="bodycontent">
-			<div class="toolboxarea">
-				<%@include file="/__sys/cmn/toolbox.jsp"%>
-			</div>
-			<div class="workarea">
-				<div class="form-container">
-					<form method="post"
-						action="${pageContext.request.contextPath}/adapter">
-						<input type="hidden" name="serviceName" value="InsertUser" />
-						<div class="form-header">
-							<img src="${pageContext.request.contextPath}/__sys/img/user-add-16-16.png" alt="New User" title="New User" />
-							<h3>New User</h3>
+		<%-- Additional ID selection for Super Admin --%>
+		<c:if test="${umsSession.roleId == 1}">
+			<div class="panel panel-danger">
+				<div class="panel-heading">
+					<div class="panel-title">
+						Additional ID Selection - Super User Area
+					</div>
+				</div>
+
+				<div class="panel-body">
+					<div class="row has-inline-button">
+						<div class="col-md-3">
+							<div class="form-group">
+								<label class="control-label" for="name">Additional ID</label>
+								<input class="form-control" type="text" id="commu-id" name="selectedOrgId" readonly>
+							</div>
 						</div>
-						<div class="form-content">
 
-							<c:if test="${umsSession.roleId == 1}">
-								<fieldset class="first">
-									<legend>Organization Details</legend>
-									<div class="fields-row">
-										<div class="field-col">
-											<label for="name">Organization Id</label> <input type="text"
-												id="org-id" name="selectedOrgId" style="text-align: right;" readonly required />
-										</div>
-										<div class="field-col">
-											<label for="name">Organization Name</label> <input
-												type="text" id="org-name" class="input-width-double" readonly required />
-										</div>
-										<div class="field-col">
-											<label for="name">&nbsp;</label> <input type="button"
-												id="btn-org-lookup" value="Lookup" />
-										</div>
-									</div>
-								</fieldset>
-								<script type="text/javascript">
-								$(document).ready(function() {
-									$('#btn-org-lookup').click(function(){
-										showDialog("orgs-dialog",false);
-									});
-									
-									$("#close-org-dialog").click(function (e) {
-										hideDialog("orgs-dialog");
-										e.preventDefault();
-									});
-									
-									$("#select-org").click(function(){
-										var org = $('input[name=orgRadio]:checked').val();
-										var arr = org.split(':');
-										$("#org-id").val(arr[0]);
-										$("#org-name").val(arr[1]);
-										hideDialog("orgs-dialog");
-									});
-									
-									$("#org-list-table").tablesorter({
-										// pass the headers argument and assing a object 
-										headers: {
-											// assign the first column (we start counting zero)
-											0: {
-												// disable it by setting the property sorter to false
-												sorter: false
-											}
-										},
-										// sort on the second column(1), order asc(0) and first column(0), order asc(0)
-										sortList: [[1,0]]
-									});
-								});
-								</script>
-								<div id="overlay" class="dialog-overlay"></div>
-								<div id="orgs-dialog" class="dialog-window">
-									<div class="dialog-header">
-										<img
-											src="${pageContext.request.contextPath}/__sys/img/org-16-16.png"
-											alt="Organizations" />
-										<h3>Organizations</h3>
-										<a href="#" id="close-org-dialog"><img
-											src="${pageContext.request.contextPath}/__sys/img/delete-16-16.png"
-											alt="Close" title="Close" /></a>
-									</div>
-									<div class="dialog-content">
-										<table id="org-list-table" class="table-sorter">
-											<thead>
-												<tr>
-													<th style="width: 50px;">Select</th>
-													<th style="width: 50px;">Id</th>
-													<th>Name</th>
-													<th style="width: 100px;">Status</th>
-												</tr>
-											</thead>
-											<tbody>
-												<c:choose>
-													<c:when test="${not empty orgsListForLookup}">
-														<c:forEach items="${orgsListForLookup}" var="curOrg">
-															<tr>
-																<td style="text-align: center;"><input type="radio"
-																	name="orgRadio"
-																	value="${curOrg.organizationId}:${curOrg.organizationName}" /></td>
-																<td style="text-align: right;">${curOrg.organizationId}</td>
-																<td>${curOrg.organizationName}</td>
-																<td style="text-align: center;">${curOrg.organizationStatus}</td>
-															</tr>
-														</c:forEach>
-													</c:when>
-													<c:otherwise>
-														<tr>
-															<td colspan="4" style="text-align: center;">No
-																organizations configured.</td>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="control-label" for="name">Additional Name</label>
+								<input class="form-control" type="text" id="commu-name" readonly>
+							</div>
+						</div>
+
+						<div class="col-md-3 inline-button-container">
+							<div class="form-group">
+								<button type="button" class="btn btn-md btn-primary" data-toggle="modal" data-target="#commu-modal">
+									Lookup
+								</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="modal" role="dialog" id="commu-modal" tabindex="-1">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+									<h4 class="modal-title">Choose A Community for the New User</h4>
+								</div>
+								<div class="modal-body">
+									<table class="table table-hover">
+										<thead>
+											<tr>
+												<th>ID</th>
+												<th>Name</th>
+												<th>Primary Phone Number</th>
+											</tr>
+										</thead>
+
+										<tbody id="commu-table">
+											<c:choose>
+												<c:when test="${not empty orgsListForLookup}">
+													<c:forEach items="${orgsListForLookup}" var="current">
+														<tr class="ui-widget-content">
+															<td>${current.key}</td>
+															<td>${current.value["commu-name"]}</td>
+															<td>${current.value["commu-primary-phone"]}</td>
 														</tr>
-													</c:otherwise>
-												</c:choose>
-											</tbody>
-										</table>
-									</div>
-									<div class="dialog-actions">
-										<input type="button" id="select-org" value="Select" />
-									</div>
-								</div>
-							</c:if>
+													</c:forEach>
+												</c:when>
 
-							<fieldset <c:if test="${umsSession.roleId != 1}">class="first"</c:if>>
-								<legend>User Details</legend>
-								<div class="fields-row">
-									<div class="field-col">
-										<label for="firstname">First Name</label> <input type="text"
-											id="firstname" name="firstname" value="" required />
-									</div>
-									<div class="field-col">
-										<label for="lastname">Last Name</label> <input type="text"
-											id="lastname" name="lastname" value="" required />
-									</div>
-									<div class="field-col">
-										<label for="alias">Alias (Nickname)</label> <input type="text"
-											id="alias" name="alias" value="" />
-									</div>
+												<c:otherwise>
+													<tr>
+														<td colspan="3">No community found.</td>
+													</tr>
+												</c:otherwise>
+											</c:choose>
+										</tbody>
+									</table>
 								</div>
-								<div class="fields-row">
-									<div class="field-col">
-										<label for="address">Address</label>
-										<textarea name="address"></textarea>
-									</div>
-									<div class="multi-row-col">
-										<div class="field-col">
-											<label for="phone">Phone</label> <input type="text"
-												name="phone" value="" required />
-										</div>
-										<div class="field-col">
-											<label for="alt-phone">Alternate Phone</label> <input
-												type="text" name="altPhone" value="" />
-										</div>
-									</div>
-									<div class="multi-row-col">
-										<div class="field-col">
-											<label for="email">Email</label>
-											<input type="text" name="email" value="" required />
-											<c:if test="${not empty validation.emailError}"><div class="${validation.emailError.level}">${validation.emailError.message}</div></c:if>
-										</div>
-										<div class="field-col">
-											<label for="alt-email">Alternate Email</label> <input
-												type="text" name="altEmail" value="" />
-										</div>
-									</div>
+
+								<div class="modal-footer">
+									<button type="button" class="btn btn-primary" id="commu-select-btn">Select</button>
+									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 								</div>
-								<div class="fields-row">
-									<div class="field-col">
-										<label for="gender">Gender</label> <select id="gender"
-											name="gender" class="-iq-gender-input">
-											<option value="-1">--select--</option>
-											<option value="0">Male</option>
-											<option value="1">Female</option>
-											<option value="2">Other</option>
-										</select>
-									</div>
-									<div class="field-col">
-										<label for="birth-day">Birthday</label> <input type="date"
-											id="birth-day" name="birthday" value="" />
-									</div>
-									<div class="field-col">
-										<label for="anniversary">Anniversary</label> <input
-											type="date" id="anniversary" name="anniversary" value="" />
-									</div>
-								</div>
-							</fieldset>
-							<fieldset>
-								<legend>Login Credentials</legend>
-								<div class="fields-row">
-									<div class="field-col">
-										<label for="username">Username</label> <input type="text"
-											id="username" name="username" value="" required />
-									</div>
-									<div class="field-col">
-										<label for="password">Password</label> <input type="password"
-											id="password" name="password" value="" required />
-									</div>
-									<div class="field-col">
-										<label for="cpassword">Confirm Password</label> <input
-											type="password" id="cpassword" name="cpassword" value=""
-											required />
-									</div>
-								</div>
-							</fieldset>
-							<fieldset>
-								<legend>Role Selection</legend>
-								<div class="fields-row">
-									<div class="field-col">
-										<label for="name">Role Id</label>
-										<input type="text" id="role-id" name="selectedRoleId" style="text-align: right;" readonly required />
-									</div>
-									<div class="field-col">
-										<label for="name">Role Name</label>
-										<input type="text" id="role-name" readonly required />
-									</div>
-									<div class="field-col">
-										<label for="name">&nbsp;</label>
-										<input type="button" id="btnLookup" value="Lookup" />
-									</div>
-								</div>
-							</fieldset>
-							<div class="clear"></div>
+							</div>
 						</div>
-						<div class="form-actions">
-							<input type="submit" id="" value="Save User" />
+					</div>
+				</div>
+			</div>
+		</c:if>
+
+		<%-- User Details --%>
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<div class="panel-title">User Details</div>
+			</div>
+
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group has-feedback">
+							<label class="control-label" for="firstname">First Name</label>
+							<input class="form-control" type="text" id="firstname" name="firstname" required data-toggle="tooltip" data-placement="auto" title="">
+
+							<span class="glyphicon glyphicon-ok form-control-feedback hidden"></span>
+							<span class="glyphicon glyphicon-remove form-control-feedback hidden"></span>
+
+							<%-- Validation error message --%>
+							<p class="error-msg text-danger small hidden">
+								<strong>Enter the user's first name</strong>
+							</p>
+
+							<%-- Error message from server --%>
+							<c:if test="${hasError}">
+								<p class="error-msg-from-svr text-danger small">
+									<strong>${hasError.message}</strong>
+								</p>
+							</c:if>
 						</div>
-					</form>
+					</div>
+
+					<div class="col-md-3">
+						<div class="form-group has-feedback">
+							<label class="control-label" for="firstname">Last Name</label>
+							<input class="form-control" type="text" id="firstname" name="firstname" required data-toggle="tooltip" data-placement="auto" title="">
+
+							<span class="glyphicon glyphicon-ok form-control-feedback hidden"></span>
+							<span class="glyphicon glyphicon-remove form-control-feedback hidden"></span>
+
+							<%-- Validation error message --%>
+							<p class="error-msg text-danger small hidden">
+								<strong>Enter the user's last name</strong>
+							</p>
+
+							<%-- Error message from server --%>
+							<c:if test="${hasError}">
+								<p class="error-msg-from-svr text-danger small">
+									<strong>${hasError.message}</strong>
+								</p>
+							</c:if>
+						</div>
+					</div>
+
+					<div class="col-md-3">
+						<div class="form-group has-feedback">
+							<label class="control-label" for="alias">Alias (Nickname)</label>
+							<input class="form-control" type="text" id="alias" name="alias">
+
+							<span class="glyphicon glyphicon-ok form-control-feedback hidden"></span>
+							<span class="glyphicon glyphicon-remove form-control-feedback hidden"></span>
+
+							<%-- Validation error message --%>
+							<p class="error-msg text-danger small hidden">
+								<strong>Enter an alias for the user</strong>
+							</p>
+
+							<%-- Error message from server --%>
+							<c:if test="${hasError}">
+								<p class="error-msg-from-svr text-danger small">
+									<strong>${hasError.message}</strong>
+								</p>
+							</c:if>
+						</div>
+					</div>
+
+					<div class="col-md-3">
+						<label class="control-label" for="gender">Gender</label>
+						<br>
+						<div class="form-group has-feedback">
+							<div class="btn-group" data-toggle="buttons">
+								<label class="btn btn-default">
+									<input class="form-control" type="radio" name="gender" value="0" required> Male
+								</label>
+
+								<label class="btn btn-default">
+									<input class="form-control" type="radio" name="gender" value="1" required> Female
+								</label>
+
+								<label class="btn btn-default">
+									<input class="form-control" type="radio" name="gender" value="2" required> Other
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group has-feedback">
+							<label class="control-label" class="control-label" for="address">Address</label>
+							<textarea class="form-control" name="address" required></textarea>
+
+							<span class="glyphicon glyphicon-ok form-control-feedback hidden"></span>
+							<span class="glyphicon glyphicon-remove form-control-feedback hidden"></span>
+
+							<%-- Validation error message --%>
+							<p class="error-msg text-danger small hidden">
+								<strong>Enter user's address</strong>
+							</p>
+
+							<%-- Error message from server --%>
+							<c:if test="${hasError}">
+								<p class="error-msg-from-svr text-danger small">
+									<strong>${hasError.message}</strong>
+								</p>
+							</c:if>
+						</div>
+					</div>
+
+					<div class="col-md-3 form-group">
+						<div class="form-group has-feedback">
+							<label class="control-label" for="phone">Phone</label>
+							<input class="form-control" type="tel" name="phone" required maxlength="14">
+
+							<span class="glyphicon glyphicon-ok form-control-feedback hidden"></span>
+							<span class="glyphicon glyphicon-remove form-control-feedback hidden"></span>
+
+							<%-- Validation error message --%>
+							<p class="error-msg text-danger small hidden">
+								<strong>Enter user's phone number</strong>
+							</p>
+
+							<%-- Error message from server --%>
+							<c:if test="${hasError}">
+								<p class="error-msg-from-svr text-danger small">
+									<strong>${hasError.message}</strong>
+								</p>
+							</c:if>
+						</div>
+					</div>
+
+					<div class="col-md-3">
+						<div class="form-group has-feedback">
+							<label class="control-label" for="alt-phone">Alternate Phone</label>
+							<input class="form-control" type="tel" name="altPhone" maxlength="14" placeholder="Optional field">
+
+							<span class="glyphicon glyphicon-ok form-control-feedback hidden"></span>
+							<span class="glyphicon glyphicon-remove form-control-feedback hidden"></span>
+
+							<%-- Error message from server --%>
+							<c:if test="${hasError}">
+								<p class="error-msg-from-svr text-danger small">
+									<strong>${hasError.message}</strong>
+								</p>
+							</c:if>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group has-feedback">
+							<label class="control-label" for="email">Email</label>
+							<input class="form-control" type="text" name="email" required>
+
+							<span class="glyphicon glyphicon-ok form-control-feedback hidden"></span>
+							<span class="glyphicon glyphicon-remove form-control-feedback hidden"></span>
+
+							<%-- Validation error message --%>
+							<p class="error-msg text-danger small hidden">
+								<strong>Enter user's email address</strong>
+							</p>
+
+							<%-- Error message from server --%>
+							<c:if test="${hasError}">
+								<p class="error-msg-from-svr text-danger small">
+									<strong>${hasError.message}</strong>
+								</p>
+							</c:if>
+						</div>
+					</div>
+
+					<div class="col-md-6">
+						<div class="form-group has-feedback">
+							<label class="control-label" for="alt-email">Alternate Email</label>
+							<input class="form-control" type="text" name="altEmail" placeholder="Optional field">
+
+							<span class="glyphicon glyphicon-ok form-control-feedback hidden"></span>
+							<span class="glyphicon glyphicon-remove form-control-feedback hidden"></span>
+
+							<%-- Validation error message --%>
+							<p class="error-msg text-danger small hidden">
+								<strong>Enter the name of your community</strong>
+							</p>
+
+							<%-- Error message from server --%>
+							<c:if test="${hasError}">
+								<p class="error-msg-from-svr text-danger small">
+									<strong>${hasError.message}</strong>
+								</p>
+							</c:if>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group has-feedback">
+							<label class="control-label" class="control-label" for="birth-day">Birthday</label>
+							<input class="form-control" type="date" id="birth-day" name="birthday" required>
+
+							<span class="glyphicon glyphicon-ok form-control-feedback hidden"></span>
+							<span class="glyphicon glyphicon-remove form-control-feedback hidden"></span>
+
+							<%-- Validation error message --%>
+							<p class="error-msg text-danger small hidden">
+								<strong>Enter user's birthday</strong>
+							</p>
+
+							<%-- Error message from server --%>
+							<c:if test="${hasError}">
+								<p class="error-msg-from-svr text-danger small">
+									<strong>${hasError.message}</strong>
+								</p>
+							</c:if>
+						</div>
+					</div>
+
+					<div class="col-md-3">
+						<div class="form-group has-feedback">
+							<label class="control-label" for="anniversary">Anniversary</label>
+							<input class="form-control" type="date" id="anniversary" name="anniversary">
+
+							<span class="glyphicon glyphicon-ok form-control-feedback hidden"></span>
+							<span class="glyphicon glyphicon-remove form-control-feedback hidden"></span>
+
+							<%-- Error message from server --%>
+							<c:if test="${hasError}">
+								<p class="error-msg-from-svr text-danger small">
+									<strong>${hasError.message}</strong>
+								</p>
+							</c:if>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-		<%@include file="/__sys/cmn/footer.jsp"%>
-	</div>
 
-<script type="text/javascript">
-$(document).ready(function() {
-	$('#btnLookup').click(function(){
-		showDialog("roles-dialog",false);
-	});
-	
-	$("#close-dialog").click(function (e) {
-		hideDialog("roles-dialog");
-		e.preventDefault();
-	});
-	
-	$("#select-role").click(function(){
-		var role = $('input[name=roleRadio]:checked').val();
-		var arr = role.split(':');
-		$("#role-id").val(arr[0]);
-		$("#role-name").val(arr[1]);
-		hideDialog("roles-dialog");
-	});
-	$("#role-list-table").tablesorter({
-		// pass the headers argument and assing a object 
-		headers: {
-			// assign the first column (we start counting zero)
-			0: {
-				// disable it by setting the property sorter to false
-				sorter: false
-			}
-		},
-		// sort on the second column(1), order asc(0) and first column(0), order asc(0)
-		sortList: [[1,0]]
-	});
-});
-</script>
+		<%-- Login Details --%>
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<div class="panel-title">
+					Login Credentials
+				</div>
+			</div>
 
-	<div id="overlay" class="dialog-overlay"></div>
-	<div id="roles-dialog" class="dialog-window">
-		<div class="dialog-header">
-			<img
-				src="${pageContext.request.contextPath}/__sys/img/role-16-16.gif"
-				alt="Roles" />
-			<h3>Roles</h3>
-			<a href="#" id="close-dialog"><img
-				src="${pageContext.request.contextPath}/__sys/img/delete-16-16.png"
-				alt="Close" title="Close" /></a>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group has-feedback">
+							<label class="control-label" for="username">Username</label>
+							<input class="form-control" type="text" id="username" name="username" required>
+
+							<span class="glyphicon glyphicon-ok form-control-feedback hidden"></span>
+							<span class="glyphicon glyphicon-remove form-control-feedback hidden"></span>
+
+							<%-- Validation error message --%>
+							<p class="error-msg text-danger small hidden">
+								<strong>Choose a username</strong>
+							</p>
+
+							<%-- Error message from server --%>
+							<c:if test="${hasError}">
+								<p class="error-msg-from-svr text-danger small">
+									<strong>${hasError.message}</strong>
+								</p>
+							</c:if>
+						</div>
+					</div>
+
+					<div class="col-md-3">
+						<div class="form-group has-feedback">
+							<label class="control-label" for="password">Password</label>
+							<input class="form-control" type="password" id="password" name="password" required>
+
+							<span class="glyphicon glyphicon-ok form-control-feedback hidden"></span>
+							<span class="glyphicon glyphicon-remove form-control-feedback hidden"></span>
+
+							<%-- Validation error message --%>
+							<p class="error-msg text-danger small hidden">
+								<strong>Super secret password ;)</strong>
+							</p>
+
+							<%-- Error message from server --%>
+							<c:if test="${hasError}">
+								<p class="error-msg-from-svr text-danger small">
+									<strong>${hasError.message}</strong>
+								</p>
+							</c:if>
+						</div>
+					</div>
+
+					<div class="col-md-3">
+						<div class="form-group has-feedback">
+							<label class="control-label" for="cpassword">Confirm Password</label>
+							<input class="form-control" type="password" id="cpassword" name="cpassword" required>
+
+							<span class="glyphicon glyphicon-ok form-control-feedback hidden"></span>
+							<span class="glyphicon glyphicon-remove form-control-feedback hidden"></span>
+
+							<%-- Validation error message --%>
+							<p class="error-msg text-danger small hidden">
+								<strong>Repeat the password</strong>
+							</p>
+
+							<%-- Error message from server --%>
+							<c:if test="${hasError}">
+								<p class="error-msg-from-svr text-danger small">
+									<strong>${hasError.message}</strong>
+								</p>
+							</c:if>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div class="dialog-content">
-			<table id="role-list-table" class="table-sorter">
-				<thead>
-					<tr>
-						<th style="width: 50px;">Select</th>
-						<th style="width: 50px;">Id</th>
-						<th>Name</th>
-						<th style="width: 100px;">Status</th>
-					</tr>
-				</thead>
-				<tbody>
-					<c:choose>
-						<c:when test="${not empty rolesListForLookup}">
-							<c:forEach items="${rolesListForLookup}" var="currentRole">
-								<tr>
-									<td style="text-align: center;"><input type="radio"
-										name="roleRadio"
-										value="${currentRole.roleId}:${currentRole.roleName}" /></td>
-									<td style="text-align: right;">${currentRole.roleId}</td>
-									<td>${currentRole.roleName}</td>
-									<td style="text-align: center;">${currentRole.roleStatus}</td>
-								</tr>
-							</c:forEach>
-						</c:when>
-						<c:otherwise>
-							<tr>
-								<td colspan="10" style="text-align: center;">No roles
-									configured.</td>
-							</tr>
-						</c:otherwise>
-					</c:choose>
-				</tbody>
-			</table>
+
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<div class="panel-title">
+					Role Selection
+				</div>
+			</div>
+
+			<div class="panel-body">
+				<div class="row has-inline-button">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Role ID</label>
+							<input class="form-control" type="text" id="role-id" name="selectedRoleId" readonly>
+						</div>
+					</div>
+
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label" >Role Name</label>
+							<input class="form-control" type="text" id="role-name" readonly>
+						</div>
+					</div>
+
+					<div class="col-md-3 inline-button-container">
+						<div class="form-group">
+							<button type="button" class="btn btn-md btn-primary" data-toggle="modal" data-target="#role-modal">
+								Lookup
+							</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal" role="dialog" id="role-modal" tabindex="-1">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+								<h4 class="modal-title">Choose A Role for the New User</h4>
+							</div>
+
+							<div class="modal-body">
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>Name</th>
+											<th>Description</th>
+										</tr>
+									</thead>
+
+									<tbody id="roles-table">
+										<c:choose>
+											<c:when test="${not empty rolesListForLookup}">
+												<c:forEach items="${rolesListForLookup}" var="current">
+													<tr class="ui-widget-content">
+														<td>${current.roleId}</td>
+														<td>${current.roleName}</td>
+														<td>${current.roleDescription}</td>
+													</tr>
+												</c:forEach>
+											</c:when>
+
+											<c:otherwise>
+												<tr>
+													<td colspan="3">No roles found.</td>
+												</tr>
+											</c:otherwise>
+										</c:choose>
+									</tbody>
+								</table>
+							</div>
+
+							<div class="modal-footer">
+								<button type="button" class="btn btn-primary" id="role-select-btn">Select</button>
+								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div class="dialog-actions">
-			<input type="button" id="select-role" value="Select" />
+
+		<div class="row">
+			<div class="col-md-12">
+				<input class="btn btn-md btn-primary" type="submit" value="Save">
+			</div>
 		</div>
-	</div>
-</body>
-</html>
+		<br>
+	</form>
+
+<%@include file="../cmn/tail.jsp"%>

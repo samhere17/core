@@ -10,13 +10,14 @@ import org.iq.exception.ServiceException;
 import org.iq.logger.LocalLogger;
 import org.iq.service.BaseService;
 import org.iq.service.Service;
+import org.iq.ums.UmsContext;
 import org.iq.ums.UmsConstants.SessionStatus;
 import org.iq.ums.dao.UmsSessionDetailsDao;
 import org.iq.ums.dao.impl.UmsSessionDetailsDaoImpl;
+import org.iq.ums.util.UmsDbProvider;
 import org.iq.ums.vo.UmsSession;
 import org.iq.ums.vo.UmsSessionDetails;
 import org.iq.util.StringUtil;
-import org.iq.util.system.CoreDbProvider;
 
 @Service(name="Logout")
 public class LogoutService extends BaseService {
@@ -43,14 +44,14 @@ public class LogoutService extends BaseService {
 				LocalLogger.logDebug("UMS_SESSIONS" + " Region Exists.");
 			}
 			
-			UmsSessionDetailsDao umsSessionDetailsDao = new UmsSessionDetailsDaoImpl(CoreDbProvider.getDbSession());
+			UmsSessionDetailsDao umsSessionDetailsDao = new UmsSessionDetailsDaoImpl(UmsDbProvider.getDbSession());
 			UmsSession umsSession = (UmsSession)cacheHelper.getElement("UMS_SESSIONS", jSessionId);
 			UmsSessionDetails currSessionDetails = new UmsSessionDetails();
 			currSessionDetails.setUserId(umsSession.getUserId());
 			currSessionDetails.setSystemSessionId(umsSession.getSystemSessionId());
 			currSessionDetails.setNativeToken(umsSession.getNativeToken());
 			currSessionDetails.setSessionStatus(SessionStatus.VALID);
-			umsSessionDetailsDao.delete(currSessionDetails);
+			umsSessionDetailsDao.hardDelete(currSessionDetails);
 
 			cacheHelper.removeElement("UMS_SESSIONS", jSessionId);
 		} catch (CacheException e) {
@@ -61,6 +62,6 @@ public class LogoutService extends BaseService {
 			throw new ServiceException(e);
 		}
 
-		redirectUrl = "index.jsp";
+		redirectUrl = UmsContext.umsConfig.getLogoutSuccessRedirectUrl();
 	}
 }

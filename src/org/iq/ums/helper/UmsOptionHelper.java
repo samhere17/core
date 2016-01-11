@@ -16,7 +16,7 @@ import org.iq.ums.vo.UmsOption;
 import org.iq.util.StringUtil;
 
 public class UmsOptionHelper extends BaseHelper {
-	
+
 	/**
 	 * 
 	 */
@@ -26,56 +26,44 @@ public class UmsOptionHelper extends BaseHelper {
 		super(UmsDbProvider.getDbSession());
 	}
 
-/*	public List<UmsOption> getAllOptions() throws DbException {
-		// Fetching option details
-		UmsOptionDao umsOptionsDao = new UmsOptionDaoImpl(dbSession);
-		return umsOptionsDao.getAllOptions();
-	}
-
-	public List<UmsOption> getOptionsList(String listType) throws DbException {
-		// Fetching option details
-		UmsOptionDao umsOptionsDao = new UmsOptionDaoImpl(dbSession);
-		if (ALL_OPTIONS.equals(listType)) {
-			return umsOptionsDao.getAllOptions();
-		} else if (ACTIVE_OPTIONS.equals(listType)) {
-			return umsOptionsDao.getActiveOptions();
-		} else if (PARENT_OPTIONS.equals(listType)) {
-			return umsOptionsDao.getParentOptions();
-		}else {
-			return umsOptionsDao.getAllOptions();
-		}
-	}
-
-	public UmsOption getOptionById(String optionId) throws DbException {
-		// Fetching option details
-		UmsOptionDao umsOptionsDao = new UmsOptionDaoImpl(dbSession);
-		return umsOptionsDao.getOptionByOptionId(optionId);
-	}
-
-	public int updateOption(int optionId, String optionName, int optionStatus, String optionLink,
-			String optionImageLink, int parentOptionId, int optionOrder) {
-		
-		// preparing data before hitting UmsOptions DAO layer
-		UmsOption umsOption = new UmsOption();
-		umsOption.setOptionId(optionId);
-		umsOption.setOptionName(optionName);
-		umsOption.setOptionStatus(OptionStatus.getOptionStatus(optionStatus));
-		umsOption.setOptionLink(optionLink);
-		umsOption.setOptionImageLink(optionImageLink);
-		umsOption.setParentOptionId(parentOptionId);
-		umsOption.setOptionOrder(optionOrder);
-
-		//hitting UmsOptions DAO layer
-		UmsOptionDao umsOptionsDao = new UmsOptionDaoImpl(dbSession);
-		try {
-			return umsOptionsDao.updateOption(umsOption);
-		} catch (DbException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return 0;
-	}
-*/
+	/*
+	 * public List<UmsOption> getAllOptions() throws DbException { // Fetching
+	 * option details UmsOptionDao umsOptionsDao = new
+	 * UmsOptionDaoImpl(dbSession); return umsOptionsDao.getAllOptions(); }
+	 * 
+	 * public List<UmsOption> getOptionsList(String listType) throws DbException
+	 * { // Fetching option details UmsOptionDao umsOptionsDao = new
+	 * UmsOptionDaoImpl(dbSession); if (ALL_OPTIONS.equals(listType)) { return
+	 * umsOptionsDao.getAllOptions(); } else if
+	 * (ACTIVE_OPTIONS.equals(listType)) { return
+	 * umsOptionsDao.getActiveOptions(); } else if
+	 * (PARENT_OPTIONS.equals(listType)) { return
+	 * umsOptionsDao.getParentOptions(); }else { return
+	 * umsOptionsDao.getAllOptions(); } }
+	 * 
+	 * public UmsOption getOptionById(String optionId) throws DbException { //
+	 * Fetching option details UmsOptionDao umsOptionsDao = new
+	 * UmsOptionDaoImpl(dbSession); return
+	 * umsOptionsDao.getOptionByOptionId(optionId); }
+	 * 
+	 * public int updateOption(int optionId, String optionName, int
+	 * optionStatus, String optionLink, String optionImageLink, int
+	 * parentOptionId, int optionOrder) {
+	 * 
+	 * // preparing data before hitting UmsOptions DAO layer UmsOption umsOption
+	 * = new UmsOption(); umsOption.setOptionId(optionId);
+	 * umsOption.setOptionName(optionName);
+	 * umsOption.setOptionStatus(OptionStatus.getOptionStatus(optionStatus));
+	 * umsOption.setOptionLink(optionLink);
+	 * umsOption.setOptionImageLink(optionImageLink);
+	 * umsOption.setParentOptionId(parentOptionId);
+	 * umsOption.setOptionOrder(optionOrder);
+	 * 
+	 * //hitting UmsOptions DAO layer UmsOptionDao umsOptionsDao = new
+	 * UmsOptionDaoImpl(dbSession); try { return
+	 * umsOptionsDao.updateOption(umsOption); } catch (DbException e) { // TODO
+	 * Auto-generated catch block e.printStackTrace(); } return 0; }
+	 */
 
 	public int deleteOption(int optionId) throws BusinessException {
 
@@ -86,25 +74,25 @@ public class UmsOptionHelper extends BaseHelper {
 		// hitting UmsOptions DAO layer
 		UmsOptionDao umsOptionsDao = new UmsOptionDaoImpl(dbSession);
 		try {
-			return umsOptionsDao.delete(umsOption);
+			return umsOptionsDao.softDelete(umsOption);
 		} catch (DbException e) {
 			throw new BusinessException(e);
 		}
 	}
 
-	public int insertOption(String optionName, int optionStatus, String optionLink,
-			String optionImageLink, int parentOptionId, int optionOrder) throws BusinessException {
-		
+	public int insertOption(String optionName, int optionStatus, String optionLink, String optionImageLink,
+			int parentOptionId, int optionOrder) throws BusinessException {
+
 		// preparing data before hitting UmsOptions DAO layer
 		UmsOption umsOption = new UmsOption();
 		umsOption.setOptionName(optionName);
 		umsOption.setOptionStatus(OptionStatus.getOptionStatus(optionStatus));
 		umsOption.setOptionLink(optionLink);
-		umsOption.setOptionImageLink(optionImageLink);
+		// umsOption.setOptionImageLink(optionImageLink);
 		umsOption.setParentOptionId(parentOptionId);
 		umsOption.setOptionOrder(optionOrder);
 
-		//hitting UmsOptions DAO layer
+		// hitting UmsOptions DAO layer
 		UmsOptionDao umsOptionsDao = new UmsOptionDaoImpl(dbSession);
 		try {
 			return umsOptionsDao.insert(umsOption);
@@ -112,7 +100,6 @@ public class UmsOptionHelper extends BaseHelper {
 			throw new BusinessException(e);
 		}
 	}
-
 
 	public List<UmsOption> getParentOptions() throws BusinessException {
 		// hitting UmsOptions DAO layer
@@ -144,8 +131,7 @@ public class UmsOptionHelper extends BaseHelper {
 		}
 	}
 
-	public List<UmsOption> getOptionsByParentId(int parentOptionId)
-			throws BusinessException {
+	public List<UmsOption> getOptionsByParentId(int parentOptionId) throws BusinessException {
 		// hitting UmsOptions DAO layer
 		UmsOptionDao umsOptionsDao = new UmsOptionDaoImpl(dbSession);
 		try {
@@ -154,9 +140,8 @@ public class UmsOptionHelper extends BaseHelper {
 			throw new BusinessException(e);
 		}
 	}
-	
-	public List<UmsOption> getActiveOptionsByParentId(int parentOptionId)
-			throws BusinessException {
+
+	public List<UmsOption> getActiveOptionsByParentId(int parentOptionId) throws BusinessException {
 		// hitting UmsOptions DAO layer
 		UmsOptionDao umsOptionsDao = new UmsOptionDaoImpl(dbSession);
 		try {
@@ -165,16 +150,15 @@ public class UmsOptionHelper extends BaseHelper {
 			throw new BusinessException(e);
 		}
 	}
-	
+
 	/**
 	 * @param roleId
 	 * @param sessionMap
 	 * @return List<UmsOption>
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
-	public List<UmsOption> getOptionsForMenu(int roleId,
-			HashMap<String, Object> sessionMap) throws BusinessException {
-		
+	public List<UmsOption> getOptionsForMenu(int roleId, HashMap<String, Object> sessionMap) throws BusinessException {
+
 		List<UmsOption> retOptions = new ArrayList<UmsOption>();
 
 		List<UmsOption> parentOptions = getActiveParentOptions();
@@ -185,12 +169,11 @@ public class UmsOptionHelper extends BaseHelper {
 				// checking for role
 				if (optionsMap != null && optionsMap.get(umsParentOption.getOptionId()) != null
 						&& optionsMap.get(umsParentOption.getOptionId())) {
-					List<UmsOption> umsChildOptions = getActiveOptionsByParentId(umsParentOption
-							.getOptionId());
+					List<UmsOption> umsChildOptions = getActiveOptionsByParentId(umsParentOption.getOptionId());
 					if (umsChildOptions != null && umsChildOptions.size() > 0) {
 						for (UmsOption thisChildOption : umsChildOptions) {
 							// checking for role
-							if (/*optionsMap != null && */optionsMap.get(thisChildOption.getOptionId()) != null
+							if (/* optionsMap != null && */optionsMap.get(thisChildOption.getOptionId()) != null
 									&& optionsMap.get(thisChildOption.getOptionId())) {
 								thisChildOption.setMenuItemEnabled(true);
 								// checking for session object availability
@@ -220,17 +203,15 @@ public class UmsOptionHelper extends BaseHelper {
 	 * @param enableToolbox
 	 * @param optionLink
 	 * @param optionImageLink
-	 * @param optionImageAlt
+	 * @param optionIcon
 	 * @param objectReferenceKey
 	 * @param parentOptionId
 	 * @return int
 	 * @throws BusinessException
 	 */
-	public int createOption(String optionName, String optionDescription,
-			int optionTypeValue, int optionStatusValue, int optionOrder,
-			boolean enableToolbox, String optionLink, String optionImageLink,
-			String optionImageAlt, String objectReferenceKey, int parentOptionId)
-			throws BusinessException {
+	public int createOption(String optionName, String optionDescription, int optionTypeValue, int optionStatusValue,
+			int optionArea, int optionOrder, boolean enableToolbox, String optionLink, String optionIcon,
+			String objectReferenceKey, int parentOptionId) throws BusinessException {
 
 		// TODO Need to validate the input first
 
@@ -240,11 +221,11 @@ public class UmsOptionHelper extends BaseHelper {
 		option.setOptionDescription(optionDescription);
 		option.setOptionType(optionTypeValue);
 		option.setOptionStatus(optionStatusValue);
+		option.setOptionArea(optionArea);
 		option.setOptionOrder(optionOrder);
 		option.setEnableToolbox(enableToolbox);
 		option.setOptionLink(optionLink);
-		option.setOptionImageLink(optionImageLink);
-		option.setOptionImageAlt(optionImageAlt);
+		option.setOptionIcon(optionIcon);
 		option.setObjectReferenceKey(objectReferenceKey);
 		option.setParentOptionId(parentOptionId);
 
@@ -269,17 +250,16 @@ public class UmsOptionHelper extends BaseHelper {
 			throw new BusinessException(e);
 		}
 	}
-	
+
 	/**
 	 * @return List<UmsOption>
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
 	public List<UmsOption> getAllOptions() throws BusinessException {
 		List<UmsOption> parentOptions = getParentOptions();
 		if (parentOptions != null && parentOptions.size() > 0) {
 			for (UmsOption umsParentOption : parentOptions) {
-				List<UmsOption> umsChildOptions = getOptionsByParentId(umsParentOption
-						.getOptionId());
+				List<UmsOption> umsChildOptions = getOptionsByParentId(umsParentOption.getOptionId());
 				if (umsChildOptions != null && umsChildOptions.size() > 0) {
 					for (UmsOption thisChildOption : umsChildOptions) {
 						umsParentOption.addChildOption(thisChildOption);
@@ -292,14 +272,13 @@ public class UmsOptionHelper extends BaseHelper {
 
 	/**
 	 * @return List<UmsOption>
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
 	public List<UmsOption> getAppOptions() throws BusinessException {
 		List<UmsOption> parentOptions = getParentAppOptions();
 		if (parentOptions != null && parentOptions.size() > 0) {
 			for (UmsOption umsParentOption : parentOptions) {
-				List<UmsOption> umsChildOptions = getOptionsByParentId(umsParentOption
-						.getOptionId());
+				List<UmsOption> umsChildOptions = getOptionsByParentId(umsParentOption.getOptionId());
 				if (umsChildOptions != null && umsChildOptions.size() > 0) {
 					for (UmsOption thisChildOption : umsChildOptions) {
 						umsParentOption.addChildOption(thisChildOption);
@@ -318,7 +297,7 @@ public class UmsOptionHelper extends BaseHelper {
 	 * @param optionStatusValue
 	 * @param optionLink
 	 * @param optionImageLink
-	 * @param optionImageAlt
+	 * @param optionIcon
 	 * @param optionOrder
 	 * @param parentOptionId
 	 * @param enableToolbox
@@ -326,12 +305,9 @@ public class UmsOptionHelper extends BaseHelper {
 	 * @return int
 	 * @throws BusinessException
 	 */
-	public int updateOption(int optionId, String optionName,
-			String optionDescription, int optionTypeValue,
-			int optionStatusValue, String optionLink, String optionImageLink,
-			String optionImageAlt, int optionOrder, int parentOptionId,
-			boolean enableToolbox, String objectReferenceKey)
-			throws BusinessException {
+	public int updateOption(int optionId, String optionName, String optionDescription, int optionTypeValue,
+			int optionStatusValue, String optionLink, String optionIcon, int optionOrder, int parentOptionId,
+			boolean enableToolbox, String objectReferenceKey) throws BusinessException {
 
 		// preparing data before hitting UmsOptions DAO layer
 		UmsOption umsOption = new UmsOption();
@@ -343,8 +319,7 @@ public class UmsOptionHelper extends BaseHelper {
 		umsOption.setOptionOrder(optionOrder);
 		umsOption.setEnableToolbox(enableToolbox);
 		umsOption.setOptionLink(optionLink);
-		umsOption.setOptionImageLink(optionImageLink);
-		umsOption.setOptionImageAlt(optionImageAlt);
+		umsOption.setOptionIcon(optionIcon);
 		umsOption.setObjectReferenceKey(objectReferenceKey);
 		umsOption.setParentOptionId(parentOptionId);
 
@@ -352,6 +327,17 @@ public class UmsOptionHelper extends BaseHelper {
 		UmsOptionDao umsOptionsDao = new UmsOptionDaoImpl(dbSession);
 		try {
 			return umsOptionsDao.update(umsOption);
+		} catch (DbException e) {
+			throw new BusinessException(e);
+		}
+	}
+
+	public int updateOptionOrder(int optId, int newOrderId) throws BusinessException {
+
+		UmsOptionDao umsOptionsDao = new UmsOptionDaoImpl(dbSession);
+
+		try {
+			return umsOptionsDao.updateOptionOrder(optId, newOrderId);
 		} catch (DbException e) {
 			throw new BusinessException(e);
 		}

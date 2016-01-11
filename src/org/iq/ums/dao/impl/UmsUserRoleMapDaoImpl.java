@@ -10,7 +10,7 @@ import org.iq.exception.DbException;
 import org.iq.ums.dao.UmsUserRoleMapDao;
 import org.iq.ums.vo.UmsUserRoleMap;
 
-public class UmsUserRoleMapDaoImpl extends BaseDaoImpl implements
+public class UmsUserRoleMapDaoImpl extends BaseDaoImpl<UmsUserRoleMap> implements
 		UmsUserRoleMapDao {
 
 	/**
@@ -69,12 +69,6 @@ public class UmsUserRoleMapDaoImpl extends BaseDaoImpl implements
 	}
 
 	@Override
-	public int delete(UmsUserRoleMap object) throws DbException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public UmsUserRoleMap getSingleRow(DataSet dataSet, int rowNum) {
 		UmsUserRoleMap umsUserRoleMap = new UmsUserRoleMap();
 
@@ -82,5 +76,17 @@ public class UmsUserRoleMapDaoImpl extends BaseDaoImpl implements
 		umsUserRoleMap.setRoleId(dataSet.getIntValue(rowNum, "ROLE_ID"));
 		
 		return umsUserRoleMap;
+	}
+
+	@Override
+	public int softDelete(UmsUserRoleMap t) throws DbException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int hardDelete(UmsUserRoleMap t) throws DbException {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

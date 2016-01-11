@@ -1,6 +1,0 @@
-public class CLASS {
-
-	public String generate(Form form, Properties cssProps) {
-	
-	}
-}

@@ -27,28 +27,25 @@ public class GetRoleService extends BaseService {
 	public void execute(HashMap<String, Object> input) throws ServiceException {
 		LocalLogger.logMethodStart();
 
-		int roleId = Integer.valueOf(StringUtil.getStringValue(input
-				.get(RoleKeys.ROLE_ID_KEY)));
-		
+		int roleId = Integer.valueOf(StringUtil.getStringValue(input.get(RoleKeys.ROLE_ID_KEY)));
+
 		int currUserRole = umsSession.getRoleId();
 
 		try {
-			resultAttributes.put(RoleKeys.ROLE_KEY,
-					new UmsRoleHelper().getRoleByRoleId(roleId));
-			
+			resultAttributes.put(RoleKeys.ROLE_KEY, new UmsRoleHelper().getRoleByRoleId(roleId));
+
 			List<UmsOption> options = null;
-			
+
 			if (currUserRole == RoleKeys.SUPER_ADMIN_ROLE_ID) {
 				options = new UmsOptionHelper().getAllOptions();
 			} else {
 				options = new UmsOptionHelper().getAppOptions();
-			}		
+			}
 
-//			List<UmsOption> options = new UmsOptionHelper().getAllOptions();
+			// List<UmsOption> options = new UmsOptionHelper().getAllOptions();
 
 			UmsRoleHelper umsRoleHelper = new UmsRoleHelper();
-			Map<Integer, Boolean> optionsMap = umsRoleHelper
-					.getOptionsMap(roleId);
+			Map<Integer, Boolean> optionsMap = umsRoleHelper.getOptionsMap(roleId);
 
 			if (options != null && optionsMap != null) {
 				for (UmsOption thisParentOption : options) {
@@ -67,7 +64,7 @@ public class GetRoleService extends BaseService {
 					}
 				}
 			}
-			
+
 			resultAttributes.put(OptionKeys.OPTIONS_LIST_KEY, options);
 		} catch (BusinessException e) {
 			throw new ServiceException(e);

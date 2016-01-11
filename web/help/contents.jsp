@@ -1,23 +1,4 @@
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>OMS::iquesters</title>
-<%@include file="/__sys/cmn/styles.jsp"%>
-<%@include file="/__sys/cmn/scripts.jsp"%>
-</head>
-<body>
-	<%
-		String header = "Help Contents";
-	%>
-	<div class="wrapper">
-		<%@include file="/__sys/cmn/header.jsp"%>
-		<%@include file="/__sys/cmn/menu.jsp"%>
-
-		<div class="bodycontent">
-			<div class="toolboxarea">
-				<%@include file="/__sys/cmn/toolbox.jsp"%>
-			</div>
-			<div class="workarea">
+<%@include file="../cmn/head.jsp"%>
 				<div class="form-container">
 					<form method="post"
 						action="${pageContext.request.contextPath}/adapter">
@@ -40,9 +21,4 @@
 						<div class="form-actions"></div>
 					</form>
 				</div>
-			</div>
-		</div>
-		<%@include file="/__sys/cmn/footer.jsp"%>
-	</div>
-</body>
-</html>
+<%@include file="../cmn/tail.jsp"%>
