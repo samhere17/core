@@ -49,57 +49,59 @@
 
 		<delete dir="${dist.dir}" />
 
-		<mkdir dir="${dist.dir}" />
-		<mkdir dir="${dist.dir}/war" />
+		<mkdir dir="${dist.dir}/dist/conf" />
+		<mkdir dir="${dist.dir}/dist/lib" />
+		<mkdir dir="${dist.dir}/dist/jar" />
+		<mkdir dir="${dist.dir}/dist/sql" />
+		<mkdir dir="${dist.dir}/dist/src" />
+		<mkdir dir="${dist.dir}/dist/setup" />
+		<mkdir dir="${dist.dir}/dist/war" />
 		
-		<mkdir dir="${dist.dir}/conf" />
-		<mkdir dir="${dist.dir}/lib" />
-		<mkdir dir="${dist.dir}/jar" />
-		<mkdir dir="${dist.dir}/sql" />
-		<mkdir dir="${dist.dir}/src" />
-		<mkdir dir="${dist.dir}/setup" />
-		
+		<!-- The ${dist.dir}/temp dir will be used to build the jars and war -->
 		<mkdir dir="${dist.dir}/temp/bin" />
-		<mkdir dir="${dist.dir}/temp/lib" />
+		<!-- <mkdir dir="${dist.dir}/temp/lib" /> -->
 
 
-		<!-- Copying required supporting libraries to ${dist.dir}/lib and ${dist.dir}/temp/lib -->
+		<!-- Copying required supporting libraries to ${dist.dir}/dist/lib and ${dist.dir}/temp/lib -->
 		<antcall target="copy.libraries"></antcall>
 
-		<!-- Building core jar to ${dist.dir}/jar and ${dist.dir}/temp/lib -->
+		<!-- Compiling all java files to ${dist.dir}/temp/bin -->
+		<antcall target="compile.java.files"></antcall>
+
+		<!-- Building core jar to ${dist.dir}/dist/jar and ${dist.dir}/temp/lib -->
 		<antcall target="build.core.jar"></antcall>
 
-		<!-- Building core services jar to ${dist.dir}/jar and ${dist.dir}/temp/lib -->
+		<!-- Building core services jar ${dist.dir}/temp/lib -->
 		<antcall target="build.core.services.jar"></antcall>
 
-		<!-- Copying core conf files to ${dist.dir}/conf -->
+		<!-- Copying core conf files to ${dist.dir}/dist/conf -->
 		<antcall target="copy.config.props"></antcall>
 
 		<!-- Building core conf jar to ${dist.dir}/temp/lib -->
 		<antcall target="build.core.conf.jar"></antcall>
 
-		<!-- Building core war to ${dist.dir}/war -->
+		<!-- Building core war to ${dist.dir}/dist/war -->
 		<antcall target="build.core.war"></antcall>
 		
-		<!-- Copying db scripts (if any) to ${dist.dir}/db -->
+		<!-- Copying db scripts (if any) to ${dist.dir}/dist/sql -->
 		<antcall target="copy.db.scripts"></antcall>
 
-		<!-- Copying third party setup files to ${dist.dir}/setup -->
+		<!-- Copying third party setup files to ${dist.dir}/dist/setup -->
 		<antcall target="copy.setupfiles"></antcall>
 
-		<!-- Building src zip to ${dist.dir}/src -->
+		<!-- Building src zip to ${dist.dir}/dist/src -->
 		<antcall target="build.src.zip"></antcall>
 		
-		<!-- Copying readme.txt to ${dist.dir} -->
+		<!-- Copying readme.txt to ${dist.dir}/dist -->
 		<antcall target="copy.readme.txt"></antcall>
 		
-		<!-- Copying license to ${dist.dir} -->
+		<!-- Copying license to ${dist.dir}/dist -->
 		<antcall target="copy.license"></antcall>
 		
 		<!-- Deleting ${dist.dir}/temp -->
 		<antcall target="delete.temp.dir"></antcall>
 		
-		<!-- Zipping ${dist.dir} -->
+		<!-- Zipping ${dist.dir}/dist -->
 		<antcall target="zip.dist"></antcall>
 
 		<!--FOR DEV-->
@@ -108,7 +110,7 @@
 
 	</target>
 	
-	<!-- Copying required supporting libraries to ${dist.dir}/lib and ${dist.dir}/temp/lib -->
+	<!-- Copying required supporting libraries to ${dist.dir}/dist/lib and ${dist.dir}/temp/lib -->
 	<target name="copy.libraries">
 		<!-- Preparing required supporting libraries list -->
 		<fileset id="requiredLibraries" dir="${lib.dir}">
@@ -146,30 +148,26 @@
 			<include name="jstl-1.2.jar"/>
 		</fileset>
 
-		<!-- Copying required supporting libraries to ${dist.dir}/lib -->
-		<echo message="Copying required supporting libraries to ${dist.dir}/lib"/>
-		<copy todir="${dist.dir}/lib" verbose="true">
+		<!-- Copying required supporting libraries to ${dist.dir}/dist/lib -->
+		<echo message="Copying required supporting libraries to ${dist.dir}/dist/lib"/>
+		<copy todir="${dist.dir}/dist/lib" verbose="true">
 			<fileset refid="requiredLibraries"/>
 		</copy>
-		
-		<!-- Copying required supporting libraries to ${dist.dir}/temp/lib -->
+
+		<!-- Copying required supporting libraries to ${dist.dir}/temp/lib; to be used for building war -->
 		<echo message="Copying required supporting libraries to ${dist.dir}/temp/lib"/>
 		<copy todir="${dist.dir}/temp/lib" verbose="true">
 			<fileset refid="requiredLibraries"/>
 		</copy>
 	</target>
 	
-	
-	<!-- Building core jar to ${dist.dir}/jar and ${dist.dir}/temp/lib -->
-	<target name="build.core.jar">
-        <!-- Preparing classpath reference variable based on jars present in ${dist.dir}/lib -->
-		<echo message="Preparing classpath reference variable based on jars present in ${dist.dir}/lib"/>
+	<!-- Compiling all java files to ${dist.dir}/dist/bin -->
+	<target name="compile.java.files">
+        <!-- Preparing classpath reference variable based on jars present in ${dist.dir}/dist/lib -->
+		<echo message="Preparing classpath reference variable based on jars present in ${dist.dir}/dist/lib"/>
 	    <path id="project.classpath">
-	        <fileset dir="${dist.dir}/lib">
+	        <fileset dir="${dist.dir}/dist/lib">
 	        	<include name="**/*.jar"/>
-	        </fileset>
-			<fileset dir="${lib.dir}">
-				<include name="javax.servlet-api-3.0.1.jar"/>
 	        </fileset>
 	    </path>
 
@@ -191,9 +189,12 @@
 				<exclude name="**/*.java"/>
 			</fileset>
 		</copy>
-		
-		<!-- Building the core jar and placing it in ${dist.dir}/jar -->
-		<jar destfile="${dist.dir}/jar/${proj.name}-${build.version}.jar" basedir="${dist.dir}/temp/bin">
+	</target>
+	
+	<!-- Building core jar to ${dist.dir}/dist/jar and ${dist.dir}/temp/lib -->
+	<target name="build.core.jar">
+		<!-- Building the core jar and placing it in ${dist.dir}/dist/jar -->
+		<jar destfile="${dist.dir}/dist/jar/${proj.name}-${build.version}.jar" basedir="${dist.dir}/temp/bin">
 			<include name="**" />
 			<exclude name="org/iq/service/**" />
 			<exclude name="org/iq/ums/service/**" />
@@ -208,16 +209,16 @@
 
 		<!-- Copying the core jar to ${dist.dir}/temp/lib -->
 		<copy todir="${dist.dir}/temp/lib" verbose="true">
-			<fileset dir="${dist.dir}/jar">
+			<fileset dir="${dist.dir}/dist/jar">
 				<include name="${proj.name}-${build.version}.jar"/>
 			</fileset>
 		</copy>
 	</target>
 
-	<!-- Building core jar to ${dist.dir}/jar and ${dist.dir}/temp/lib -->
+	<!-- Building core jar to ${dist.dir}/temp/lib -->
 	<target name="build.core.services.jar">
-		<!-- Building the core services jar and placing it in ${dist.dir}/jar -->
-		<jar destfile="${dist.dir}/jar/${proj.name}-${build.version}-services.jar" basedir="${dist.dir}/temp/bin">
+		<!-- Building the core services jar and placing it in ${dist.dir}/dist/jar -->
+		<jar destfile="${dist.dir}/temp/lib/${proj.name}-${build.version}-services.jar" basedir="${dist.dir}/temp/bin">
 			<include name="org/iq/service/**" />
 			<include name="org/iq/ums/service/**" />
 			<manifest>
@@ -228,20 +229,13 @@
 				<attribute name="Implementation-Date" value="${build.date} ${build.time}" />
 			</manifest>
 		</jar>
-
-		<!-- Copying the core jar to ${dist.dir}/temp/lib -->
-		<copy todir="${dist.dir}/temp/lib" verbose="true">
-			<fileset dir="${dist.dir}/jar">
-				<include name="${proj.name}-${build.version}-services.jar"/>
-			</fileset>
-		</copy>
 	</target>
 
 	<!--Copying conf files-->
 	<target name="copy.config.props">
-		<!-- Copying config properties files present in ${res.dir} project to ${dist.dir}/conf -->
-		<echo message="Copying config properties files present in ${res.dir} project to ${dist.dir}/conf" />
-		<copy todir="${dist.dir}" verbose="true">
+		<!-- Copying config properties files present in ${res.dir} project to ${dist.dir}/dist/conf -->
+		<echo message="Copying config properties files present in ${res.dir} project to ${dist.dir}/dist/conf" />
+		<copy todir="${dist.dir}/dist" verbose="true">
 			<fileset dir="${res.dir}">
 				<include name="**/*.properties"/>
 				<type type="file"/>
@@ -267,7 +261,7 @@
 	<!--Building core war-->
 	<target name="build.core.war">
 		<!-- Building the war -->
-		<war warfile="${dist.dir}/war/${proj.name}-${build.version}.war" webxml="${server.config.dir}/web.xml">
+		<war warfile="${dist.dir}/dist/war/${proj.name}-${build.version}.war" webxml="${server.config.dir}/web.xml">
 			<lib dir="${dist.dir}/temp/lib">
 				<include name="**/*.jar" />
 				<exclude name="javax.servlet_1.0.1.0_2-5.jar"/>
@@ -297,11 +291,11 @@
 		</war>
 	</target>
 	
-	<!--Copying db scripts (if any) to ${dist.dir}/db-->
+	<!-- Copying db scripts (if any) to ${dist.dir}/dist/sql -->
 	<target name="copy.db.scripts" depends="db.scripts.dir.check, do.copy.db.scripts, dont.copy.db.scripts"></target>
 	
 	<target name="do.copy.db.scripts" depends="db.scripts.dir.check" if="db.scripts.dir.exists">
-		<copy todir="${dist.dir}/sql" verbose="true">
+		<copy todir="${dist.dir}/dist/sql" verbose="true">
 			<fileset dir="${sql.dir}/${build.version}">
 				<include name="**/*.sql"/>
 			</fileset>
@@ -310,7 +304,7 @@
 	
 	<target name="dont.copy.db.scripts" depends="db.scripts.dir.check" unless="db.scripts.dir.exists">
 		<echo>${sql.dir}/${build.version} missing</echo>
-		<echo file="${dist.dir}/sql/no-db-changes.txt">Version ${build.version} do not have any database changes.</echo>
+		<echo file="${dist.dir}/dist/sql/no-db-changes.txt">Version ${build.version} do not have any database changes.</echo>
 	</target>
 	
 	<target name="db.scripts.dir.check">
@@ -321,9 +315,9 @@
 	
 	<!-- Copying setup files -->
 	<target name="copy.setupfiles">
-		<!-- Copying setup files present in ${proj.name} project to ${dist.dir}/setup -->
-		<echo message="Copying conf files present in ${proj.name} project to ${dist.dir}/setup" />
-		<copy todir="${dist.dir}/setup" verbose="true">
+		<!-- Copying setup files present in ${proj.name} project to ${dist.dir}/dist/setup -->
+		<echo message="Copying conf files present in ${proj.name} project to ${dist.dir}/dist/setup" />
+		<copy todir="${dist.dir}/dist/setup" verbose="true">
 			<fileset dir="${setup.dir}">
 				<include name="**/*"/>
 				<type type="file"/>
@@ -332,13 +326,13 @@
 	</target>
 
 	<target name="build.src.zip">
-		<zip destfile="${dist.dir}/src/${proj.name}-${build.version}_src.zip" basedir="${src.dir}">
+		<zip destfile="${dist.dir}/dist/src/${proj.name}-${build.version}_src.zip" basedir="${src.dir}">
 			<include name="**" />
 		</zip>
 	</target>
 	
 	<target name="copy.readme.txt">
-		<copy todir="${dist.dir}" verbose="true">
+		<copy todir="${dist.dir}/dist" verbose="true">
 			<fileset dir=".">
 				<include name="readme.txt"/>
 			</fileset>
@@ -346,7 +340,7 @@
 	</target>
 	
 	<target name="copy.license">
-		<copy todir="${dist.dir}" verbose="true">
+		<copy todir="${dist.dir}/dist" verbose="true">
 			<fileset dir="..">
 				<include name="LICENSE"/>
 			</fileset>
@@ -358,7 +352,7 @@
 	</target>
 	
 	<target name="zip.dist">
-		<zip destfile="${dist.dir}/${proj.name}-release-${build.version}.zip" basedir="${dist.dir}"></zip>
+		<zip destfile="${dist.dir}/${proj.name}-release-${build.version}.zip" basedir="${dist.dir}/dist"></zip>
 	</target>
 
 	<!--FOR DEV-->
