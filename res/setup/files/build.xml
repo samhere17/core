@@ -87,21 +87,42 @@
 		<mkdir dir="${dist.dir}/${proj.name}/temp/lib" />
 		<mkdir dir="${dist.dir}/${proj.name}/temp/conf" /> -->
 
+
+
 		<!-- Copying required supporting libraries to ${dist.dir}/${proj.name}/temp/lib -->
 		<antcall target="copy.libraries" />
 
 		<!-- Compiling app classes to ${dist.dir}/${proj.name}/temp/bin -->
-		<antcall target="compile.classes" />
+		<antcall target="compile.java.files" />
+
+		<!-- Building app jar to ${dist.dir}/${proj.name}/temp/lib -->
+		<antcall target="build.app.jar" />
+
+		<!-- Building app services jar ${dist.dir}/${proj.name}/temp/lib -->
+		<antcall target="build.app.services.jar" />
 
 		<!-- Building app conf jar to ${dist.dir}/${proj.name}/temp/lib -->
-		<antcall target="build.conf.jar" />
+		<antcall target="build.app.conf.jar" />
 
+		<!-- Copying app web content to ${dist.dir}/${proj.name}/temp/web -->
+		<antcall target="copy.app.web.content" />
+		
+		<!-- ADDING CONTENT FROM THE CORE WAR -->
+		
+		<!-- Extracting core war contents to ${dist.dir}/${proj.name}/temp/war-contents -->
+		<antcall target="extract.core.war" />
+		
+		<!-- Copying core lib content to ${dist.dir}/${proj.name}/temp/lib -->
+		<antcall target="copy.core.lib.content" />
+		
+		<!-- Copying core web content to ${dist.dir}/${proj.name}/temp/web -->
+		<antcall target="copy.core.web.content" />
+		
 		<!-- Building app war to ${dist.dir}/${proj.name}/war -->
 		<antcall target="build.app.war" />
 
-		<!-- Copying db scripts (if any) to ${dist.dir}/${proj.name}/db -->
-		<!-- <antcall target="copy.db.scripts">
-		</antcall> -->
+		<!-- Copying db scripts (if any) to ${dist.dir}/${proj.name}/sql -->
+		<antcall target="copy.db.scripts"/>
 
 		<!-- Copying readme.txt to ${dist.dir}/${proj.name} -->
 		<!-- <antcall target="copy.readme.txt">
@@ -114,7 +135,7 @@
 		<!-- <delete dir="${dist.dir}/${proj.name}/temp" /> -->
 
 		<!--FOR DEV-->
-		<antcall target="dev.copy.war" />
+		<!-- <antcall target="dev.copy.war" /> -->
 		<!--FOR DEV-->
 
 	</target>
@@ -131,7 +152,7 @@
 	</target>
 
 	<!-- Compiling app classes to ${dist.dir}/${proj.name}/temp/bin -->
-	<target name="compile.classes">
+	<target name="compile.java.files">
 		<!-- Preparing classpath reference variable based on jars present in ${dist.dir}/${proj.name}/temp/lib -->
 		<echo message="Preparing classpath reference variable based on jars present in ${dist.dir}/${proj.name}/temp/lib" />
 		<path id="project.classpath">
@@ -162,20 +183,51 @@
 		</copy>
 	</target>
 
+	<!-- Building app jar to ${dist.dir}/${proj.name}/temp/lib -->
+	<target name="build.app.jar">
+		<!-- Building the app jar and placing it in ${dist.dir}/${proj.name}/temp/lib -->
+		<jar destfile="${dist.dir}/${proj.name}/temp/lib/${proj.name}-${build.version}.jar" basedir="${dist.dir}/${proj.name}/temp/bin">
+			<include name="**" />
+			<exclude name="com/iq/ams/service/**" />
+			<manifest>
+				<attribute name="Implementation-Title" value="${proj.name}-${build.version}.jar" />
+				<attribute name="Implementation-Vendor" value="${comp.name}" />
+				<attribute name="Implementation-Version" value="${build.version}" />
+				<attribute name="Development-Version" value="${build.dev.version}" />
+				<attribute name="Implementation-Date" value="${build.date} ${build.time}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<!-- Building app services jar ${dist.dir}/${proj.name}/temp/lib -->
+	<target name="build.app.services.jar">
+		<!-- Building the app services jar and placing it in ${dist.dir}/${proj.name}/temp/lib -->
+		<jar destfile="${dist.dir}/${proj.name}/temp/lib/${proj.name}-${build.version}-services.jar" basedir="${dist.dir}/${proj.name}/temp/bin">
+			<include name="com/iq/ams/service/**" />
+			<manifest>
+				<attribute name="Implementation-Title" value="${proj.name}-${build.version}-services.jar" />
+				<attribute name="Implementation-Vendor" value="${comp.name}" />
+				<attribute name="Implementation-Version" value="${build.version}" />
+				<attribute name="Development-Version" value="${build.dev.version}" />
+				<attribute name="Implementation-Date" value="${build.date} ${build.time}" />
+			</manifest>
+		</jar>
+	</target>
+	
 	<!-- Building app conf jar to ${dist.dir}/${proj.name}/temp/lib -->
-	<target name="build.conf.jar">
+	<target name="build.app.conf.jar">
 		<!-- Copying conf files present in ${proj.name} project to ${dist.dir}/${proj.name}/temp/conf -->
 		<echo message="Copying conf files present in ${proj.name} project to ${dist.dir}/${proj.name}/temp/conf" />
 		<copy todir="${dist.dir}/${proj.name}/temp/conf" overwrite="true" verbose="true">
 			<fileset dir="${res.dir}">
-				<include name="**/*.conf" />
+				<include name="**/*.properties" />
 				<type type="file" />
 			</fileset>
 		</copy>
 
 		<!-- Building the jar -->
 		<jar destfile="${dist.dir}/${proj.name}/temp/lib/${proj.name}-${build.version}-conf.jar" basedir="${dist.dir}/${proj.name}/temp/conf">
-			<include name="**/*.conf" />
+			<include name="**/*.properties" />
 			<manifest>
 				<attribute name="Implementation-Title" value="${proj.name}-${build.version}-conf.jar" />
 				<attribute name="Implementation-Vendor" value="${comp.name}" />
@@ -186,33 +238,95 @@
 		</jar>
 	</target>
 
+	<!-- Copying app web content to ${dist.dir}/${proj.name}/temp/web -->
+	<target name="copy.app.web.content">
+		<!-- Copying app web content to ${dist.dir}/${proj.name}/temp/web -->
+		<echo message="Copying app web content to ${dist.dir}/${proj.name}/temp/web" />
+		<copy todir="${dist.dir}/${proj.name}/temp/web" verbose="true">
+			<fileset dir="${web.dir}">
+				<include name="**/*.html" />
+				<include name="**/*.jsp" />
+				<include name="**/*.css" />
+				<include name="**/*.js" />
+				<include name="**/*.png" />
+				<include name="**/*.jpg" />
+				<include name="**/*.gif" />
+				<include name="**/*.eot" />
+				<include name="**/*.svg" />
+				<include name="**/*.ttf" />
+				<include name="**/*.woff" />
+				<include name="**/*.woff2" />
+				<include name="**/*.otf" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- Extracting core war contents to ${dist.dir}/${proj.name}/temp/war-contents -->
+	<target name="extract.core.war">
+		<echo message="Extracting core war contents to ${dist.dir}/${proj.name}/temp/war-contents"/>
+		<unzip dest="${dist.dir}/${proj.name}/temp/war-contents" src="core-war/core-1.0.0.0.war">
+			<patternset>
+				<include name="**/**"/>
+			</patternset>
+		</unzip>
+	</target>
+
+	<!-- Copying core lib content to ${dist.dir}/${proj.name}/temp/lib -->
+	<target name="copy.core.lib.content">
+		<echo message="Copying core lib content to ${dist.dir}/${proj.name}/temp/lib" />
+		<copy todir="${dist.dir}/${proj.name}/temp/lib" verbose="true" overwrite="true">
+			<fileset dir="${dist.dir}/${proj.name}/temp/war-contents/WEB-INF/lib">
+				<exclude name="**/*-conf.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- Copying core web content to ${dist.dir}/${proj.name}/temp/web -->
+	<target name="copy.core.web.content">
+		<echo message="Copying core web content to ${dist.dir}/${proj.name}/temp/web" />
+		<copy todir="${dist.dir}/${proj.name}/temp/web" verbose="true" overwrite="true">
+			<fileset dir="${dist.dir}/${proj.name}/temp/war-contents">
+				<include name="**/*.html" />
+				<include name="**/*.jsp" />
+				<include name="**/*.css" />
+				<include name="**/*.js" />
+				<include name="**/*.png" />
+				<include name="**/*.jpg" />
+				<include name="**/*.gif" />
+				<include name="**/*.eot" />
+				<include name="**/*.svg" />
+				<include name="**/*.ttf" />
+				<include name="**/*.woff" />
+				<include name="**/*.woff2" />
+				<include name="**/*.otf" />
+			</fileset>
+		</copy>
+	</target>
+
+
 	<!-- Building app war to ${dist.dir}/${proj.name}/war -->
 	<target name="build.app.war">
-		<!-- Building the war -->
-		<war warfile="${dist.dir}/${proj.name}/war/${proj.name}-${build.version}.war" needxmlfile="false">
-			<classes dir="${dist.dir}/${proj.name}/temp/bin" />
+		<war warfile="${dist.dir}/${proj.name}/war/${proj.name}-${build.version}.war" webxml="${dist.dir}/${proj.name}/temp/war-contents/WEB-INF/web.xml">
 			<lib dir="${dist.dir}/${proj.name}/temp/lib">
 				<include name="**/*.jar" />
 			</lib>
-			<fileset dir="${web.dir}">
-				<include name="**" />
+			<fileset dir="${dist.dir}/${proj.name}/temp/web">
+				<include name="**/*.html" />
+				<include name="**/*.jsp" />
+				<include name="**/*.css" />
+				<include name="**/*.js" />
+				<include name="**/*.png" />
+				<include name="**/*.jpg" />
+				<include name="**/*.gif" />
+				<include name="**/*.eot" />
+				<include name="**/*.svg" />
+				<include name="**/*.ttf" />
+				<include name="**/*.woff" />
+				<include name="**/*.woff2" />
+				<include name="**/*.otf" />
 			</fileset>
 			<manifest>
 				<attribute name="Implementation-Title" value="${proj.name}-${build.version}.war" />
-				<attribute name="Implementation-Vendor" value="${comp.name}" />
-				<attribute name="Implementation-Version" value="${build.version}" />
-				<attribute name="Development-Version" value="${build.dev.version}" />
-				<attribute name="Implementation-Date" value="${build.date} ${build.time}" />
-			</manifest>
-		</war>
-		
-		<!-- Building the war -->
-		<war warfile="${dist.dir}/${proj.name}/war/${proj.name}-client-${build.version}.war" needxmlfile="false">
-			<fileset dir="${web.dir}">
-				<include name="**" />
-			</fileset>
-			<manifest>
-				<attribute name="Implementation-Title" value="${proj.name}-client-${build.version}.war" />
 				<attribute name="Implementation-Vendor" value="${comp.name}" />
 				<attribute name="Implementation-Version" value="${build.version}" />
 				<attribute name="Development-Version" value="${build.dev.version}" />
@@ -227,20 +341,20 @@
 
 	<target name="do.copy.db.scripts" depends="db.scripts.dir.check" if="db.scripts.dir.exists">
 		<copy todir="${dist.dir}/${proj.name}/db" verbose="true">
-			<fileset dir="${db.script.dir}/${build.version}">
+			<fileset dir="${sql.dir}/${build.version}">
 				<include name="**/*.sql" />
 			</fileset>
 		</copy>
 	</target>
 
 	<target name="dont.copy.db.scripts" depends="db.scripts.dir.check" unless="db.scripts.dir.exists">
-		<echo>${db.script.dir}/${build.version} missing</echo>
+		<echo>${sql.dir}/${build.version} missing</echo>
 		<echo file="${dist.dir}/${proj.name}/db/no-db-changes.txt">Version ${build.version} do not have any database changes.</echo>
 	</target>
 
 	<target name="db.scripts.dir.check">
 		<condition property="db.scripts.dir.exists">
-			<available file="${db.script.dir}/${build.version}" type="dir" />
+			<available file="${sql.dir}/${build.version}" type="dir" />
 		</condition>
 	</target>
 

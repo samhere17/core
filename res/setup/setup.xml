@@ -18,35 +18,58 @@
 
 		<echo message=" " />
 
-		<mkdir dir="../src" />
-		<!-- <mkdir dir="../lib" /> -->
+		<!-- Copying version.properties to org/iq/version package -->
+		<antcall target="copy.version.properties"/>
 
-		<!--unzip core release package -->
-		<!--<antcall target="unzip.setupfiles"></antcall>-->
+		<!-- Copying build scripts to project/build -->
+		<antcall target="copy.build.scripts"/>
 
-		<!-- Copying required supporting libraries to project /lib -->
-		<antcall target="copy.libraries">
-		</antcall>
+		<!-- Copying required supporting libraries to project/lib -->
+		<antcall target="copy.libraries"/>
 
-		<!--  Copying build scripts to project/build-scripts -->
-		<antcall target="copy.buildscripts">
-		</antcall>
+		<!-- Copying resources to project/res -->
+		<antcall target="copy.resources"/>
 
-		<!--  Copying artifacts to project/web -->
-		<antcall target="copy.artifacts">
-		</antcall>
+		<!-- Creating project/sql/0.0.0.0 -->
+		<antcall target="create.sql.dir"/>
+		
+		<!-- Copying artifacts to project/web -->
+		<antcall target="copy.web.artifacts"/>
 
-		<!--  Copying resources to project/res -->
-		<antcall target="copy.resources">
-		</antcall>
+		<!-- Copying .project and .classpath to project root -->
+		<antcall target="setup.project"/>
 
 	</target>
 
-	<target name="unzip.setupfiles">
-		<unzip src="${release.pkg.dir}/core-release-1.0.0.0.zip" dest="${release.pkg.dir}/temp" />
+	<!-- Copying version.properties to org/iq/version package -->
+	<target name="copy.version.properties">
+		<echo message="Copying version.properties to org/iq/version package" />
+		<copy todir="../src/org/iq/version" verbose="true">
+			<fileset dir="${release.pkg.dir}/setup/files">
+				<include name="version.properties" />
+			</fileset>
+		</copy>
 	</target>
 
-	<!-- Copying required supporting libraries to project /lib -->
+	<!-- Copying build scripts to ${proj.root}/build -->
+	<target name="copy.build.scripts">
+		<echo message="Copying build scripts to build folder of the project" />
+		<copy todir="../build" verbose="true">
+			<fileset dir="${release.pkg.dir}/setup/files">
+				<include name="build.properties" />
+				<include name="build.xml" />
+			</fileset>
+		</copy>
+		
+		<echo message="Copying the core war to build folder of the project" />
+		<copy todir="../build/core-war" verbose="true">
+			<fileset dir="${release.pkg.dir}/war">
+				<include name="*.war" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- Copying required supporting libraries to project/lib -->
 	<target name="copy.libraries">
 		<echo message="Copying required libraries to lib folder of the project" />
 		<copy todir="../lib" verbose="true">
@@ -61,47 +84,39 @@
 		</copy>
 	</target>
 
-	<!-- Copying required supporting libraries to ${proj.root}/lib -->
-	<target name="copy.buildscripts">
-		<!-- Copying required supporting libraries to ${proj.root}/lib -->
-		<echo message="Copying required supporting libraries to lib folder of the project" />
-		<copy todir="../build-scripts" verbose="true">
-			<fileset dir="${release.pkg.dir}/setup/files">
-				<!-- PUT JAR FILE ENTRIES THAT YOU INTEND TO USE FOR THIS PROJECT -->
-				<include name="build.properties" />
-				<include name="build.xml" />
+	<!-- Copying required resources to project/res -->
+	<target name="copy.resources">
+		<echo message="Copying required resources to res folder of the project" />
+		<copy todir="../res/conf" verbose="true">
+			<fileset dir="${release.pkg.dir}/conf">
+				<include name="**/**" />
 			</fileset>
 		</copy>
 	</target>
 
-	<!-- Copying artifacts to project -->
-	<target name="copy.artifacts">
+	<!-- Creating project/sql/0.0.0.0 -->
+	<target name="create.sql.dir">
+		<mkdir dir="../sql/0.0.0.0"/>
+	</target>
+	
+	<!-- Copying web artifacts to project/web -->
+	<target name="copy.web.artifacts">
 		<!-- Copying example index.html to project/web -->
 		<echo message="Copying example index.html to project/web" />
 		<copy todir="../web" verbose="true">
 			<fileset dir="${release.pkg.dir}/setup/files">
+				<present present="srconly" targetdir="../web" />
 				<include name="index.html" />
 			</fileset>
 		</copy>
-
-		<!-- Copying version.properties to org/iq/version package -->
-		<echo message="Copying version.properties to org/iq/version package" />
-		<copy todir="../src/org/iq/version" verbose="true">
-			<fileset dir="${release.pkg.dir}/setup/files">
-				<include name="version.properties" />
-			</fileset>
-		</copy>
 	</target>
-
-	<!-- Copying required resources to project/res  -->
-	<target name="copy.resources">
-		<!-- Copying required supporting libraries to ${proj.root}/lib -->
-		<echo message="Copying required supporting libraries to lib folder of the project" />
-		<copy todir="../res/conf" verbose="true">
-			<fileset dir="${release.pkg.dir}/conf">
-				<!-- PUT JAR FILE ENTRIES THAT YOU INTEND TO USE FOR THIS PROJECT -->
-				<include name="**/*.conf" />
-				<type type="file" />
+	
+	<!-- Copying .project and .classpath to project root -->
+	<target name="setup.project">
+		<copy todir=".." verbose="true" overwrite="true">
+			<fileset dir="${release.pkg.dir}/setup/files">
+				<include name=".classpath" />
+				<include name=".project" />
 			</fileset>
 		</copy>
 	</target>
