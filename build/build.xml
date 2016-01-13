@@ -196,7 +196,8 @@
 		<!-- Building the core jar and placing it in ${dist.dir}/dist/jar -->
 		<jar destfile="${dist.dir}/dist/jar/${proj.name}-${build.version}.jar" basedir="${dist.dir}/temp/bin">
 			<include name="**" />
-			<exclude name="org/iq/service/**" />
+			<exclude name="org/iq/service/cache/**" />
+			<exclude name="org/iq/service/system/**" />
 			<exclude name="org/iq/ums/service/**" />
 			<manifest>
 				<attribute name="Implementation-Title" value="${proj.name}-${build.version}.jar" />

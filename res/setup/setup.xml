@@ -19,22 +19,25 @@
 		<echo message=" " />
 
 		<!-- Copying version.properties to org/iq/version package -->
-		<antcall target="copy.version.properties"></antcall>
+		<antcall target="copy.version.properties"/>
 
 		<!-- Copying build scripts to project/build -->
-		<antcall target="copy.build.scripts"></antcall>
+		<antcall target="copy.build.scripts"/>
 
 		<!-- Copying required supporting libraries to project/lib -->
-		<antcall target="copy.libraries"></antcall>
+		<antcall target="copy.libraries"/>
 
 		<!-- Copying resources to project/res -->
-		<antcall target="copy.resources"></antcall>
+		<antcall target="copy.resources"/>
 
+		<!-- Creating project/sql/0.0.0.0 -->
+		<antcall target="create.sql.dir"/>
+		
 		<!-- Copying artifacts to project/web -->
-		<antcall target="copy.web.artifacts"></antcall>
+		<antcall target="copy.web.artifacts"/>
 
 		<!-- Copying .project and .classpath to project root -->
-		<antcall target="setup.project"></antcall>
+		<antcall target="setup.project"/>
 
 	</target>
 
@@ -91,17 +94,24 @@
 		</copy>
 	</target>
 
+	<!-- Creating project/sql/0.0.0.0 -->
+	<target name="create.sql.dir">
+		<mkdir dir="../sql/0.0.0.0"/>
+	</target>
+	
 	<!-- Copying web artifacts to project/web -->
 	<target name="copy.web.artifacts">
 		<!-- Copying example index.html to project/web -->
 		<echo message="Copying example index.html to project/web" />
 		<copy todir="../web" verbose="true">
 			<fileset dir="${release.pkg.dir}/setup/files">
+				<present present="srconly" targetdir="../web" />
 				<include name="index.html" />
 			</fileset>
 		</copy>
 	</target>
 	
+	<!-- Copying .project and .classpath to project root -->
 	<target name="setup.project">
 		<copy todir=".." verbose="true" overwrite="true">
 			<fileset dir="${release.pkg.dir}/setup/files">

@@ -65,13 +65,14 @@ final public class ServicesDefinitions {
 		try {
 			ClassLoader cl = ServicesDefinitions.class.getClassLoader();
 			URL[] jarURLs = ((URLClassLoader) cl).getURLs();
+
+			String coreServicesJarName = "core-" + Version.coreVersionNumber + "-services.jar";
+
+			// TODO Add application name as parameter. Commenting "ams-" as of now
+			String appServicesJarName = /*"ams-" + */Version.versionNumber + "-services.jar";
+
 			for (URL url : jarURLs) {
-				// System.out.println(url.getFile());
-
-				String servicesJarName = "ams-" + Version.versionNumber + "-services.jar";
-				// System.out.println(servicesJarName);
-
-				if (url.getFile().endsWith(servicesJarName)) {
+				if (url.getFile().endsWith(coreServicesJarName) || url.getFile().endsWith(appServicesJarName)) {
 					JarFile jarFile = new JarFile(URLDecoder.decode(url.getPath(), "UTF-8"));
 					Enumeration<JarEntry> allEntries = jarFile.entries();
 					while (allEntries.hasMoreElements()) {
