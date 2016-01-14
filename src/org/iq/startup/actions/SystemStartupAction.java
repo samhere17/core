@@ -30,7 +30,7 @@ public class SystemStartupAction extends StartupAction {
 	@Override
 	public void destroy() {
 		System.out.println("STOPING SYSTEM...");
-		// TODO Auto-generated method stub
+		// No destroy activities as of now
 
 		System.out.println("SYSTEM STOPPED SUCCESSFULLY");
 	}
