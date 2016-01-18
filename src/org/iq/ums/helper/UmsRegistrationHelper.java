@@ -3,7 +3,9 @@ package org.iq.ums.helper;
 import java.util.Date;
 
 import org.apache.commons.validator.routines.EmailValidator;
+import org.iq.config.UmsConfig;
 import org.iq.exception.BusinessException;
+import org.iq.exception.ConfigException;
 import org.iq.exception.DbException;
 import org.iq.helper.BaseHelper;
 import org.iq.ums.UmsConstants.Gender;
@@ -29,13 +31,13 @@ public class UmsRegistrationHelper extends BaseHelper {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -1097659036364398475L;
+	private static final long	serialVersionUID		= -1097659036364398475L;
 
-	private static final String RECAPTCHA_PRIVATE_KEY = "6LdqJ_oSAAAAAJlARbVfq4JxgZPvbHNROFxiM7Ui";
-	public static final String RECAPTCHA_PUBLIC_KEY = "6LdqJ_oSAAAAAAFxkVuPZAOOmSQ6kqo5zsIeV5FN";
+	private static final String	RECAPTCHA_PRIVATE_KEY	= "6LdqJ_oSAAAAAJlARbVfq4JxgZPvbHNROFxiM7Ui";
+	public static final String	RECAPTCHA_PUBLIC_KEY	= "6LdqJ_oSAAAAAAFxkVuPZAOOmSQ6kqo5zsIeV5FN";
 
-	private static final int USERNAME_MAX_LENGTH = 50;
-	private static final int EMAIL_MAX_LENGTH = 100;
+	private static final int	USERNAME_MAX_LENGTH		= 50;
+	private static final int	EMAIL_MAX_LENGTH		= 100;
 
 	/**
 	 * @throws BusinessException
@@ -55,23 +57,33 @@ public class UmsRegistrationHelper extends BaseHelper {
 
 		// if isRegistrationSuccess is true, it means no validation error
 		// occurred
-		if (umsRegistrationResult.isRegistrationSuccess()) {
+		if(umsRegistrationResult.isRegistrationSuccess()) {
 			UmsHelper umsHelper = new UmsHelper();
-			
+
 			UmsUser umsUser = umsHelper.insertUser(username, cpassword, UserType.APPLICATION_USER.getUerTypeValue(),
 					UserStatus.NEW.getUserStatusValue(), null, null);
-			
+
 			UmsUserDetails umsUserDetails = umsHelper.insertUserDetails(umsUser.getUserId(), firstname, lastname, null,
 					null, mobile, email, null, null, gender, birthday, null);
-			
-			
+
 			// TODO email and mobile verification
-//			umsHelper.insertUserRoleMapping(umsUser.getUserId(), 0);
 
 			// putting success parameters
 			umsRegistrationResult.setRegistrationSuccess(true);
 			umsRegistrationResult.setSuccessMessage("Registration is succesful. Welcome " + firstname);
 			umsRegistrationResult.setUmsUserDetails(umsUserDetails);
+
+			try {
+				UmsConfig umsConfig = new UmsConfig();
+
+				int roleId = umsConfig.getNewlyRegisteredDefaultRole();
+
+				if(roleId != 0) {
+					umsHelper.insertUserRoleMapping(umsUser.getUserId(), roleId);
+				}
+			} catch(ConfigException e) {
+				throw new BusinessException(e);
+			}
 
 		}
 
@@ -87,61 +99,61 @@ public class UmsRegistrationHelper extends BaseHelper {
 		umsRegistrationResult.setRegistrationSuccess(true);
 
 		String validationMessage = validateFirstname(firstname);
-		if (StringUtil.isEmpty(validationMessage) == false) {
+		if(StringUtil.isEmpty(validationMessage) == false) {
 			umsRegistrationResult.setRegistrationSuccess(false);
 			umsRegistrationResult.setFirstnameValidationError(validationMessage);
 		}
 
 		validationMessage = validateLastname(lastname);
-		if (StringUtil.isEmpty(validationMessage) == false) {
+		if(StringUtil.isEmpty(validationMessage) == false) {
 			umsRegistrationResult.setRegistrationSuccess(false);
 			umsRegistrationResult.setLastnameValidationError(validationMessage);
 		}
 
 		validationMessage = validateUsername(username);
-		if (StringUtil.isEmpty(validationMessage) == false) {
+		if(StringUtil.isEmpty(validationMessage) == false) {
 			umsRegistrationResult.setRegistrationSuccess(false);
 			umsRegistrationResult.setUsernameValidationError(validationMessage);
 		}
 
 		validationMessage = validatePassword(password);
-		if (StringUtil.isEmpty(validationMessage) == false) {
+		if(StringUtil.isEmpty(validationMessage) == false) {
 			umsRegistrationResult.setRegistrationSuccess(false);
 			umsRegistrationResult.setPasswordValidationError(validationMessage);
 		}
 
 		validationMessage = validateConfirmPassword(password, cpassword);
-		if (StringUtil.isEmpty(validationMessage) == false) {
+		if(StringUtil.isEmpty(validationMessage) == false) {
 			umsRegistrationResult.setRegistrationSuccess(false);
 			umsRegistrationResult.setConfirmPasswordValidationError(validationMessage);
 		}
 
 		validationMessage = validateDateOfBirth(birthday);
-		if (StringUtil.isEmpty(validationMessage) == false) {
+		if(StringUtil.isEmpty(validationMessage) == false) {
 			umsRegistrationResult.setRegistrationSuccess(false);
 			umsRegistrationResult.setDateOfBirthValidationError(validationMessage);
 		}
 
 		validationMessage = validateGender(gender);
-		if (StringUtil.isEmpty(validationMessage) == false) {
+		if(StringUtil.isEmpty(validationMessage) == false) {
 			umsRegistrationResult.setRegistrationSuccess(false);
 			umsRegistrationResult.setGenderValidationError(validationMessage);
 		}
 
 		validationMessage = validateEmail(email);
-		if (StringUtil.isEmpty(validationMessage) == false) {
+		if(StringUtil.isEmpty(validationMessage) == false) {
 			umsRegistrationResult.setRegistrationSuccess(false);
 			umsRegistrationResult.setEmailValidationError(validationMessage);
 		}
 
 		validationMessage = validatePhone(mobile);
-		if (StringUtil.isEmpty(validationMessage) == false) {
+		if(StringUtil.isEmpty(validationMessage) == false) {
 			umsRegistrationResult.setRegistrationSuccess(false);
 			umsRegistrationResult.setPhoneValidationError(validationMessage);
 		}
 
 		validationMessage = validateCaptcha(reCaptchaPrivateKey, remoteAddr, captchaChallenge, captchaResponse);
-		if (StringUtil.isEmpty(validationMessage) == false) {
+		if(StringUtil.isEmpty(validationMessage) == false) {
 			umsRegistrationResult.setRegistrationSuccess(false);
 			umsRegistrationResult.setCaptchaValidationError(validationMessage);
 		}
@@ -174,11 +186,11 @@ public class UmsRegistrationHelper extends BaseHelper {
 	private String validateUsername(String username) {
 		String validationMessage = "";
 
-		if (StringUtil.isEmpty(username)) {
+		if(StringUtil.isEmpty(username)) {
 			validationMessage = "Username is null or blank";
-		} else if (username.length() > USERNAME_MAX_LENGTH) {
+		} else if(username.length() > USERNAME_MAX_LENGTH) {
 			validationMessage = "Maximum " + USERNAME_MAX_LENGTH + " characters allowed";
-		} else if (isUsernameExists(username)) {
+		} else if(isUsernameExists(username)) {
 			// checking for existing user name user already exists
 			validationMessage = "Username not available";
 		}
@@ -191,7 +203,7 @@ public class UmsRegistrationHelper extends BaseHelper {
 		boolean ret = false;
 		try {
 			ret = umsUserDao.getUserByUsername(username) != null;
-		} catch (DbException e) {
+		} catch(DbException e) {
 			// swallow
 		}
 		return ret;
@@ -231,7 +243,7 @@ public class UmsRegistrationHelper extends BaseHelper {
 	 */
 	private String validateGender(int gender) {
 		String validationMessage = "";
-		if (gender > Gender.OTHER.getGenderValue()) {
+		if(gender > Gender.OTHER.getGenderValue()) {
 			validationMessage = "Not a valid gender";
 		}
 
@@ -245,13 +257,13 @@ public class UmsRegistrationHelper extends BaseHelper {
 	private String validateEmail(String email) {
 		String validationMessage = "";
 
-		if (StringUtil.isEmpty(email)) {
+		if(StringUtil.isEmpty(email)) {
 			validationMessage = "Email address is null or blank";
-		} else if (email.length() > EMAIL_MAX_LENGTH) {
+		} else if(email.length() > EMAIL_MAX_LENGTH) {
 			validationMessage = "Maximum " + EMAIL_MAX_LENGTH + " characters allowed";
-		} else if (isEmailValid(email) == false) {
+		} else if(isEmailValid(email) == false) {
 			validationMessage = "Not a valid email address";
-		} else if (isEmailExists(email)) {
+		} else if(isEmailExists(email)) {
 			// checking for existing email user details already exists
 			validationMessage = "Email already exists, try forgot password instead";
 		}
@@ -268,7 +280,7 @@ public class UmsRegistrationHelper extends BaseHelper {
 		boolean ret = false;
 		try {
 			ret = umsUserDetailsDao.getUserDetailsByEmail(email) != null;
-		} catch (DbException e) {
+		} catch(DbException e) {
 			// swallow
 		}
 		return ret;
@@ -295,22 +307,22 @@ public class UmsRegistrationHelper extends BaseHelper {
 
 		String validationMessage = "";
 
-		if (StringUtil.isEmpty(reCaptchaPrivateKey) || StringUtil.isEmpty(remoteAddr)
+		if(StringUtil.isEmpty(reCaptchaPrivateKey) || StringUtil.isEmpty(remoteAddr)
 				|| StringUtil.isEmpty(captchaChallenge) || StringUtil.isEmpty(captchaResponse)) {
 			validationMessage = "Insufficient captcha input";
 		}
 
 		// if validationMessage is still null, it means that inputs are correct
-		if (StringUtil.isEmpty(validationMessage)) {
+		if(StringUtil.isEmpty(validationMessage)) {
 			ReCaptchaValidator reCaptchaValidator = new ReCaptchaValidator(reCaptchaPrivateKey);
 			ReCaptchaResponse reCaptchaResponse = null;
 			ReCaptchaRequest reCaptchaRequest = new ReCaptchaRequest(remoteAddr, captchaChallenge, captchaResponse);
 			try {
 				reCaptchaResponse = reCaptchaValidator.validateReCaptcha(reCaptchaRequest);
-				if (reCaptchaResponse != null && reCaptchaResponse.isValid() == false) {
+				if(reCaptchaResponse != null && reCaptchaResponse.isValid() == false) {
 					validationMessage = reCaptchaResponse.getUserFriendlyErrMsg();
 				}
-			} catch (UmsException e) {
+			} catch(UmsException e) {
 				validationMessage = e.getMessage();
 			}
 		}

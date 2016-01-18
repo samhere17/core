@@ -42,8 +42,8 @@ public class UmsAuthenticationHelper extends BaseHelper {
 	private static final long serialVersionUID = 4558785891174003558L;
 
 	/**
-	 * @throws BusinessException 
-	 * @throws DbException 
+	 * @throws BusinessException
+	 * @throws DbException
 	 * 
 	 */
 	public UmsAuthenticationHelper() throws BusinessException {
@@ -60,47 +60,47 @@ public class UmsAuthenticationHelper extends BaseHelper {
 	 * @param actualAccessIP
 	 * @param userAgentString
 	 * @return UmsSession
-	 * @throws UmsException 
+	 * @throws UmsException
 	 */
-	public UmsSession authenticate(String username, String password,
-			String jSessionId, String accessIp, String accessPort,
-			String accessGateway, String actualAccessIP, String userAgentString) throws UmsException {
+	public UmsSession authenticate(String username, String password, String jSessionId, String accessIp,
+			String accessPort, String accessGateway, String actualAccessIP, String userAgentString)
+					throws UmsException {
 
 		UmsUser user = UmsContext.umsAnnexSecurity.authenticate(username, password.toCharArray());
 
 		UmsSession umsSession = new UmsSession();
-		if (user != null) {
+		if(user != null) {
 			UmsUserDetails userDetails = new UmsUserDetails();
 			UmsLoginDetails lastLoginDetails = new UmsLoginDetails();
 
 			try {
-				//Fetching user details
+				// Fetching user details
 				UmsUserDetailsDao umsUserDetailsDao = new UmsUserDetailsDaoImpl(dbSession);
 				userDetails = umsUserDetailsDao.getUserDetailsByUserId(user.getUserId());
-				
-				//Fetching user role mapping
+
+				// Fetching user role mapping
 				UmsUserRoleMapDao umsUserRoleMapDao = new UmsUserRoleMapDaoImpl(dbSession);
-				UmsUserRoleMap userRoleMap  = umsUserRoleMapDao.selectByUserId(user.getUserId());
-				
-				//Fetching last login details
+				UmsUserRoleMap userRoleMap = umsUserRoleMapDao.selectByUserId(user.getUserId());
+
+				// Fetching last login details
 				UmsLoginDetailsDao umsLoginDetailsDao = new UmsLoginDetailsDaoImpl(dbSession);
 				lastLoginDetails = umsLoginDetailsDao.getLastLoginDetailsByUserId(user.getUserId());
-				
+
 				String systemSessionId = UmsKeyGenerator.getRandomKey();
 				String nativeToken = UmsContext.umsAnnexSecurity.createNativeToken(username);
-				
-				//Preparing current session details
+
+				// Preparing current session details
 				UmsSessionDetails currSessionDetails = new UmsSessionDetails();
 				currSessionDetails.setUserId(user.getUserId());
 				currSessionDetails.setSystemSessionId(systemSessionId);
 				currSessionDetails.setNativeToken(nativeToken);
 				currSessionDetails.setSessionStatus(SessionStatus.VALID);
-				
-				//Inserting current session details
+
+				// Inserting current session details
 				UmsSessionDetailsDao umsSessionDetailsDao = new UmsSessionDetailsDaoImpl(dbSession);
 				umsSessionDetailsDao.insert(currSessionDetails);
 
-				//Preparing current login details
+				// Preparing current login details
 				UmsLoginDetails currLoginDetails = new UmsLoginDetails();
 				currLoginDetails.setUserId(user.getUserId());
 				currLoginDetails.setSystemSessionId(systemSessionId);
@@ -110,20 +110,20 @@ public class UmsAuthenticationHelper extends BaseHelper {
 				currLoginDetails.setAccessPort(accessPort);
 				currLoginDetails.setAccessGateway(accessGateway);
 				currLoginDetails.setActualAccessIP(actualAccessIP);
-				
+
 				UserAgent userAgent = new UserAgent(userAgentString);
 
 				currLoginDetails.setDeviceType(userAgent.getOperatingSystem().getDeviceType().getName());
 				currLoginDetails.setOperatingSystem(userAgent.getOperatingSystem().getName());
-				currLoginDetails.setOperatingSystemManufacturer(userAgent.getOperatingSystem().getManufacturer().getName());
+				currLoginDetails
+						.setOperatingSystemManufacturer(userAgent.getOperatingSystem().getManufacturer().getName());
 				currLoginDetails.setBrowserName(userAgent.getBrowser().getName());
 				currLoginDetails.setBrowserVersion(userAgent.getBrowserVersion().toString());
 				currLoginDetails.setBrowserManufacturer(userAgent.getBrowser().getManufacturer().getName());
 				currLoginDetails.setBrowserType(userAgent.getBrowser().getBrowserType().getName());
 				currLoginDetails.setBrowserRenderingEngine(userAgent.getBrowser().getRenderingEngine().getName());
 
-
-				//Inserting current login details
+				// Inserting current login details
 				umsLoginDetailsDao.insert(currLoginDetails);
 
 				umsSession.setAdditionalId(user.getAdditionalId());
@@ -137,25 +137,26 @@ public class UmsAuthenticationHelper extends BaseHelper {
 				umsSession.setUserDetails(userDetails);
 				umsSession.setUserId(userDetails.getUserId());
 				umsSession.setUsername(username);
-				
-				
-				if (cacheHelper.isRegionExists("UMS_SESSIONS") == false) {
+
+				umsSession.setUserStatus(user.getUserStatus());
+
+				if(cacheHelper.isRegionExists("UMS_SESSIONS") == false) {
 					cacheHelper.addRegion("UMS_SESSIONS", "Region to store user session details", true);
 				} else {
 					LocalLogger.logDebug("UMS_SESSIONS" + " Region Exists.");
 				}
 
 				cacheHelper.addElement("UMS_SESSIONS", jSessionId, umsSession);
-				
-			} catch (DbException e) {
+
+			} catch(DbException e) {
 				LocalLogger.logSevere(e);
-			} catch (CacheException e) {
+			} catch(CacheException e) {
 				LocalLogger.logSevere(e);
 			}
 		} else {
 			umsSession.setSessionValid(false);
 		}
-		
+
 		return umsSession;
 	}
 

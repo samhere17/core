@@ -1,5 +1,6 @@
 package org.iq.ums.vo;
 
+import org.iq.ums.UmsConstants.UserStatus;
 import org.iq.util.StringUtil;
 import org.iq.valueobject.BaseVO;
 
@@ -11,21 +12,22 @@ public class UmsSession extends BaseVO {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -3397149819284537051L;
-	
-	private int userId;
-	private String userAccessKey;
-	private String username;
-	private String additionalId;
-	private int roleId;
-	private boolean sessionValid;
-	private String systemSessionId;
-	private String nativeToken;
-	private UmsUserDetails userDetails;
-	private UmsLoginDetails lastLoginDetails;
-	private String invalidMessage;
+	private static final long	serialVersionUID	= -3397149819284537051L;
 
-	
+	private int					userId;
+	private String				userAccessKey;
+	private String				username;
+	private String				additionalId;
+	private int					roleId;
+	private boolean				sessionValid;
+	private String				systemSessionId;
+	private String				nativeToken;
+	private UmsUserDetails		userDetails;
+	private UmsLoginDetails		lastLoginDetails;
+	private String				invalidMessage;
+
+	private UserStatus			userStatus;
+
 	/**
 	 * @return the userId
 	 */
@@ -34,7 +36,8 @@ public class UmsSession extends BaseVO {
 	}
 
 	/**
-	 * @param userId the userId to set
+	 * @param userId
+	 *            the userId to set
 	 */
 	public void setUserId(int userId) {
 		this.userId = userId;
@@ -48,7 +51,8 @@ public class UmsSession extends BaseVO {
 	}
 
 	/**
-	 * @param username the username to set
+	 * @param username
+	 *            the username to set
 	 */
 	public void setUsername(String username) {
 		this.username = username;
@@ -62,7 +66,8 @@ public class UmsSession extends BaseVO {
 	}
 
 	/**
-	 * @param additionalId the additionalId to set
+	 * @param additionalId
+	 *            the additionalId to set
 	 */
 	public void setAdditionalId(String additionalId) {
 		this.additionalId = additionalId;
@@ -76,7 +81,8 @@ public class UmsSession extends BaseVO {
 	}
 
 	/**
-	 * @param roleId the roleId to set
+	 * @param roleId
+	 *            the roleId to set
 	 */
 	public void setRoleId(int roleId) {
 		this.roleId = roleId;
@@ -165,7 +171,8 @@ public class UmsSession extends BaseVO {
 	}
 
 	/**
-	 * @param userDetails the userDetails to set
+	 * @param userDetails
+	 *            the userDetails to set
 	 */
 	public void setUserDetails(UmsUserDetails userDetails) {
 		this.userDetails = userDetails;
@@ -179,12 +186,21 @@ public class UmsSession extends BaseVO {
 	}
 
 	/**
-	 * @param lastLoginDetails the lastLoginDetails to set
+	 * @param lastLoginDetails
+	 *            the lastLoginDetails to set
 	 */
 	public void setLastLoginDetails(UmsLoginDetails lastLoginDetails) {
 		this.lastLoginDetails = lastLoginDetails;
 	}
-	
+
+	public UserStatus getUserStatus() {
+		return userStatus;
+	}
+
+	public void setUserStatus(UserStatus userStatus) {
+		this.userStatus = userStatus;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -215,7 +231,8 @@ public class UmsSession extends BaseVO {
 		buffer.append(StringUtil.lineSeparator);
 		buffer.append("    userDetails = ").append(userDetails != null ? userDetails.toString() : "null");
 		buffer.append(StringUtil.lineSeparator);
-		buffer.append("    lastLoginDetails = ").append(lastLoginDetails != null ? lastLoginDetails.toString() : "null");
+		buffer.append("    lastLoginDetails = ")
+				.append(lastLoginDetails != null ? lastLoginDetails.toString() : "null");
 		buffer.append(StringUtil.lineSeparator);
 		buffer.append("]");
 		return buffer.toString();

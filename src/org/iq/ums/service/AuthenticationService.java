@@ -11,6 +11,7 @@ import org.iq.logger.LocalLogger;
 import org.iq.service.BaseService;
 import org.iq.service.Service;
 import org.iq.ums.UmsConstants;
+import org.iq.ums.UmsConstants.UserStatus;
 import org.iq.ums.UmsContext;
 import org.iq.ums.exception.UmsException;
 import org.iq.ums.helper.UmsAuthenticationHelper;
@@ -21,22 +22,22 @@ import org.iq.util.StringUtil;
  * @author Sam
  * 
  */
-@Service(name="Authentication")
+@Service(name = "Authentication")
 public class AuthenticationService extends BaseService {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -4938218481685588931L;
+	private static final long	serialVersionUID		= -4938218481685588931L;
 
-	private static final String USERNAME_KEY = "username";
-	private static final String PASSWORD_KEY = "password";
-	private static final String J_SESSION_ID_KEY = "jSessionId";
-	private static final String ACCESS_IP_KEY = "accessIP";
-	private static final String ACCESS_PORT_KEY = "accessPort";
-	private static final String ACCESS_GATEWAY_KEY = "accessGateway";
-	private static final String ACTUAL_ACCESS_IP_KEY = "actualAccessIP";
-	private static final String USER_AGENT_KEY = "userAgent";
+	private static final String	USERNAME_KEY			= "username";
+	private static final String	PASSWORD_KEY			= "password";
+	private static final String	J_SESSION_ID_KEY		= "jSessionId";
+	private static final String	ACCESS_IP_KEY			= "accessIP";
+	private static final String	ACCESS_PORT_KEY			= "accessPort";
+	private static final String	ACCESS_GATEWAY_KEY		= "accessGateway";
+	private static final String	ACTUAL_ACCESS_IP_KEY	= "actualAccessIP";
+	private static final String	USER_AGENT_KEY			= "userAgent";
 
 	/*
 	 * (non-Javadoc)
@@ -54,28 +55,44 @@ public class AuthenticationService extends BaseService {
 		String accessGateway = StringUtil.getStringValue(input.get(ACCESS_GATEWAY_KEY));
 		String actualAccessIP = StringUtil.getStringValue(input.get(ACTUAL_ACCESS_IP_KEY));
 		String userAgentString = StringUtil.getStringValue(input.get(USER_AGENT_KEY));
-		
-//		String successUrl = StringUtil.getStringValue(input.get(SUCCESS_URL_KEY));
-//		String errorUrl = StringUtil.getStringValue(input.get(ERROR_URL_KEY));
 
 		UmsSession umsSession = null;
 		try {
 			umsSession = new UmsAuthenticationHelper().authenticate(username, password, jSessionId, accessIp,
 					accessPort, accessGateway, actualAccessIP, userAgentString);
-		} catch (UmsException e) {
+		} catch(UmsException e) {
 			throw new ServiceException(e);
-		} catch (BusinessException e) {
+		} catch(BusinessException e) {
 			throw new ServiceException(e);
 		}
 
-//		System.out.println(umsSession);
 		LocalLogger.logDebug(umsSession);
 		resultAttributes.put(UmsConstants.UMS_SESSION_KEY, umsSession);
 
-		if (umsSession.isSessionValid()) {
-			redirectUrl = UmsContext.umsConfig.getLoginSuccessRedirectUrl();
-		} else {
-			redirectUrl = UmsContext.umsConfig.getLoginFailureRedirectUrl();
+		/* If login was successful */
+		if(umsSession.isSessionValid()) {
+			/* If it's a new user, redirect to the search community page */
+			if(umsSession.getUserStatus() == UserStatus.NEW) {
+				redirectUrl = UmsContext.umsConfig.getNewlyRegisteredLoginSuccessRedirectUrl();
+			}
+
+			/* If it's an existing user, redirect to the dashboard */
+			else {
+				redirectUrl = UmsContext.umsConfig.getExistingUserLoginSuccessRedirectUrl();
+			}
+		}
+
+		/* If login was unsuccessful */
+		else {
+			/* If it's a new user, redirect to the login page */
+			if(umsSession.getUserStatus() == UserStatus.NEW) {
+				redirectUrl = UmsContext.umsConfig.getNewlyRegisteredLoginFailureRedirectUrl();
+			}
+
+			/* If it's an existing user, redirect to the login page */
+			else {
+				redirectUrl = UmsContext.umsConfig.getExistingUserLoginFailureRedirectUrl();
+			}
 		}
 		LocalLogger.logMethodEnd();
 	}

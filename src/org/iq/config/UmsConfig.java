@@ -9,34 +9,32 @@ import org.iq.util.handlers.PropertiesHandler;
  * @author Sam
  */
 final public class UmsConfig extends BaseConfig {
+	private static final long	serialVersionUID	= -8595191746954249989L;
 
-	public String getRegisterSuccessRedirectUrl() {
-		return registerSuccessRedirectUrl;
-	}
+	private static final String	UMS_CONFIG_NAME		= "ums";
 
-	public String getRegisterFailureRedirectUrl() {
-		return registerFailureRedirectUrl;
-	}
+	private String				umsDbSessionClassName;
+	private String				umsDbHost;
+	private Short				umsDbPort;
+	private String				umsDbUser;
+	private String				umsDbPass;
+	private String				umsDbName;
+	private String				umsAnnexSecurityClass;
 
-	private static final long serialVersionUID = -8595191746954249989L;
+	private String				registerSuccessRedirectUrl;
+	private String				registerFailureRedirectUrl;
 
-	private static final String UMS_CONFIG_NAME = "ums";
+	private String				existingUserLoginSuccessRedirectUrl;
+	private String				existingUserLoginFailureRedirectUrl;
 
-	private String umsDbSessionClassName;
-	private String umsDbHost;
-	private Short umsDbPort;
-	private String umsDbUser;
-	private String umsDbPass;
-	private String umsDbName;
-	private String umsAnnexSecurityClass;
-	
-	private String registerSuccessRedirectUrl;
-	private String registerFailureRedirectUrl;
-	
-	private String loginSuccessRedirectUrl;
-	private String loginFailureRedirectUrl;
-	private String logoutSuccessRedirectUrl;
-	private String logoutFailureRedirectUrl;
+	private String				logoutSuccessRedirectUrl;
+	private String				logoutFailureRedirectUrl;
+
+	/* For new users */
+	private int					newlyRegisteredDefaultRole;
+
+	private String				newlyRegisteredLoginSuccessRedirectUrl;
+	private String				newlyRegisteredLoginFailureRedirectUrl;
 
 	public UmsConfig() throws ConfigException {
 		super(UMS_CONFIG_NAME);
@@ -44,21 +42,26 @@ final public class UmsConfig extends BaseConfig {
 
 	class UmsConfigHandler extends PropertiesHandler<UmsConfig> {
 
-		private static final String UMS_DB_TYPE_KEY = "iq.ums.db.type";
-		private static final String UMS_DB_HOST_KEY = "iq.ums.db.host";
-		private static final String UMS_DB_PORT_KEY = "iq.ums.db.port";
-		private static final String UMS_DB_USER_KEY = "iq.ums.db.user";
-		private static final String UMS_DB_PASS_KEY = "iq.ums.db.pass";
-		private static final String UMS_DB_NAME_KEY = "iq.ums.db.name";
-		private static final String UMS_ANNEX_SECURITY_CLASS_KEY = "iq.ums.annex.security.class";
-		
-		private static final String UMS_REGISTER_SUCCESS_REDIRECT_URL_KEY = "register.success.redirect.url";
-		private static final String UMS_REGISTER_FAILURE_REDIRECT_URL_KEY = "register.failure.redirect.url";
+		private static final String	UMS_DB_TYPE_KEY							= "iq.ums.db.type";
+		private static final String	UMS_DB_HOST_KEY							= "iq.ums.db.host";
+		private static final String	UMS_DB_PORT_KEY							= "iq.ums.db.port";
+		private static final String	UMS_DB_USER_KEY							= "iq.ums.db.user";
+		private static final String	UMS_DB_PASS_KEY							= "iq.ums.db.pass";
+		private static final String	UMS_DB_NAME_KEY							= "iq.ums.db.name";
+		private static final String	UMS_ANNEX_SECURITY_CLASS_KEY			= "iq.ums.annex.security.class";
 
-		private static final String UMS_LOGIN_SUCCESS_REDIRECT_URL_KEY = "login.success.redirect.url";
-		private static final String UMS_LOGIN_FAILURE_REDIRECT_URL_KEY = "login.failure.redirect.url";
-		private static final String UMS_LOGOUT_SUCCESS_REDIRECT_URL_KEY = "logout.success.redirect.url";
-		private static final String UMS_LOGOUT_FAILURE_REDIRECT_URL_KEY = "logout.failure.redirect.url";
+		private static final String	UMS_REGISTER_SUCCESS_REDIRECT_URL_KEY	= "register.success.redirect.url";
+		private static final String	UMS_REGISTER_FAILURE_REDIRECT_URL_KEY	= "register.failure.redirect.url";
+
+		private static final String	UMS_LOGIN_SUCCESS_REDIRECT_URL_KEY		= "existinguser.login.success.redirect.url";
+		private static final String	UMS_LOGIN_FAILURE_REDIRECT_URL_KEY		= "existinguser.login.failure.redirect.url";
+
+		private static final String	UMS_LOGOUT_SUCCESS_REDIRECT_URL_KEY		= "logout.success.redirect.url";
+		private static final String	UMS_LOGOUT_FAILURE_REDIRECT_URL_KEY		= "logout.failure.redirect.url";
+
+		private static final String	NEWLY_REGISTERED_DEFAULT_ROLE			= "newuser.registration.default.role.id";
+		private static final String	NEWLY_REGISTERED_LOGIN_SUCCESS_REDIRECT	= "newuser.login.success.url";
+		private static final String	NEWLY_REGISTERED_LOGIN_FAILURE_REDIRECT	= "newuser.login.failure.url";
 
 		public UmsConfigHandler() {
 			super(confInputStream);
@@ -78,14 +81,19 @@ final public class UmsConfig extends BaseConfig {
 			setUmsDbName(properties.getProperty(UMS_DB_NAME_KEY));
 
 			setUmsAnnexSecurityClass(properties.getProperty(UMS_ANNEX_SECURITY_CLASS_KEY));
-			
+
 			setRegisterSuccessRedirectUrl(properties.getProperty(UMS_REGISTER_SUCCESS_REDIRECT_URL_KEY));
 			setRegisterFailureRedirectUrl(properties.getProperty(UMS_REGISTER_FAILURE_REDIRECT_URL_KEY));
 
-			setLoginSuccessRedirectUrl(properties.getProperty(UMS_LOGIN_SUCCESS_REDIRECT_URL_KEY));
-			setLoginFailureRedirectUrl(properties.getProperty(UMS_LOGIN_FAILURE_REDIRECT_URL_KEY));
+			setExistingUserLoginSuccessRedirectUrl(properties.getProperty(UMS_LOGIN_SUCCESS_REDIRECT_URL_KEY));
+			setExistingUserLoginFailureRedirectUrl(properties.getProperty(UMS_LOGIN_FAILURE_REDIRECT_URL_KEY));
+
 			setLogoutSuccessRedirectUrl(properties.getProperty(UMS_LOGOUT_SUCCESS_REDIRECT_URL_KEY));
 			setLogoutFailureRedirectUrl(properties.getProperty(UMS_LOGOUT_FAILURE_REDIRECT_URL_KEY));
+
+			setNewlyRegisteredDefaultRole(Integer.valueOf(properties.getProperty(NEWLY_REGISTERED_DEFAULT_ROLE)));
+			setNewlyRegisteredLoginSuccessRedirectUrl(properties.getProperty(NEWLY_REGISTERED_LOGIN_SUCCESS_REDIRECT));
+			setNewlyRegisteredLoginFailureRedirectUrl(properties.getProperty(NEWLY_REGISTERED_LOGIN_FAILURE_REDIRECT));
 		}
 
 		@Override
@@ -143,20 +151,6 @@ final public class UmsConfig extends BaseConfig {
 	 */
 	public String getUmsAnnexSecurityClass() {
 		return umsAnnexSecurityClass;
-	}
-
-	/**
-	 * @return the loginSuccessRedirectUrl
-	 */
-	public String getLoginSuccessRedirectUrl() {
-		return loginSuccessRedirectUrl;
-	}
-
-	/**
-	 * @return the loginFailureRedirectUrl
-	 */
-	public String getLoginFailureRedirectUrl() {
-		return loginFailureRedirectUrl;
 	}
 
 	/**
@@ -228,8 +222,7 @@ final public class UmsConfig extends BaseConfig {
 	private void setUmsAnnexSecurityClass(String umsAnnexSecurityClass) {
 		this.umsAnnexSecurityClass = umsAnnexSecurityClass;
 	}
-	
-	
+
 	/**
 	 * @param loginSuccessRedirectUrl
 	 *            the loginSuccessRedirectUrl to set
@@ -247,22 +240,6 @@ final public class UmsConfig extends BaseConfig {
 	}
 
 	/**
-	 * @param loginSuccessRedirectUrl
-	 *            the loginSuccessRedirectUrl to set
-	 */
-	private void setLoginSuccessRedirectUrl(String loginSuccessRedirectUrl) {
-		this.loginSuccessRedirectUrl = loginSuccessRedirectUrl;
-	}
-
-	/**
-	 * @param loginFailureRedirectUrl
-	 *            the loginFailureRedirectUrl to set
-	 */
-	private void setLoginFailureRedirectUrl(String loginFailureRedirectUrl) {
-		this.loginFailureRedirectUrl = loginFailureRedirectUrl;
-	}
-
-	/**
 	 * @param logoutSuccessRedirectUrl
 	 *            the logoutSuccessRedirectUrl to set
 	 */
@@ -276,6 +253,54 @@ final public class UmsConfig extends BaseConfig {
 	 */
 	private void setLogoutFailureRedirectUrl(String logoutFailureRedirectUrl) {
 		this.logoutFailureRedirectUrl = logoutFailureRedirectUrl;
+	}
+
+	public String getRegisterSuccessRedirectUrl() {
+		return registerSuccessRedirectUrl;
+	}
+
+	public String getRegisterFailureRedirectUrl() {
+		return registerFailureRedirectUrl;
+	}
+
+	public int getNewlyRegisteredDefaultRole() {
+		return newlyRegisteredDefaultRole;
+	}
+
+	public void setNewlyRegisteredDefaultRole(int newlyRegisteredDefaultRole) {
+		this.newlyRegisteredDefaultRole = newlyRegisteredDefaultRole;
+	}
+
+	public String getNewlyRegisteredLoginSuccessRedirectUrl() {
+		return newlyRegisteredLoginSuccessRedirectUrl;
+	}
+
+	public void setNewlyRegisteredLoginSuccessRedirectUrl(String newlyRegisteredLoginSuccessRedirectUrl) {
+		this.newlyRegisteredLoginSuccessRedirectUrl = newlyRegisteredLoginSuccessRedirectUrl;
+	}
+
+	public String getNewlyRegisteredLoginFailureRedirectUrl() {
+		return newlyRegisteredLoginFailureRedirectUrl;
+	}
+
+	public void setNewlyRegisteredLoginFailureRedirectUrl(String newlyRegisteredLoginFailureRedirectUrl) {
+		this.newlyRegisteredLoginFailureRedirectUrl = newlyRegisteredLoginFailureRedirectUrl;
+	}
+
+	public String getExistingUserLoginSuccessRedirectUrl() {
+		return existingUserLoginSuccessRedirectUrl;
+	}
+
+	public void setExistingUserLoginSuccessRedirectUrl(String existingUserLoginSuccessRedirectUrl) {
+		this.existingUserLoginSuccessRedirectUrl = existingUserLoginSuccessRedirectUrl;
+	}
+
+	public String getExistingUserLoginFailureRedirectUrl() {
+		return existingUserLoginFailureRedirectUrl;
+	}
+
+	public void setExistingUserLoginFailureRedirectUrl(String existingUserLoginFailureRedirectUrl) {
+		this.existingUserLoginFailureRedirectUrl = existingUserLoginFailureRedirectUrl;
 	}
 
 }
