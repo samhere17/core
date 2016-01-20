@@ -1,14 +1,12 @@
 package org.iq.ums;
 
-
 /**
  * @author Sam
  * 
  */
 public interface UmsConstants {
-	
-	public static final String UMS_SESSION_KEY = "umsSession";
 
+	public static final String UMS_SESSION_KEY = "umsSession";
 
 	/**
 	 * @author Sam
@@ -29,8 +27,8 @@ public interface UmsConstants {
 
 		public static RoleStatus getRoleStatus(int status) {
 			RoleStatus returnStatus = null;
-			for (RoleStatus thisStatus : RoleStatus.values()) {
-				if (thisStatus.getRoleStatusValue() == status) {
+			for(RoleStatus thisStatus : RoleStatus.values()) {
+				if(thisStatus.getRoleStatusValue() == status) {
 					returnStatus = thisStatus;
 					break;
 				}
@@ -40,15 +38,15 @@ public interface UmsConstants {
 
 		@Override
 		public String toString() {
-			switch (this) {
-			case INACTIVE:
-				return "Inactive";
-			case ACTIVE:
-				return "Active";
-			case DELETED:
-				return "Deleted";
-			default:
-				return "Unknown";
+			switch(this) {
+				case INACTIVE:
+					return "Inactive";
+				case ACTIVE:
+					return "Active";
+				case DELETED:
+					return "Deleted";
+				default:
+					return "Unknown";
 			}
 		}
 	}
@@ -72,8 +70,8 @@ public interface UmsConstants {
 
 		public static AreaSpecifier getAreaSpecifier(int type) {
 			AreaSpecifier returnType = null;
-			for (AreaSpecifier thisType : AreaSpecifier.values()) {
-				if (thisType.getAreaSpecifierValue() == type) {
+			for(AreaSpecifier thisType : AreaSpecifier.values()) {
+				if(thisType.getAreaSpecifierValue() == type) {
 					returnType = thisType;
 					break;
 				}
@@ -83,13 +81,13 @@ public interface UmsConstants {
 
 		@Override
 		public String toString() {
-			switch (this) {
-			case SYSTEM:
-				return "System";
-			case APPLICATION:
-				return "Application";
-			default:
-				return "Unknown";
+			switch(this) {
+				case SYSTEM:
+					return "System";
+				case APPLICATION:
+					return "Application";
+				default:
+					return "Unknown";
 			}
 		}
 	}
@@ -98,28 +96,40 @@ public interface UmsConstants {
 	 *
 	 */
 	public enum UserStatus {
-
 		/**
-		 * 
+		 * Status not known
 		 */
 		UNKNOWN(0),
+
 		/**
-		 * 
+		 * User has just registered
 		 */
 		NEW(1),
+
 		/**
-		 * 
+		 * User has verified email address
 		 */
-		ACTIVE(2),
-		DELETED(3)/*,
-		EXPIRING(9),
-		EXPIRED(1),
-		REJECTED(2),
-		NOT_EFFECTIVE(4),
-		DISABLED(8),
-		NEVER_EXPIRED(0),
-		CHECKED(0),
-		WRONG_CREDENTIAL_TYPE(16)*/;
+		VERIFIED(2),
+
+		/**
+		 * User has raised a join request. Approval is pending
+		 */
+		PENDING_APPROVAL(3),
+
+		/**
+		 * Request to join community has been accepted.
+		 */
+		ACTIVE(4),
+
+		/**
+		 * User has been deleted
+		 */
+		DELETED(5);
+
+		/*
+		 * , EXPIRING(9), EXPIRED(1), REJECTED(2), NOT_EFFECTIVE(4), DISABLED(8), NEVER_EXPIRED(0), CHECKED(0),
+		 * WRONG_CREDENTIAL_TYPE(16)
+		 */
 
 		private final int userStat;
 
@@ -140,8 +150,8 @@ public interface UmsConstants {
 		 */
 		public static UserStatus getUserStatus(int status) {
 			UserStatus userStatus = null;
-			for (UserStatus stat : UserStatus.values()) {
-				if (stat.getUserStatusValue() == status) {
+			for(UserStatus stat : UserStatus.values()) {
+				if(stat.getUserStatusValue() == status) {
 					userStatus = stat;
 					break;
 				}
@@ -168,8 +178,8 @@ public interface UmsConstants {
 
 		public static Gender getGender(int gender) {
 			Gender returnGender = null;
-			for (Gender thisGender : Gender.values()) {
-				if (thisGender.getGenderValue() == gender) {
+			for(Gender thisGender : Gender.values()) {
+				if(thisGender.getGenderValue() == gender) {
 					returnGender = thisGender;
 					break;
 				}
@@ -179,16 +189,16 @@ public interface UmsConstants {
 
 		@Override
 		public String toString() {
-			switch (this) {
-			case MALE:
-				return "Male";
-			case FEMALE:
-				return "Female";
-			case OTHER:
-				return "Other";
-			case UNKNOWN:
-			default:
-				return "Unknown";
+			switch(this) {
+				case MALE:
+					return "Male";
+				case FEMALE:
+					return "Female";
+				case OTHER:
+					return "Other";
+				case UNKNOWN:
+				default:
+					return "Unknown";
 			}
 		}
 	}
@@ -211,8 +221,8 @@ public interface UmsConstants {
 
 		public static SessionStatus getSessionStatus(int sessionStatus) {
 			SessionStatus returnSessionStatus = null;
-			for (SessionStatus thisSessionStatus : SessionStatus.values()) {
-				if (thisSessionStatus.getSessionStatusValue() == sessionStatus) {
+			for(SessionStatus thisSessionStatus : SessionStatus.values()) {
+				if(thisSessionStatus.getSessionStatusValue() == sessionStatus) {
 					returnSessionStatus = thisSessionStatus;
 					break;
 				}
@@ -222,14 +232,14 @@ public interface UmsConstants {
 
 		@Override
 		public String toString() {
-			switch (this) {
-			case INVALID:
-				return "Invalid";
-			case VALID:
-				return "Valid";
-			case UNKNOWN:
-			default:
-				return "Unknown";
+			switch(this) {
+				case INVALID:
+					return "Invalid";
+				case VALID:
+					return "Valid";
+				case UNKNOWN:
+				default:
+					return "Unknown";
 			}
 		}
 	}
@@ -252,8 +262,8 @@ public interface UmsConstants {
 
 		public static OptionStatus getOptionStatus(int optionStatus) {
 			OptionStatus returnOptionStatus = null;
-			for (OptionStatus thisOptionStatus : OptionStatus.values()) {
-				if (thisOptionStatus.getOptionStatusValue() == optionStatus) {
+			for(OptionStatus thisOptionStatus : OptionStatus.values()) {
+				if(thisOptionStatus.getOptionStatusValue() == optionStatus) {
 					returnOptionStatus = thisOptionStatus;
 					break;
 				}
@@ -263,15 +273,15 @@ public interface UmsConstants {
 
 		@Override
 		public String toString() {
-			switch (this) {
-			case INACTIVE:
-				return "Inactive";
-			case ACTIVE:
-				return "Active";
-			case DELETED:
-				return "Deleted";
-			default:
-				return "Unknown";
+			switch(this) {
+				case INACTIVE:
+					return "Inactive";
+				case ACTIVE:
+					return "Active";
+				case DELETED:
+					return "Deleted";
+				default:
+					return "Unknown";
 			}
 		}
 	}
@@ -294,8 +304,8 @@ public interface UmsConstants {
 
 		public static OptionType getOptionType(int optionType) {
 			OptionType returnOptionType = null;
-			for (OptionType thisOptionType : OptionType.values()) {
-				if (thisOptionType.getOptionTypeValue() == optionType) {
+			for(OptionType thisOptionType : OptionType.values()) {
+				if(thisOptionType.getOptionTypeValue() == optionType) {
 					returnOptionType = thisOptionType;
 					break;
 				}
@@ -305,15 +315,15 @@ public interface UmsConstants {
 
 		@Override
 		public String toString() {
-			switch (this) {
-			case MENU:
-				return "Menu";
-			case MENU_ITEM:
-				return "Menu Item";
-			case SEPERATOR:
-				return "Seperator";
-			default:
-				return "Unknown";
+			switch(this) {
+				case MENU:
+					return "Menu";
+				case MENU_ITEM:
+					return "Menu Item";
+				case SEPERATOR:
+					return "Seperator";
+				default:
+					return "Unknown";
 			}
 		}
 	}
@@ -333,8 +343,8 @@ public interface UmsConstants {
 
 		public static UserType getUserType(int userType) {
 			UserType returnUserType = null;
-			for (UserType thisUserType : UserType.values()) {
-				if (thisUserType.getUerTypeValue() == userType) {
+			for(UserType thisUserType : UserType.values()) {
+				if(thisUserType.getUerTypeValue() == userType) {
 					returnUserType = thisUserType;
 					break;
 				}
@@ -344,13 +354,13 @@ public interface UmsConstants {
 
 		@Override
 		public String toString() {
-			switch (this) {
-			case SYSTEM_USER:
-				return "System";
-			case APPLICATION_USER:
-				return "Application";
-			default:
-				return "Unknown";
+			switch(this) {
+				case SYSTEM_USER:
+					return "System";
+				case APPLICATION_USER:
+					return "Application";
+				default:
+					return "Unknown";
 			}
 		}
 	}

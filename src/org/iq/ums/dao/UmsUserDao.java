@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.iq.db.dao.BaseDao;
 import org.iq.exception.DbException;
+import org.iq.ums.UmsConstants.UserStatus;
 import org.iq.ums.vo.UmsUser;
 
 /**
@@ -31,23 +32,20 @@ public interface UmsUserDao extends BaseDao<UmsUser> {
 	 */
 	UmsUser getUserByUsername(String userName) throws DbException;
 
-	
 	/**
 	 * @param userAccessKey
 	 * @param password
 	 * @return
 	 * @throws DbException
 	 */
-	int updatePassword(String userAccessKey, String password)
-			throws DbException;
-
+	int updatePassword(String userAccessKey, String password) throws DbException;
 
 	/**
 	 * @return List<UmsUser>
 	 * @throws DbException
 	 */
 	List<UmsUser> getSystemUsers() throws DbException;
-	
+
 	/**
 	 * @param user
 	 * @return int
@@ -62,5 +60,7 @@ public interface UmsUserDao extends BaseDao<UmsUser> {
 	int getLastUserId() throws DbException;
 
 	UmsUser getUserByUserId(int userId) throws DbException;
+
+	void updateStatus(int userId, UserStatus userStatus) throws DbException;
 
 }

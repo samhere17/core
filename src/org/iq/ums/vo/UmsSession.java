@@ -221,6 +221,8 @@ public class UmsSession extends BaseVO {
 		buffer.append(StringUtil.lineSeparator);
 		buffer.append("    roleId = ").append(roleId);
 		buffer.append(StringUtil.lineSeparator);
+		buffer.append("    userStatus = ").append(userStatus);
+		buffer.append(StringUtil.lineSeparator);
 		buffer.append("    sessionValid = ").append(sessionValid);
 		buffer.append(StringUtil.lineSeparator);
 		buffer.append("    systemSessionId = ").append(systemSessionId);

@@ -39,10 +39,10 @@ public class UmsHelper extends BaseHelper {
 		List<UmsUser> umsUserList = null;
 		try {
 			umsUserList = umsUserDao.getSystemUsers();
-		} catch (DbException e) {
+		} catch(DbException e) {
 			throw new BusinessException(e);
 		}
-		if (umsUserList != null && umsUserList.size() > 0) {
+		if(umsUserList != null && umsUserList.size() > 0) {
 			return true;
 		}
 		return false;
@@ -53,7 +53,7 @@ public class UmsHelper extends BaseHelper {
 		UmsUserDetailsDao userDetailsDao = new UmsUserDetailsDaoImpl(dbSession);
 		try {
 			return userDetailsDao.search(additionalId, userId, username, firstname, lastname, phone, email, roleId);
-		} catch (DbException e) {
+		} catch(DbException e) {
 			throw new BusinessException(e);
 		}
 	}
@@ -61,7 +61,7 @@ public class UmsHelper extends BaseHelper {
 	public UmsUser getUser(int userId) throws BusinessException {
 		try {
 			return new UmsUserDaoImpl(dbSession).getUserByUserId(userId);
-		} catch (DbException e) {
+		} catch(DbException e) {
 			throw new BusinessException(e);
 		}
 	}
@@ -69,27 +69,26 @@ public class UmsHelper extends BaseHelper {
 	public UmsUserDetails getUserDetails(int userId) throws BusinessException {
 		try {
 			return new UmsUserDetailsDaoImpl(dbSession).getUserDetailsByUserId(userId);
-		} catch (DbException e) {
+		} catch(DbException e) {
 			throw new BusinessException(e);
 		}
 	}
-	
-	public UmsUser createUser(String firstname,String lastname, String alias, String address, String phone, String email,
-			String altPhone, String altEmail, int gender, Date birthday, Date anniversary,
-			String username, String password, String cpassword, String additionalId, int roleId,
-			int userUpdatedBy) throws BusinessException {
+
+	public UmsUser createUser(String firstname, String lastname, String alias, String address, String phone,
+			String email, String altPhone, String altEmail, int gender, Date birthday, Date anniversary,
+			String username, String password, String cpassword, String additionalId, int roleId, int userUpdatedBy)
+					throws BusinessException {
 		UmsUser umsUser = insertUser(username, cpassword, Integer.valueOf(UserType.APPLICATION_USER.getUerTypeValue()),
 				Integer.valueOf(UserStatus.NEW.getUserStatusValue()), additionalId, userUpdatedBy);
-		
-		insertUserDetails(umsUser.getUserId(), firstname, lastname, alias,
-				address, phone, email, altPhone, altEmail, gender, birthday, anniversary);
-		
+
+		insertUserDetails(umsUser.getUserId(), firstname, lastname, alias, address, phone, email, altPhone, altEmail,
+				gender, birthday, anniversary);
+
 		insertUserRoleMapping(umsUser.getUserId(), roleId);
-		
+
 		return umsUser;
 
 	}
-	
 
 	public UmsUser insertUser(String username, String password, Integer userType, Integer userStatus,
 			String additionalId, Integer userUpdatedById) throws BusinessException {
@@ -105,7 +104,7 @@ public class UmsHelper extends BaseHelper {
 
 		umsUser.setUserCreationTime(new Date());
 		umsUser.setUserUpdatedTime(new Date());
-		if (StringUtil.isEmpty(StringUtil.getStringValue(userUpdatedById))==false) {
+		if(StringUtil.isEmpty(StringUtil.getStringValue(userUpdatedById)) == false) {
 			umsUser.setUserCreatedBy(userUpdatedById);
 			umsUser.setUserUpdatedBy(userUpdatedById);
 		}
@@ -114,7 +113,7 @@ public class UmsHelper extends BaseHelper {
 		UmsUserDao umsUserDao = new UmsUserDaoImpl(dbSession);
 		try {
 			umsUser.setUserId(umsUserDao.insertAndGetUserId(umsUser));
-		} catch (DbException e) {
+		} catch(DbException e) {
 			throw new BusinessException(e);
 		}
 		return umsUser;
@@ -142,7 +141,7 @@ public class UmsHelper extends BaseHelper {
 		UmsUserDetailsDao umsUserDetailsDao = new UmsUserDetailsDaoImpl(dbSession);
 		try {
 			umsUserDetailsDao.insert(umsUserDetails);
-		} catch (DbException e) {
+		} catch(DbException e) {
 			throw new BusinessException(e);
 		}
 		return umsUserDetails;
@@ -158,7 +157,7 @@ public class UmsHelper extends BaseHelper {
 		UmsUserRoleMapDao umsUserRoleMapDao = new UmsUserRoleMapDaoImpl(dbSession);
 		try {
 			umsUserRoleMapDao.insert(umsUserRoleMap);
-		} catch (DbException e) {
+		} catch(DbException e) {
 			throw new BusinessException(e);
 		}
 	}
@@ -169,8 +168,27 @@ public class UmsHelper extends BaseHelper {
 			umsUser.setUserAccessKey(userAccessKey);
 
 			return new UmsUserDaoImpl(dbSession).softDelete(umsUser);
-		} catch (DbException e) {
+		} catch(DbException e) {
 			throw new BusinessException(e);
 		}
 	}
+
+	public void assignCommunity(int communityId, int userId) throws BusinessException {
+		try {
+			new UmsUserDaoImpl(dbSession).assignCommunity(communityId, userId);
+		} catch(DbException e) {
+			throw new BusinessException(e);
+		}
+	}
+
+	public void updateStatus(int userId, UserStatus userStatus) throws BusinessException {
+		try {
+			UmsUserDao umsUserDao = new UmsUserDaoImpl(dbSession);
+			umsUserDao.updateStatus(userId, userStatus);
+
+		} catch(DbException e) {
+			throw new BusinessException(e);
+		}
+	}
+
 }
