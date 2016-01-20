@@ -13,5 +13,10 @@
 	<classpathentry kind="lib" path="lib/jstl-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/mail-1.4.4.jar"/>
 	<classpathentry kind="lib" path="lib/opencsv-3.6.jar"/>
+	<classpathentry kind="lib" path="res/setup/files/dev/lib/jackson-all-1.9.11.jar"/>
+	<classpathentry kind="lib" path="res/setup/files/dev/lib/apache-commons-lang.jar"/>
+	<classpathentry kind="lib" path="res/setup/files/dev/lib/apache-velocity-velocity-1.5.jar"/>
+	<classpathentry kind="lib" path="res/setup/files/dev/lib/commons.collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="res/setup/files/dev/lib/ant.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

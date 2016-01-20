@@ -1,0 +1,70 @@
+{
+	"id":"498202fe-d660-46a5-8aa7-60211c207238",
+	"name":"Auth",
+	"description":"This module deal with user authentication and authorization",
+	"forms":[
+		{
+			"id":"4595779e-d255-45b9-95ec-8299d0b55fbc",
+			"name":"Login",
+			"action":"Authentication",
+			"method":"POST",
+			"image":null,
+			"header":"Login Form",
+			"helpLink":null,
+			"fieldsets":[
+				{
+					"id":"5a79e544-ffe2-4904-9e92-e64a35c4426e",
+					"legend":null,
+					"fields":[
+						{
+							"id":"ffd85b37-b4fa-4574-8e38-32658116433c",
+							"htmlId":"887f22ae3fc24ea9",
+							"label":"Username",
+							"name":"Field #1",
+							"fieldInfo":"This is a Text field for user name",
+							"inputType":"TEXT",
+							"readonly":false,
+							"required":false,
+							"disabled":false,
+							"maxLength":"10",
+							"fieldFor":null
+						},
+						{
+							"id":"5f268720-467f-41a9-b483-2860ee21dbc3",
+							"htmlId":"7e976c9556ad4918",
+							"label":"Password",
+							"name":"Field #1",
+							"fieldInfo":"This is a Password field for password",
+							"inputType":"PASSWORD",
+							"readonly":false,
+							"required":false,
+							"disabled":false,
+							"maxLength":"10",
+							"fieldFor":null
+						}
+					],
+					"childFieldset":null,
+					"rowDivClass":null
+				}
+			],
+			"actionFields":[
+				{
+					"id":"33e4d9d7-663b-41b9-9c39-0502ba8bdf4f",
+					"htmlId":null,
+					"label":"submit",
+					"name":"submit",
+					"fieldInfo":null,
+					"inputType":"SUBMIT",
+					"readonly":false,
+					"required":false,
+					"disabled":false,
+					"maxLength":null,
+					"fieldFor":null,
+					"actionMethod":"post",
+					"targetUrl":"www.google.com",
+					"encryptionType":null
+				}
+			]
+		}
+	]
+}

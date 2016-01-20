@@ -1,0 +1,33 @@
+#set($formAction = "${pageContext.request.contextPath}/adapter")
+<form class="" method="$form.method" action="$formAction">
+#if(!$StringUtils.isEmpty($form.action))
+	<input type="hidden" name="serviceName" value="$form.action">
+#end
+#foreach($section in $form.sections)
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			<div class="panel-title">$section.title</div>
+		</div>
+
+		<div class="panel-body">
+#foreach($dataField in $section.fields)
+			<div class="row">
+				<div class="$dataField.gridColumn.getCss()">
+					<div class="form-group has-feedback">
+						<label class="control-label" for="$dataField.htmlId">$dataField.label</label>
+						<input type="text" class="form-control" id="$dataField.htmlId" name="$dataField.htmlId" placeholder="Enter your username" required>
+
+						<span class="glyphicon glyphicon-ok form-control-feedback hidden"></span>
+						<span class="glyphicon glyphicon-remove form-control-feedback hidden"></span>
+
+						<p class="error-msg text-danger small hidden">
+							<strong>Enter username</strong>
+						</p>
+					</div>
+				</div>
+			</div>
+#end
+		</div>
+	</div>
+#end
+</form>

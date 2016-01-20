@@ -1,0 +1,12 @@
+package $module.getServicePackageName();
+
+public interface $module.getParamKeysClassName() {
+
+#foreach($form in $module.forms)
+#foreach($section in $form.sections)
+#foreach($field in $section.fields)
+	static final String $BuilderUtil.getConstantName($field.name) = "$field.htmlId";
+#end
+#end
+#end
+}
