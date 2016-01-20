@@ -65,21 +65,25 @@
 		<!-- Copying required supporting libraries to ${dist.dir}/dist/lib and ${dist.dir}/temp/lib -->
 		<antcall target="copy.libraries"></antcall>
 
+		<!-- Copying resource files to ${dist.dir}/dist -->
+		<!-- This includes conf files and setup files -->
+		<antcall target="copy.resource.files"></antcall>
+
 		<!-- Compiling all java files to ${dist.dir}/temp/bin -->
 		<antcall target="compile.java.files"></antcall>
 
 		<!-- Building core jar to ${dist.dir}/dist/jar and ${dist.dir}/temp/lib -->
 		<antcall target="build.core.jar"></antcall>
 
-		<!-- Building core services jar ${dist.dir}/temp/lib -->
+		<!-- Building core services jar to ${dist.dir}/dist/jar and ${dist.dir}/temp/lib -->
 		<antcall target="build.core.services.jar"></antcall>
 
-		<!-- Copying core conf files to ${dist.dir}/dist/conf -->
-		<antcall target="copy.config.props"></antcall>
-
-		<!-- Building core conf jar to ${dist.dir}/temp/lib -->
-		<antcall target="build.core.conf.jar"></antcall>
-
+		<!-- Building core conf jar to ${dist.dir}/dist/jar and ${dist.dir}/temp/lib -->
+		<antcall target="build.core.config.jar"></antcall>
+		
+		<!-- Building core conf generator to ${dist.dir}/dist/jar -->
+		<antcall target="build.core.generator.jar"></antcall>
+		
 		<!-- Building core war to ${dist.dir}/dist/war -->
 		<antcall target="build.core.war"></antcall>
 		
@@ -87,7 +91,7 @@
 		<antcall target="copy.db.scripts"></antcall>
 
 		<!-- Copying third party setup files to ${dist.dir}/dist/setup -->
-		<antcall target="copy.setupfiles"></antcall>
+		<!-- <antcall target="copy.setup.files"></antcall> -->
 
 		<!-- Building src zip to ${dist.dir}/dist/src -->
 		<antcall target="build.src.zip"></antcall>
@@ -104,6 +108,9 @@
 		<!-- Zipping ${dist.dir}/dist -->
 		<antcall target="zip.dist"></antcall>
 
+		<!-- Deleting ${dist.dir}/dist -->
+		<!-- <antcall target="delete.dist.dir"></antcall> -->
+		
 		<!--FOR DEV-->
 		<!-- <antcall target="dev.copy.war" /> -->
 		<!--FOR DEV-->
@@ -161,12 +168,29 @@
 		</copy>
 	</target>
 	
+	<!-- Copying resource files to ${dist.dir}/dist -->
+	<!-- This includes conf files and setup files -->
+	<target name="copy.resource.files">
+		<!-- Copying resource files present in ${proj.name} project to ${dist.dir}/dist -->
+		<echo message="Copying resource files present in ${proj.name} project to ${dist.dir}/dist" />
+		<echo message="This includes conf files and setup files." />
+		<copy todir="${dist.dir}/dist" verbose="true">
+			<fileset dir="${res.dir}">
+				<include name="**/*"/>
+				<type type="file"/>
+			</fileset>
+		</copy>
+	</target>
+	
 	<!-- Compiling all java files to ${dist.dir}/dist/bin -->
 	<target name="compile.java.files">
         <!-- Preparing classpath reference variable based on jars present in ${dist.dir}/dist/lib -->
 		<echo message="Preparing classpath reference variable based on jars present in ${dist.dir}/dist/lib"/>
 	    <path id="project.classpath">
 	        <fileset dir="${dist.dir}/dist/lib">
+	        	<include name="**/*.jar"/>
+	        </fileset>
+	        <fileset dir="${setup.dir}/files/dev/lib">
 	        	<include name="**/*.jar"/>
 	        </fileset>
 	    </path>
@@ -199,6 +223,7 @@
 			<exclude name="org/iq/service/cache/**" />
 			<exclude name="org/iq/service/system/**" />
 			<exclude name="org/iq/ums/service/**" />
+			<exclude name="org/iq/gen/**" />
 			<manifest>
 				<attribute name="Implementation-Title" value="${proj.name}-${build.version}.jar" />
 				<attribute name="Implementation-Vendor" value="${comp.name}" />
@@ -216,10 +241,10 @@
 		</copy>
 	</target>
 
-	<!-- Building core jar to ${dist.dir}/temp/lib -->
+	<!-- Building core services jar to ${dist.dir}/dist/jar and ${dist.dir}/temp/lib -->
 	<target name="build.core.services.jar">
 		<!-- Building the core services jar and placing it in ${dist.dir}/dist/jar -->
-		<jar destfile="${dist.dir}/temp/lib/${proj.name}-${build.version}-services.jar" basedir="${dist.dir}/temp/bin">
+		<jar destfile="${dist.dir}/dist/jar/${proj.name}-${build.version}-services.jar" basedir="${dist.dir}/temp/bin">
 			<include name="org/iq/service/**" />
 			<include name="org/iq/ums/service/**" />
 			<manifest>
@@ -230,6 +255,13 @@
 				<attribute name="Implementation-Date" value="${build.date} ${build.time}" />
 			</manifest>
 		</jar>
+		
+		<!-- Copying the core services jar to ${dist.dir}/temp/lib -->
+		<copy todir="${dist.dir}/temp/lib" verbose="true">
+			<fileset dir="${dist.dir}/dist/jar">
+				<include name="${proj.name}-${build.version}-services.jar"/>
+			</fileset>
+		</copy>
 	</target>
 
 	<!--Copying conf files-->
@@ -244,19 +276,48 @@
 		</copy>
 	</target>
 	
-	<!--Building core conf jar-->
-	<target name="build.core.conf.jar">
-		<!-- Building the jar -->
-		<jar destfile="${dist.dir}/temp/lib/${proj.name}-${build.version}-conf.jar" basedir="${dist.dir}">
+	<!-- Building core config jar to ${dist.dir}/dist/jar and ${dist.dir}/temp/lib -->
+	<target name="build.core.config.jar">
+		<!-- Building the core config jar and placing it in ${dist.dir}/dist/jar -->
+		<jar destfile="${dist.dir}/dist/jar/${proj.name}-${build.version}-config.jar" basedir="${dist.dir}/dist">
 			<include name="conf/**/*.properties" />
 			<manifest>
-				<attribute name="Implementation-Title" value="${proj.name}-${build.version}-conf.jar" />
+				<attribute name="Implementation-Title" value="${proj.name}-${build.version}-config.jar" />
 				<attribute name="Implementation-Vendor" value="${comp.name}" />
 				<attribute name="Implementation-Version" value="${build.version}" />
 				<attribute name="Development-Version" value="${build.dev.version}" />
 				<attribute name="Implementation-Date" value="${build.date} ${build.time}" />
 			</manifest>
 		</jar>
+
+		<!-- Copying the core config jar to ${dist.dir}/temp/lib -->
+		<copy todir="${dist.dir}/temp/lib" verbose="true">
+			<fileset dir="${dist.dir}/dist/jar">
+				<include name="${proj.name}-${build.version}-config.jar"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<!-- Building core generator jar to ${dist.dir}/dist/jar and ${dist.dir}/temp/lib -->
+	<target name="build.core.generator.jar">
+		<!-- Building the core generator jar and placing it in ${dist.dir}/dist/jar -->
+		<jar destfile="${dist.dir}/dist/jar/${proj.name}-${build.version}-generator.jar" basedir="${dist.dir}/temp/bin">
+			<include name="org/iq/gen/**" />
+			<manifest>
+				<attribute name="Implementation-Title" value="${proj.name}-${build.version}-generator.jar" />
+				<attribute name="Implementation-Vendor" value="${comp.name}" />
+				<attribute name="Implementation-Version" value="${build.version}" />
+				<attribute name="Development-Version" value="${build.dev.version}" />
+				<attribute name="Implementation-Date" value="${build.date} ${build.time}" />
+			</manifest>
+		</jar>
+
+		<!-- Copying the core generator jar to ${dist.dir}/temp/lib -->
+		<!-- <copy todir="${dist.dir}/temp/lib" verbose="true">
+			<fileset dir="${dist.dir}/dist/jar">
+				<include name="${proj.name}-${build.version}-generator.jar"/>
+			</fileset>
+		</copy> -->
 	</target>
 	
 	<!--Building core war-->
@@ -315,7 +376,7 @@
 	</target>
 	
 	<!-- Copying setup files -->
-	<target name="copy.setupfiles">
+	<target name="copy.setup.files">
 		<!-- Copying setup files present in ${proj.name} project to ${dist.dir}/dist/setup -->
 		<echo message="Copying conf files present in ${proj.name} project to ${dist.dir}/dist/setup" />
 		<copy todir="${dist.dir}/dist/setup" verbose="true">
@@ -356,6 +417,10 @@
 		<zip destfile="${dist.dir}/${proj.name}-release-${build.version}.zip" basedir="${dist.dir}/dist"></zip>
 	</target>
 
+	<target name="delete.dist.dir">
+		<delete dir="${dist.dir}/dist" />
+	</target>
+	
 	<!--FOR DEV-->
 	<!--target name="dev.copy.war">
 		<property environment="env"/>

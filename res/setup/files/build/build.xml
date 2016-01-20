@@ -102,7 +102,7 @@
 		<antcall target="build.app.services.jar" />
 
 		<!-- Building app conf jar to ${dist.dir}/${proj.name}/temp/lib -->
-		<antcall target="build.app.conf.jar" />
+		<antcall target="build.app.config.jar" />
 
 		<!-- Copying app web content to ${dist.dir}/${proj.name}/temp/web -->
 		<antcall target="copy.app.web.content" />
@@ -118,11 +118,12 @@
 		<!-- Copying core web content to ${dist.dir}/${proj.name}/temp/web -->
 		<antcall target="copy.core.web.content" />
 		
+		
 		<!-- Building app war to ${dist.dir}/${proj.name}/war -->
 		<antcall target="build.app.war" />
 
 		<!-- Copying db scripts (if any) to ${dist.dir}/${proj.name}/sql -->
-		<antcall target="copy.db.scripts"/>
+		<antcall target="copy.db.scripts" />
 
 		<!-- Copying readme.txt to ${dist.dir}/${proj.name} -->
 		<!-- <antcall target="copy.readme.txt">
@@ -215,7 +216,7 @@
 	</target>
 	
 	<!-- Building app conf jar to ${dist.dir}/${proj.name}/temp/lib -->
-	<target name="build.app.conf.jar">
+	<target name="build.app.config.jar">
 		<!-- Copying conf files present in ${proj.name} project to ${dist.dir}/${proj.name}/temp/conf -->
 		<echo message="Copying conf files present in ${proj.name} project to ${dist.dir}/${proj.name}/temp/conf" />
 		<copy todir="${dist.dir}/${proj.name}/temp/conf" overwrite="true" verbose="true">
@@ -226,10 +227,10 @@
 		</copy>
 
 		<!-- Building the jar -->
-		<jar destfile="${dist.dir}/${proj.name}/temp/lib/${proj.name}-${build.version}-conf.jar" basedir="${dist.dir}/${proj.name}/temp/conf">
+		<jar destfile="${dist.dir}/${proj.name}/temp/lib/${proj.name}-${build.version}-config.jar" basedir="${dist.dir}/${proj.name}/temp/conf">
 			<include name="**/*.properties" />
 			<manifest>
-				<attribute name="Implementation-Title" value="${proj.name}-${build.version}-conf.jar" />
+				<attribute name="Implementation-Title" value="${proj.name}-${build.version}-config.jar" />
 				<attribute name="Implementation-Vendor" value="${comp.name}" />
 				<attribute name="Implementation-Version" value="${build.version}" />
 				<attribute name="Development-Version" value="${build.dev.version}" />
@@ -263,10 +264,10 @@
 
 	<!-- Extracting core war contents to ${dist.dir}/${proj.name}/temp/war-contents -->
 	<target name="extract.core.war">
-		<echo message="Extracting core war contents to ${dist.dir}/${proj.name}/temp/war-contents"/>
+		<echo message="Extracting core war contents to ${dist.dir}/${proj.name}/temp/war-contents" />
 		<unzip dest="${dist.dir}/${proj.name}/temp/war-contents" src="core-war/core-1.0.0.0.war">
 			<patternset>
-				<include name="**/**"/>
+				<include name="**/**" />
 			</patternset>
 		</unzip>
 	</target>
@@ -276,7 +277,7 @@
 		<echo message="Copying core lib content to ${dist.dir}/${proj.name}/temp/lib" />
 		<copy todir="${dist.dir}/${proj.name}/temp/lib" verbose="true" overwrite="true">
 			<fileset dir="${dist.dir}/${proj.name}/temp/war-contents/WEB-INF/lib">
-				<exclude name="**/*-conf.jar" />
+				<include name="**/*.jar" />
 			</fileset>
 		</copy>
 	</target>
@@ -309,6 +310,9 @@
 		<war warfile="${dist.dir}/${proj.name}/war/${proj.name}-${build.version}.war" webxml="${dist.dir}/${proj.name}/temp/war-contents/WEB-INF/web.xml">
 			<lib dir="${dist.dir}/${proj.name}/temp/lib">
 				<include name="**/*.jar" />
+				<exclude name="javax.servlet_1.0.1.0_2-5.jar" />
+				<exclude name="*core*-config.jar" />
+				<exclude name="*core*-generator.jar" />
 			</lib>
 			<fileset dir="${dist.dir}/${proj.name}/temp/web">
 				<include name="**/*.html" />
