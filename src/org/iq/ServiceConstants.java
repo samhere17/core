@@ -12,6 +12,7 @@ public interface ServiceConstants {
 
 	public static final String AUTHENTICATION_SERVICE_NAME = "Authentication";
 	public static final String REGISTRATION_SERVICE_NAME = "Registration";
+	public static final String VERIFICATION_SERVICE_NAME = "VerifyUser";
 	public static final String REFRESH_CONTEXT_SERVICE_NAME = "RefreshContext";
 	public static final String LOGOUT_SERVICE_NAME = "Logout";
 }

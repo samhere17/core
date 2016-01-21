@@ -1,6 +1,13 @@
 <form method="post" action="${pageContext.request.contextPath}/adapter">
 	<input type="hidden" name="serviceName" value="VerifyUser">
-	<input type="hidden" name="userId" value="${umsSession.userId}">
+
+	<c:if test="${not empty umsSession}">
+		<input type="hidden" name="userId" value="${umsSession.userId}">
+	</c:if>
+
+	<c:if test="${registrationResult.registrationSuccess}">
+		<input type="hidden" name="userId" value="${registrationResult.umsUserDetails.userId}">
+	</c:if>
 
 	<div class="panel panel-info">
 		<div class="panel-heading">
