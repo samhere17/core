@@ -10,7 +10,7 @@ INSERT INTO UMS_OPTION (OPTION_NAME, OPTION_DESCRIPTION, OPTION_TYPE, OPTION_ARE
 SET @last_id_in_ums_option = LAST_INSERT_ID();
 
 INSERT INTO UMS_OPTION (OPTION_NAME, OPTION_DESCRIPTION, OPTION_TYPE, OPTION_AREA, OPTION_STATUS, OPTION_LINK, OPTION_ICON, OPTION_ORDER, PARENT_OPTION_ID, OBJECT_REFERENCE_KEY) VALUES
-	('New Option', NULL, 1, 1, 1, 'ums/opt/new', NULL, 1, @last_id_in_ums_option, NULL),
+	('New Option', NULL, 1, 1, 1, 'ums/opt/new&serviceName=ListOptions&listType=parent', 'plus', 1, @last_id_in_ums_option, NULL),
 	('List Option', NULL, 1, 1, 1, 'ums/opt/list&serviceName=ListOptions', 'list-ol', 2, @last_id_in_ums_option, NULL),
 	('Reorder Option', NULL, 1, 1, 1, 'ums/opt/reorder&serviceName=ListOptions', 'reorder', 3, @last_id_in_ums_option, NULL);
 
@@ -23,14 +23,14 @@ SET @last_id_in_ums_option = LAST_INSERT_ID();
 INSERT INTO UMS_OPTION (OPTION_NAME, OPTION_DESCRIPTION, OPTION_TYPE, OPTION_AREA, OPTION_STATUS, OPTION_LINK, OPTION_ICON, OPTION_ORDER, PARENT_OPTION_ID, OBJECT_REFERENCE_KEY) VALUES
 	('My Details', NULL, 1, 1, 1, 'ums/details&serviceName=GetUser', NULL, 1, @last_id_in_ums_option, NULL),
 	('', NULL, 2, 1, 1, '', NULL, 2, @last_id_in_ums_option, NULL),
-	('New User', NULL, 1, 1, 1, 'ums/new&serviceName=GetNewUser', NULL, 3, @last_id_in_ums_option, NULL),
-	('New Multiple Users', NULL, 1, 1, 1, 'ums/newmultiple&serviceName=GetNewUser', NULL, 4, @last_id_in_ums_option, NULL),
-	('Search User', NULL, 1, 1, 1, 'ums/search&serviceName=GetNewUser', NULL, 5, @last_id_in_ums_option, NULL),
+	('New User', NULL, 1, 1, 1, 'ums/new&serviceName=GetNewUser', 'plus', 3, @last_id_in_ums_option, NULL),
+	('New Multiple Users', NULL, 1, 1, 1, 'ums/newmultiple&serviceName=GetNewUser', 'plus', 4, @last_id_in_ums_option, NULL),
+	('Search User', NULL, 1, 1, 1, 'ums/search&serviceName=GetNewUser', 'search', 5, @last_id_in_ums_option, NULL),
 	/*('Edit User', NULL, 1, 1, 1, 'ums/edit', NULL, 6, @last_id_in_ums_option, NULL),
 	('Delete User', NULL, 1, 1, 1, 'ums/delete', NULL, 7, @last_id_in_ums_option, NULL),*/
 	('', NULL, 2, 1, 1, '', NULL, 6, @last_id_in_ums_option, NULL),
-	('New Role', NULL, 1, 1, 1, 'ums/role/new&serviceName=ListPermissions', NULL, 7, @last_id_in_ums_option, NULL),
-	('Search Role', NULL, 1, 1, 1, 'ums/role/search', NULL, 8, @last_id_in_ums_option, NULL);
+	('New Role', NULL, 1, 1, 1, 'ums/role/new&serviceName=ListPermissions', 'plus', 7, @last_id_in_ums_option, NULL),
+	('Search Role', NULL, 1, 1, 1, 'ums/role/search', 'search', 8, @last_id_in_ums_option, NULL);
 	/*('Edit Role', NULL, 1, 1, 1, 'ums/role/edit', NULL, 11, @last_id_in_ums_option, 'role'),
 	('Delete Role', NULL, 1, 1, 1, 'ums/role/delete', NULL, 12, @last_id_in_ums_option, 'role'),*/
 

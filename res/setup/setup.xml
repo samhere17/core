@@ -76,6 +76,7 @@
 			<!-- Copying the core jar to project /lib -->
 			<fileset dir="${release.pkg.dir}/jar">
 				<include name="*.jar" />
+				<exclude name="*core*-config.jar" />
 			</fileset>
 			<!-- Copying required supporting jars to project /lib -->
 			<fileset dir="${release.pkg.dir}/lib">
@@ -89,6 +90,7 @@
 		<echo message="Copying required resources to res folder of the project" />
 		<copy todir="../res/conf" verbose="true">
 			<fileset dir="${release.pkg.dir}/conf">
+				<present present="srconly" targetdir="../res/conf" />
 				<include name="**/**" />
 			</fileset>
 		</copy>

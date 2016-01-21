@@ -175,6 +175,13 @@ public class RequestProcessor extends BaseProcessor {
 			resultMap.put(ServiceConstants.REDIRECT_URL, ERROR_PAGE);
 		}
 
+		LocalLogger.logDebug("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+		LocalLogger.logDebug("Result:");
+		Set<String> resultNames = resultMap.keySet();
+		for (String resultName : resultNames) {
+			LocalLogger.logDebug("Result Name:" + resultName + " and Result Value:" + resultMap.get(resultName));
+		}
+		LocalLogger.logDebug("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
 		LocalLogger.logDebug("Redirect Url: " + StringUtil.getStringValue(resultMap
 				.get(ServiceConstants.REDIRECT_URL)));
 		LocalLogger.logDebug("######################################################################");
