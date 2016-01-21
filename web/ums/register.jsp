@@ -221,7 +221,7 @@
 							}
 						</script>
 
-						<div class="form-group">
+						<div class="form-group has-feedback">
 							<label class="control-label recaptcha_only_if_image">Enter what you see:</label>
 							<label class="control-label recaptcha_only_if_audio">Enter what you hear:</label>
 
@@ -257,8 +257,16 @@
 										</div>
 									</div>
 								</div>
-								<input class="form-control input-sm" type="text" id="recaptcha_response_field" name="recaptcha_response_field" required>
 							</div>
+							<input class="form-control input-sm" type="text" id="recaptcha_response_field" name="recaptcha_response_field" required>
+							
+							<span class="glyphicon glyphicon-ok form-control-feedback hidden" style="top: 117px;"></span>
+							<span class="glyphicon glyphicon-remove form-control-feedback hidden" style="top: 117px;"></span>
+							
+							<%-- Validation error message --%>
+							<p class="error-msg text-danger small hidden">
+								<strong>Enter captcha solution</strong>
+							</p>
 						</div>
 
 						<div class="recaptcha_only_if_incorrect_sol" style="color:red">Incorrect please try again</div>
@@ -273,6 +281,13 @@
 							<textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
 							<input type="hidden" name="recaptcha_response_field" value="manual_challenge">
 						</noscript>
+
+						<%-- Error message from server --%>
+						<c:if test="${not registrationResult.registrationSuccess}">
+							<p class="error-msg-from-svr text-danger small">
+								<strong>${registrationResult.captchaValidationError}</strong>
+							</p>
+						</c:if>
 					</div>
 				</div>
 			</div>
