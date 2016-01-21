@@ -63,4 +63,10 @@ public interface UmsUserDao extends BaseDao<UmsUser> {
 
 	void updateStatus(int userId, UserStatus userStatus) throws DbException;
 
+	void setVerificationCode(int userId, String verificationCode) throws DbException;
+
+	Boolean verifyCode(int userId, String verificationCode) throws DbException;
+
+	void deleteVerificationCode(int userId) throws DbException;
+
 }

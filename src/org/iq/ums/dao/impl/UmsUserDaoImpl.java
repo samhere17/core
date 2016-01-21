@@ -40,6 +40,10 @@ public class UmsUserDaoImpl extends BaseDaoImpl<UmsUser> implements UmsUserDao {
 	private static final String	ASSIGN_COMMUNITY					= "UPDATE UMS_USER SET ADDITIONAL_ID = ? WHERE USER_ID = ?";
 	private static final String	UPDATE_STATUS						= "UPDATE UMS_USER SET USER_STATUS = ? WHERE USER_ID = ?";
 
+	private static final String	SET_VERIFICATION_CODE				= "INSERT INTO UMS_USER_VERIFICATION (USER_ID, VERIFICATION_CODE) VALUES (?, ?)";
+	private static final String	VERIFY_CODE							= "SELECT USER_ID FROM UMS_USER_VERIFICATION WHERE USER_ID = ? AND VERIFICATION_CODE = ?";
+	private static final String	DELETE_VERIFY_CODE					= "DELETE FROM UMS_USER_VERIFICATION WHERE USER_ID = ?";
+
 	/*
 	 * USER_ID, USER_ACCESS_KEY, USERNAME, PASSWORD, USER_TYPE, USER_STATUS, ADDITIONAL_ID, USER_CREATION_STAMP,
 	 * USER_UPDATED_STAMP, USER_UPDATED_BY
@@ -199,6 +203,28 @@ public class UmsUserDaoImpl extends BaseDaoImpl<UmsUser> implements UmsUserDao {
 	@Override
 	public void updateStatus(int userId, UserStatus userStatus) throws DbException {
 		dbSession.executeUpdate(UPDATE_STATUS, userStatus.getUserStatusValue(), userId);
+	}
+
+	@Override
+	public void setVerificationCode(int userId, String verificationCode) throws DbException {
+		dbSession.executeUpdate(SET_VERIFICATION_CODE, userId, verificationCode);
+
+	}
+
+	@Override
+	public Boolean verifyCode(int userId, String verificationCode) throws DbException {
+		DataSet dataSet = dbSession.executeQuery(VERIFY_CODE, userId, verificationCode);
+
+		if(dataSet.getRowCount() > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public void deleteVerificationCode(int userId) throws DbException {
+		dbSession.executeUpdate(DELETE_VERIFY_CODE, userId);
 	}
 
 }

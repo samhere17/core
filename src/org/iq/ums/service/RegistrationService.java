@@ -5,6 +5,7 @@ package org.iq.ums.service;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.iq.exception.BusinessException;
 import org.iq.exception.ServiceException;
@@ -60,11 +61,19 @@ public class RegistrationService extends BaseService {
 		String captchaChallenge = StringUtil.getStringValue(input.get(UserKeys.CAPTCHA_CHALLENGE_KEY));
 		String captchaResponse = StringUtil.getStringValue(input.get(UserKeys.CAPTCHA_RESPONSE_KEY));
 
+		String verrificationCode = UUID.randomUUID().toString();
+
 		UmsRegistrationResult umsRegistrationResult = null;
 
 		try {
-			umsRegistrationResult = new UmsRegistrationHelper().register(firstname, lastname, username, password,
-					cpassword, birthday, gender, email, mobile, remoteAddr, captchaChallenge, captchaResponse);
+			UmsRegistrationHelper umsRegistrationHelper = new UmsRegistrationHelper();
+			umsRegistrationResult = umsRegistrationHelper.register(firstname, lastname, username, password, cpassword,
+					birthday, gender, email, mobile, remoteAddr, captchaChallenge, captchaResponse);
+
+			if(umsRegistrationResult != null && umsRegistrationResult.isRegistrationSuccess()) {
+				umsRegistrationHelper.setVerificationCode(umsRegistrationResult.getUmsUserDetails().getUserId(),
+						verrificationCode);
+			}
 
 		} catch(BusinessException e) {
 			throw new ServiceException(e);

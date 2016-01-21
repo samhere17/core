@@ -328,4 +328,35 @@ public class UmsRegistrationHelper extends BaseHelper {
 		}
 		return validationMessage;
 	}
+
+	public void setVerificationCode(int userId, String verificationCode) throws BusinessException {
+		UmsUserDao umsUserDao = new UmsUserDaoImpl(dbSession);
+
+		try {
+			umsUserDao.setVerificationCode(userId, verificationCode);
+		} catch(DbException e) {
+			throw new BusinessException(e);
+		}
+	}
+
+	public Boolean verify(int userId, String verificationCode) throws BusinessException {
+		UmsUserDao umsUserDao = new UmsUserDaoImpl(dbSession);
+
+		try {
+			return umsUserDao.verifyCode(userId, verificationCode);
+		} catch(DbException e) {
+			throw new BusinessException(e);
+		}
+	}
+
+	public void deleteVerificationCode(int userId) throws BusinessException {
+		UmsUserDao umsUserDao = new UmsUserDaoImpl(dbSession);
+
+		try {
+			umsUserDao.deleteVerificationCode(userId);
+		} catch(DbException e) {
+			throw new BusinessException(e);
+		}
+
+	}
 }

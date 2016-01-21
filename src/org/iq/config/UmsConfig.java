@@ -24,17 +24,14 @@ final public class UmsConfig extends BaseConfig {
 	private String				registerSuccessRedirectUrl;
 	private String				registerFailureRedirectUrl;
 
-	private String				existingUserLoginSuccessRedirectUrl;
-	private String				existingUserLoginFailureRedirectUrl;
+	private String				loginSuccessRedirectUrl;
+	private String				loginFailureRedirectUrl;
 
 	private String				logoutSuccessRedirectUrl;
 	private String				logoutFailureRedirectUrl;
 
 	/* For new users */
 	private int					newlyRegisteredDefaultRole;
-
-	private String				newlyRegisteredLoginSuccessRedirectUrl;
-	private String				newlyRegisteredLoginFailureRedirectUrl;
 
 	public UmsConfig() throws ConfigException {
 		super(UMS_CONFIG_NAME);
@@ -60,8 +57,6 @@ final public class UmsConfig extends BaseConfig {
 		private static final String	UMS_LOGOUT_FAILURE_REDIRECT_URL_KEY		= "logout.failure.redirect.url";
 
 		private static final String	NEWLY_REGISTERED_DEFAULT_ROLE			= "newuser.registration.default.role.id";
-		private static final String	NEWLY_REGISTERED_LOGIN_SUCCESS_REDIRECT	= "newuser.login.success.url";
-		private static final String	NEWLY_REGISTERED_LOGIN_FAILURE_REDIRECT	= "newuser.login.failure.url";
 
 		public UmsConfigHandler() {
 			super(confInputStream);
@@ -85,15 +80,13 @@ final public class UmsConfig extends BaseConfig {
 			setRegisterSuccessRedirectUrl(properties.getProperty(UMS_REGISTER_SUCCESS_REDIRECT_URL_KEY));
 			setRegisterFailureRedirectUrl(properties.getProperty(UMS_REGISTER_FAILURE_REDIRECT_URL_KEY));
 
-			setExistingUserLoginSuccessRedirectUrl(properties.getProperty(UMS_LOGIN_SUCCESS_REDIRECT_URL_KEY));
-			setExistingUserLoginFailureRedirectUrl(properties.getProperty(UMS_LOGIN_FAILURE_REDIRECT_URL_KEY));
+			setLoginSuccessRedirectUrl(properties.getProperty(UMS_LOGIN_SUCCESS_REDIRECT_URL_KEY));
+			setLoginFailureRedirectUrl(properties.getProperty(UMS_LOGIN_FAILURE_REDIRECT_URL_KEY));
 
 			setLogoutSuccessRedirectUrl(properties.getProperty(UMS_LOGOUT_SUCCESS_REDIRECT_URL_KEY));
 			setLogoutFailureRedirectUrl(properties.getProperty(UMS_LOGOUT_FAILURE_REDIRECT_URL_KEY));
 
 			setNewlyRegisteredDefaultRole(Integer.valueOf(properties.getProperty(NEWLY_REGISTERED_DEFAULT_ROLE)));
-			setNewlyRegisteredLoginSuccessRedirectUrl(properties.getProperty(NEWLY_REGISTERED_LOGIN_SUCCESS_REDIRECT));
-			setNewlyRegisteredLoginFailureRedirectUrl(properties.getProperty(NEWLY_REGISTERED_LOGIN_FAILURE_REDIRECT));
 		}
 
 		@Override
@@ -271,36 +264,20 @@ final public class UmsConfig extends BaseConfig {
 		this.newlyRegisteredDefaultRole = newlyRegisteredDefaultRole;
 	}
 
-	public String getNewlyRegisteredLoginSuccessRedirectUrl() {
-		return newlyRegisteredLoginSuccessRedirectUrl;
+	public String getLoginSuccessRedirectUrl() {
+		return loginSuccessRedirectUrl;
 	}
 
-	public void setNewlyRegisteredLoginSuccessRedirectUrl(String newlyRegisteredLoginSuccessRedirectUrl) {
-		this.newlyRegisteredLoginSuccessRedirectUrl = newlyRegisteredLoginSuccessRedirectUrl;
+	public void setLoginSuccessRedirectUrl(String loginSuccessRedirectUrl) {
+		this.loginSuccessRedirectUrl = loginSuccessRedirectUrl;
 	}
 
-	public String getNewlyRegisteredLoginFailureRedirectUrl() {
-		return newlyRegisteredLoginFailureRedirectUrl;
+	public String getLoginFailureRedirectUrl() {
+		return loginFailureRedirectUrl;
 	}
 
-	public void setNewlyRegisteredLoginFailureRedirectUrl(String newlyRegisteredLoginFailureRedirectUrl) {
-		this.newlyRegisteredLoginFailureRedirectUrl = newlyRegisteredLoginFailureRedirectUrl;
-	}
-
-	public String getExistingUserLoginSuccessRedirectUrl() {
-		return existingUserLoginSuccessRedirectUrl;
-	}
-
-	public void setExistingUserLoginSuccessRedirectUrl(String existingUserLoginSuccessRedirectUrl) {
-		this.existingUserLoginSuccessRedirectUrl = existingUserLoginSuccessRedirectUrl;
-	}
-
-	public String getExistingUserLoginFailureRedirectUrl() {
-		return existingUserLoginFailureRedirectUrl;
-	}
-
-	public void setExistingUserLoginFailureRedirectUrl(String existingUserLoginFailureRedirectUrl) {
-		this.existingUserLoginFailureRedirectUrl = existingUserLoginFailureRedirectUrl;
+	public void setLoginFailureRedirectUrl(String loginFailureRedirectUrl) {
+		this.loginFailureRedirectUrl = loginFailureRedirectUrl;
 	}
 
 }

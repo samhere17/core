@@ -12,6 +12,7 @@ import org.iq.service.BaseService;
 import org.iq.service.Service;
 import org.iq.ums.UmsConstants;
 import org.iq.ums.UmsContext;
+import org.iq.ums.UmsConstants.UserStatus;
 import org.iq.ums.exception.UmsException;
 import org.iq.ums.helper.UmsAuthenticationHelper;
 import org.iq.ums.vo.UmsSession;
@@ -70,29 +71,18 @@ public class AuthenticationService extends BaseService {
 
 		/* If login was successful */
 		if(umsSession.isSessionValid()) {
-			/* If it's a new user, redirect to the search community page */
-			/*
-			 * if(umsSession.getUserStatus() == UserStatus.NEW) { redirectUrl =
-			 * UmsContext.umsConfig.getNewlyRegisteredLoginSuccessRedirectUrl(); }
-			 * 
-			 * If it's an existing user, redirect to the dashboard else {
-			 */
-			redirectUrl = UmsContext.umsConfig.getExistingUserLoginSuccessRedirectUrl();
-			// }
+			redirectUrl = UmsContext.umsConfig.getLoginSuccessRedirectUrl();
 		}
 
 		/* If login was unsuccessful */
 		else {
-			/* If it's a new user, redirect to the login page */
-			/*
-			 * if(umsSession.getUserStatus() == UserStatus.NEW) { redirectUrl =
-			 * UmsContext.umsConfig.getNewlyRegisteredLoginFailureRedirectUrl(); }
-			 * 
-			 * If it's an existing user, redirect to the login page else {
-			 */
-			redirectUrl = UmsContext.umsConfig.getExistingUserLoginFailureRedirectUrl();
-			// }
+			redirectUrl = UmsContext.umsConfig.getLoginFailureRedirectUrl();
 		}
+
+		if(umsSession.getUserStatus() == UserStatus.NEW) {
+			redirectUrl = "verify.jsp";
+		}
+
 		LocalLogger.logMethodEnd();
 	}
 }
