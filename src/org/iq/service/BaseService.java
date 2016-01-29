@@ -27,6 +27,7 @@ public abstract class BaseService implements Cloneable, Serializable {
 	private HashMap<String, Object> resultMap = new HashMap<String, Object>();
 	protected HashMap<String, Object> resultAttributes = new HashMap<String, Object>();
 	protected String redirectUrl = null;
+	protected String redirectUrlKey = null;
 //	protected DbSession dbSession = null;
 	protected UmsSession umsSession = null;
 	protected LocalLogger logger = null;
@@ -50,6 +51,21 @@ public abstract class BaseService implements Cloneable, Serializable {
 	 */
 	public void setUmsSession(UmsSession umsSession) {
 		this.umsSession = umsSession;
+	}
+	
+	/**
+	 * @return the redirectUrlKey
+	 */
+	public final String getRedirectUrlKey() {
+		return redirectUrlKey;
+	}
+
+	/**
+	 * @param redirectUrlKey
+	 *            the redirectUrlKey to set
+	 */
+	protected final void setRedirectUrlKey(String redirectUrlKey) {
+		this.redirectUrlKey = redirectUrlKey;
 	}
 
 	/**

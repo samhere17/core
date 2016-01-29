@@ -1,0 +1,29 @@
+/**
+ * Copyright (c) 2013, iquesters - All Rights Reserved.
+ */
+package ${module.getActionPackageName()};
+
+import org.iq.action.Action;
+import org.iq.action.RedirectAction;
+
+/**
+ * @author iquesters core code generator
+ * 
+ */
+@Action(name = "${redirectAction.name}")
+public class ${redirectAction.getClassName()} extends RedirectAction {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = ${Random.nextLong()}L;
+
+	/**
+	 * 
+	 */
+	public ${redirectAction.getClassName()}() {
+		super();
+		setName("${redirectAction.name}");
+		setRedirectUrl("${redirectAction.redirectUrl}");
+	}
+}

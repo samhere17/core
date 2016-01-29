@@ -1,6 +1,7 @@
 package org.iq.startup.actions;
 
 import org.iq.SystemContext;
+import org.iq.action.Actions;
 import org.iq.exception.ConfigException;
 import org.iq.exception.CoreException;
 import org.iq.service.ServicesDefinitions;
@@ -23,6 +24,9 @@ public class SystemStartupAction extends StartupAction {
 		
 		// Loading Services Definitions
 		ServicesDefinitions.load();
+
+		// Loading Actions
+		Actions.load();
 
 		System.out.println("SYSTEM STARTED SUCCESSFULLY");
 	}

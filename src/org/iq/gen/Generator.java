@@ -15,9 +15,15 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.iq.exception.UtilityException;
 import org.iq.gen.artifact.Artifact;
 import org.iq.gen.builder.FormBuilder;
+import org.iq.gen.builder.LaunchActionBuilder;
 import org.iq.gen.builder.ParamKeysBuilder;
+import org.iq.gen.builder.RedirectActionBuilder;
+import org.iq.gen.builder.SubmitActionBuilder;
 import org.iq.gen.data.Form;
 import org.iq.gen.data.Module;
+import org.iq.gen.data.action.LaunchActionData;
+import org.iq.gen.data.action.RedirectActionData;
+import org.iq.gen.data.action.SubmitActionData;
 
 /**
  * @author Sam
@@ -27,17 +33,16 @@ public class Generator {
 	
 	private String plansDir = null;
 	private String[] moduleNames = null;
-//	private String destDir = null;
 	
 	private List<Artifact> generatedArtifacts = new ArrayList<Artifact>();
 	
-	public Generator(String plansDir, String[] moduleNames, String destDir) {
+	public Generator(String plansDir, String[] moduleNames, String destDir, String packagePrefix) {
 		this.plansDir = plansDir;
 		this.moduleNames = moduleNames;
-//		this.destDir = destDir;
 		
 		//initialize GeneratorContext
-		GeneratorContext.root = destDir;
+		GeneratorContext.destination_directory = destDir;
+		GeneratorContext.package_prefix = packagePrefix;
 	}
 	
 	public void generate() {
@@ -49,24 +54,53 @@ public class Generator {
 					System.out.println("Processing " + planFile.getName() + " file.");
 					String jsonString = GeneratorUtil.getFileContent(planFile);
 					Module module = (Module) GeneratorUtil.getObject(jsonString, Module.class);
-					
+
 					if (module != null) {
-						//Generating forms
+						// Generating module level artifacts
+						ParamKeysBuilder paramKeysBuilder = new ParamKeysBuilder(module);
+						generatedArtifacts.add(paramKeysBuilder.getGeneratedArtifact());
+
+						// Generating form level artifacts
 						List<Form> forms = module.getForms();
-						if (forms != null && forms.size()>0) {
+						if (forms != null && forms.size() > 0) {
 							for (Form form : forms) {
 								FormBuilder formContentBuilder = new FormBuilder(form, module.getName());
-								/*generatedFilesMap.put(formContentBuilder.getGeneratedFilename(),
-											formContentBuilder.getGeneratedContent());*/
-
 								generatedArtifacts.add(formContentBuilder.getGeneratedArtifact());
+							}
+						}
 
-								ParamKeysBuilder paramKeysBuilder = new ParamKeysBuilder(module);
-								/*generatedFilesMap.put(paramKeysBuilder.getGeneratedFilename(),
-											paramKeysBuilder.getGeneratedContent());*/
+						// Generating action level artifacts
+						List<RedirectActionData> redirectActions = module.getRedirectActions();
+						if (redirectActions != null && redirectActions.size() > 0) {
+							for (RedirectActionData redirectAction : redirectActions) {
+								RedirectActionBuilder redirectActionBuilder = new RedirectActionBuilder(module,
+										redirectAction);
+								generatedArtifacts.add(redirectActionBuilder.getGeneratedArtifact());
+							}
+						}
 
-								generatedArtifacts.add(paramKeysBuilder.getGeneratedArtifact());
+						List<LaunchActionData> launchActions = module.getLaunchActions();
+						if (launchActions != null && launchActions.size() > 0) {
+							for (LaunchActionData launchAction : launchActions) {
+								LaunchActionBuilder launchActionBuilder = new LaunchActionBuilder(module, launchAction);
+								generatedArtifacts.add(launchActionBuilder.getGeneratedArtifact());
 
+								RedirectActionData innerRedirectAction = launchAction.getRedirectAction();
+								if (innerRedirectAction != null) {
+									RedirectActionBuilder redirectActionBuilder = new RedirectActionBuilder(module,
+											innerRedirectAction);
+									generatedArtifacts.add(redirectActionBuilder.getGeneratedArtifact());
+								}
+							}
+						}
+
+						List<SubmitActionData> submitActions = module.getSubmitActions();
+						if (submitActions != null && submitActions.size() > 0) {
+							for (SubmitActionData submitAction : submitActions) {
+								SubmitActionBuilder submitActionBuilder = new SubmitActionBuilder(module, submitAction);
+								generatedArtifacts.add(submitActionBuilder.getGeneratedArtifact());
+								
+								//TODO inner actions
 							}
 						}
 					}

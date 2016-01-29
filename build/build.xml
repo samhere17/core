@@ -78,6 +78,9 @@
 		<!-- Building core services jar to ${dist.dir}/dist/jar and ${dist.dir}/temp/lib -->
 		<antcall target="build.core.services.jar"></antcall>
 
+		<!-- Building core actions jar to ${dist.dir}/dist/jar and ${dist.dir}/temp/lib -->
+		<antcall target="build.core.actions.jar"></antcall>
+
 		<!-- Building core conf jar to ${dist.dir}/dist/jar and ${dist.dir}/temp/lib -->
 		<antcall target="build.core.config.jar"></antcall>
 		
@@ -223,6 +226,8 @@
 			<exclude name="org/iq/service/cache/**" />
 			<exclude name="org/iq/service/system/**" />
 			<exclude name="org/iq/ums/service/**" />
+			<exclude name="org/iq/action/**" />
+			<exclude name="org/iq/ums/action/**" />
 			<exclude name="org/iq/gen/**" />
 			<manifest>
 				<attribute name="Implementation-Title" value="${proj.name}-${build.version}.jar" />
@@ -260,6 +265,29 @@
 		<copy todir="${dist.dir}/temp/lib" verbose="true">
 			<fileset dir="${dist.dir}/dist/jar">
 				<include name="${proj.name}-${build.version}-services.jar"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- Building core actions jar to ${dist.dir}/dist/jar and ${dist.dir}/temp/lib -->
+	<target name="build.core.actions.jar">
+		<!-- Building the core actions jar and placing it in ${dist.dir}/dist/jar -->
+		<jar destfile="${dist.dir}/dist/jar/${proj.name}-${build.version}-actions.jar" basedir="${dist.dir}/temp/bin">
+			<include name="org/iq/action/**" />
+			<include name="org/iq/ums/action/**" />
+			<manifest>
+				<attribute name="Implementation-Title" value="${proj.name}-${build.version}-actions.jar" />
+				<attribute name="Implementation-Vendor" value="${comp.name}" />
+				<attribute name="Implementation-Version" value="${build.version}" />
+				<attribute name="Development-Version" value="${build.dev.version}" />
+				<attribute name="Implementation-Date" value="${build.date} ${build.time}" />
+			</manifest>
+		</jar>
+		
+		<!-- Copying the core actions jar to ${dist.dir}/temp/lib -->
+		<copy todir="${dist.dir}/temp/lib" verbose="true">
+			<fileset dir="${dist.dir}/dist/jar">
+				<include name="${proj.name}-${build.version}-actions.jar"/>
 			</fileset>
 		</copy>
 	</target>

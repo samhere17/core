@@ -10,11 +10,12 @@ import org.iq.gen.data.Field;
 import org.iq.gen.data.Form;
 import org.iq.gen.data.Module;
 import org.iq.gen.data.Section;
+import org.iq.gen.data.action.RedirectActionData;
 
 public class TestJsonGenerator {
 	
 	public static void main(String[] args) throws Exception {
-		System.out.println(GeneratorUtil.getJson(getApartmentModule()));
+		System.out.println(GeneratorUtil.getPrettyJson(getApartmentModule()));
 	}
 	
 	public static Module getApartmentModule() {
@@ -24,14 +25,27 @@ public class TestJsonGenerator {
 		module.setDescription("This module deal with Apartment operations");
 		
 		List<Form> forms = new ArrayList<Form>();
-		
 		forms.add(getApartmentDetailsForm());
-		
 		module.setForms(forms);
+		
+		List<RedirectActionData> redirectActions = new ArrayList<RedirectActionData>();
+		redirectActions.addAll(getApartmentRedirectActions());
+		module.setRedirectActions(redirectActions);
 		
 		return module;
 	}
 	
+	private static List<RedirectActionData> getApartmentRedirectActions() {
+		List<RedirectActionData> actions = new ArrayList<RedirectActionData>();
+		
+		RedirectActionData redirectAction = new RedirectActionData();
+		redirectAction.setName("ApartmentNew");
+		redirectAction.setRedirectUrl("new.jsp");
+		actions.add(redirectAction);
+		
+		return actions;
+	}
+
 	private static Form getApartmentDetailsForm() {
 		Form form = new Form();
 		

@@ -1,87 +1,89 @@
 {
-	"id":"c3634266-80de-421d-b002-c9735e0a0fac",
-	"name":"Apartment",
-	"description":"This module deal with Apartment operations",
-	"forms":[
-	{
-		"id":"4837e1a1-1895-46a3-96df-d30ffdb24b98",
-		"name":"ApartmentDetails",
-		"description":"This form contains Apartment Details",
-		"method":null,
-		"action":"Authentication",
-		"enctype":null,
-		"sections":[
-		{
-			"id":"bc4f1957-e7c8-469f-a9e0-c73c4e87c25c",
-			"title":"Basic Information",
-			"description":"This is Basic Information section",
-			"fields":[
-			{
-				"id":"cfb26ef7-94bf-4e12-869c-1cc61a87b6b4",
-				"htmlId":"798631d1951c495d",
-				"name":"apt-prefix-1",
-				"label":"Apartment Number Prefix 1",
-				"value":"${apartment.apartmentNumberPrefix1}",
-				"fieldInfo":"This is a Text field for Apartment Number Prefix 1",
-				"inputType":"TEXT",
-				"readonly":true,
-				"required":false,
-				"disabled":false,
-				"maxLength":null
-			},
-			{
-				"id":"f708e575-b496-470d-a8a4-751505a359c5",
-				"htmlId":"9efc2e09d7e04010",
-				"name":"apt-prefix-2",
-				"label":"Apartment Number Prefix 2",
-				"value":"${apartment.apartmentNumberPrefix2}",
-				"fieldInfo":"This is a Text field for Apartment Number Prefix 2",
-				"inputType":"TEXT",
-				"readonly":true,
-				"required":false,
-				"disabled":false,
-				"maxLength":null
-			},
-			{
-				"id":"a032270d-a27c-4523-bec2-3cdc7aec1077",
-				"htmlId":"4a86d244cf884013",
-				"name":"apt-number","label":"Apartment Number",
-				"value":"${apartment.apartmentNumber}",
-				"fieldInfo":"This is a Text field for Apartment Number",
-				"inputType":"TEXT",
-				"readonly":true,
-				"required":false,
-				"disabled":false,
-				"maxLength":null
-			},
-			{
-				"id":"3311985a-b522-4960-be6b-41531bcec53c",
-				"htmlId":"d8ae6cffbe2649fc",
-				"name":"apt-suffix-1",
-				"label":"Apartment Number Suffix 1",
-				"value":"${apartment.apartmentNumberSuffix1}",
-				"fieldInfo":"This is a Text field for Apartment Number Suffix 1",
-				"inputType":"TEXT",
-				"readonly":true,
-				"required":false,
-				"disabled":false,
-				"maxLength":null
-			},
-			{
-				"id":"fa644a34-0f95-426e-a573-1528a35cb9c3",
-				"htmlId":"ca23e8260a0b47cc",
-				"name":"apt-suffix-2",
-				"label":"Apartment Number Suffix 2",
-				"value":"${apartment.apartmentNumberSuffix2}",
-				"fieldInfo":"This is a Text field for Apartment Number Suffix 2",
-				"inputType":"TEXT",
-				"readonly":true,
-				"required":false,
-				"disabled":false,
-				"maxLength":null
-			}],
-			"childSections":null
-		}],
-		"actionFields":null
-	}]
+  "id" : "c4d3f190-247e-4856-9225-e9ea6eca02c5",
+  "name" : "Apartment",
+  "description" : "This module deal with Apartment operations",
+  "forms" : [ {
+    "id" : "a453be1f-b957-490b-8dd5-c39a56c4a229",
+    "name" : "ApartmentDetails",
+    "description" : "This form contains Apartment Details",
+    "method" : null,
+    "action" : "Authentication",
+    "enctype" : null,
+    "sections" : [ {
+      "id" : "3c3941f0-6cd1-488f-b1af-be10bd4f944e",
+      "title" : "Basic Information",
+      "description" : "This is Basic Information section",
+      "fields" : [ {
+        "id" : "5bc72d5a-4ae8-48b2-9862-c1f1960aff90",
+        "htmlId" : "a3e09f1c35e2473a",
+        "name" : "apt-prefix-1",
+        "label" : "Apartment Number Prefix 1",
+        "value" : "${apartment.apartmentNumberPrefix1}",
+        "fieldInfo" : "This is a Text field for Apartment Number Prefix 1",
+        "inputType" : "TEXT",
+        "readonly" : true,
+        "required" : false,
+        "disabled" : false,
+        "maxLength" : null
+      }, {
+        "id" : "cf3201d2-a09e-43fc-8195-2c3539e2b731",
+        "htmlId" : "6f1b46c193ca4922",
+        "name" : "apt-prefix-2",
+        "label" : "Apartment Number Prefix 2",
+        "value" : "${apartment.apartmentNumberPrefix2}",
+        "fieldInfo" : "This is a Text field for Apartment Number Prefix 2",
+        "inputType" : "TEXT",
+        "readonly" : true,
+        "required" : false,
+        "disabled" : false,
+        "maxLength" : null
+      }, {
+        "id" : "7f6ac9b1-5b15-4d77-a5b0-fb6824c51b3e",
+        "htmlId" : "ce5a2ee38e1146a0",
+        "name" : "apt-number",
+        "label" : "Apartment Number",
+        "value" : "${apartment.apartmentNumber}",
+        "fieldInfo" : "This is a Text field for Apartment Number",
+        "inputType" : "TEXT",
+        "readonly" : true,
+        "required" : false,
+        "disabled" : false,
+        "maxLength" : null
+      }, {
+        "id" : "877e6da7-e11a-4bb4-9d24-b9e790b1e4dd",
+        "htmlId" : "93913069f1a34482",
+        "name" : "apt-suffix-1",
+        "label" : "Apartment Number Suffix 1",
+        "value" : "${apartment.apartmentNumberSuffix1}",
+        "fieldInfo" : "This is a Text field for Apartment Number Suffix 1",
+        "inputType" : "TEXT",
+        "readonly" : true,
+        "required" : false,
+        "disabled" : false,
+        "maxLength" : null
+      }, {
+        "id" : "88d585cd-8156-4efd-90f5-4a9fa011e2c4",
+        "htmlId" : "4b2937895a8d4cb1",
+        "name" : "apt-suffix-2",
+        "label" : "Apartment Number Suffix 2",
+        "value" : "${apartment.apartmentNumberSuffix2}",
+        "fieldInfo" : "This is a Text field for Apartment Number Suffix 2",
+        "inputType" : "TEXT",
+        "readonly" : true,
+        "required" : false,
+        "disabled" : false,
+        "maxLength" : null
+      } ],
+      "childSections" : null
+    } ],
+    "actionFields" : null
+  } ],
+  "redirectActions" : [ {
+    "id" : "d19d1ec4-66c8-4653-8059-6a46063ce599",
+    "name" : "Apartment New",
+    "sessionRequired" : false,
+    "redirectUrl" : "new.jsp"
+  } ],
+  "launchActions" : null,
+  "submitActions" : null
 }

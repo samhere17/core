@@ -25,7 +25,7 @@ public class Validator {
 	public static void isMinLength(Object object, int minLength)
 			throws ValidationException {
 		if (StringUtil.getStringValue(object).length() < minLength) {
-			throw new ValidationException("Manimum " + minLength
+			throw new ValidationException("Minimum " + minLength
 					+ " characters required");
 		}
 	}

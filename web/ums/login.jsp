@@ -25,6 +25,13 @@
 						<p class="error-msg text-danger small hidden">
 							<strong>Enter username</strong>
 						</p>
+
+						<%-- Error message from server --%>
+						<c:if test="${not registrationResult.registrationSuccess}">
+							<p class="error-msg-from-svr text-danger small">
+								<strong>${registrationResult.firstnameValidationError}</strong>
+							</p>
+						</c:if>
 					</div>
 				</div>
 			</div>

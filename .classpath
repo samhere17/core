@@ -15,8 +15,8 @@
 	<classpathentry kind="lib" path="lib/opencsv-3.6.jar"/>
 	<classpathentry kind="lib" path="res/setup/files/dev/lib/jackson-all-1.9.11.jar"/>
 	<classpathentry kind="lib" path="res/setup/files/dev/lib/apache-commons-lang.jar"/>
-	<classpathentry kind="lib" path="res/setup/files/dev/lib/apache-velocity-velocity-1.5.jar"/>
 	<classpathentry kind="lib" path="res/setup/files/dev/lib/commons.collections-3.2.1.jar"/>
 	<classpathentry kind="lib" path="res/setup/files/dev/lib/ant.jar"/>
+	<classpathentry kind="lib" path="res/setup/files/dev/lib/velocity-1.7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

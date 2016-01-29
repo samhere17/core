@@ -39,6 +39,11 @@ public class GeneratorUtil {
 		return mapper.writeValueAsString(object);
 	}
 
+	public static String getPrettyJson(Object object) throws JsonGenerationException, JsonMappingException, IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+	}
+
 	/**
 	 * @param json
 	 * @param inputClass

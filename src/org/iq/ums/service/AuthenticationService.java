@@ -11,8 +11,8 @@ import org.iq.logger.LocalLogger;
 import org.iq.service.BaseService;
 import org.iq.service.Service;
 import org.iq.ums.UmsConstants;
-import org.iq.ums.UmsContext;
 import org.iq.ums.UmsConstants.UserStatus;
+import org.iq.ums.action.AuthenticationSA;
 import org.iq.ums.exception.UmsException;
 import org.iq.ums.helper.UmsAuthenticationHelper;
 import org.iq.ums.vo.UmsSession;
@@ -71,16 +71,19 @@ public class AuthenticationService extends BaseService {
 
 		/* If login was successful */
 		if(umsSession.isSessionValid()) {
-			redirectUrl = UmsContext.umsConfig.getLoginSuccessRedirectUrl();
+//			redirectUrl = UmsContext.umsConfig.getLoginSuccessRedirectUrl();
+			setRedirectUrlKey(AuthenticationSA.LOGIN_SUCCESS_ACTION_KEY);
 		}
 
 		/* If login was unsuccessful */
 		else {
-			redirectUrl = UmsContext.umsConfig.getLoginFailureRedirectUrl();
+//			redirectUrl = UmsContext.umsConfig.getLoginFailureRedirectUrl();
+			setRedirectUrlKey(AuthenticationSA.LOGIN_FAILURE_ACTION_KEY);
 		}
 
 		if(umsSession.getUserStatus() == UserStatus.NEW) {
-			redirectUrl = "verify.jsp";
+//			redirectUrl = "verify.jsp";
+			setRedirectUrlKey(AuthenticationSA.LOGIN_VERIFY_ACTION_KEY);
 		}
 
 		LocalLogger.logMethodEnd();

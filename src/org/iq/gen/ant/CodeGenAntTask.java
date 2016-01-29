@@ -6,7 +6,6 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.iq.gen.Generator;
 
-
 /**
  * @author Sam
  * 
@@ -16,6 +15,7 @@ public class CodeGenAntTask extends BaseAntTask {
 	private String plansDir = null;
 	private String moduleNames = null;
 	private String destDir = null;
+	private String packagePrefix = null;
 
 	@Override
 	protected void executeTask() throws BuildException {
@@ -38,7 +38,7 @@ public class CodeGenAntTask extends BaseAntTask {
 			}
 		}
 
-		Generator codeGenerator = new Generator(plansDir, moduleNamesArr, destDir);
+		Generator codeGenerator = new Generator(plansDir, moduleNamesArr, destDir, packagePrefix);
 
 		codeGenerator.generate();
 
@@ -64,7 +64,7 @@ public class CodeGenAntTask extends BaseAntTask {
 			log("Argument 'moduleNames' is missing. Will generate all plan files", Project.MSG_WARN);
 		} else {
 			log("moduleNames = " + moduleNames, Project.MSG_INFO);
-			log("Will generate '" + moduleNames+"' plan file(s)", Project.MSG_INFO);
+			log("Will generate '" + moduleNames + "' plan file(s)", Project.MSG_INFO);
 		}
 
 		if (isEmptyString(destDir)) {
@@ -114,10 +114,25 @@ public class CodeGenAntTask extends BaseAntTask {
 	}
 
 	/**
-	 * @param destDir the destDir to set
+	 * @param destDir
+	 *            the destDir to set
 	 */
 	public void setDestDir(String destDir) {
 		this.destDir = destDir;
 	}
 
+	/**
+	 * @return the packagePrefix
+	 */
+	public String getPackagePrefix() {
+		return packagePrefix;
+	}
+
+	/**
+	 * @param packagePrefix
+	 *            the packagePrefix to set
+	 */
+	public void setPackagePrefix(String packagePrefix) {
+		this.packagePrefix = packagePrefix;
+	}
 }

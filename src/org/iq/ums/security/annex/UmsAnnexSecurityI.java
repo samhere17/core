@@ -2,6 +2,7 @@ package org.iq.ums.security.annex;
 
 import java.util.Map;
 
+import org.iq.exception.RenderableException;
 import org.iq.ums.exception.UmsException;
 import org.iq.ums.vo.UmsUser;
 
@@ -22,8 +23,9 @@ interface UmsAnnexSecurityI {
 	 * @param password
 	 * @return UmsUser
 	 * @throws UmsException
+	 * @throws RenderableException 
 	 */
-	public abstract UmsUser authenticate(String userName, char[] password) throws UmsException;
+	public abstract UmsUser authenticate(String userName, char[] password) throws UmsException, RenderableException;
 
 	/**
 	 * @param userName

@@ -6,4 +6,6 @@ package org.iq;
  */
 public interface Constants {
 	
+	public static final String REQUESTED_ACTION_KEY = "serviceName";
+
 }

@@ -3,10 +3,9 @@
  */
 package org.iq.gen.builder;
 
-import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Random;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -48,9 +47,9 @@ public abstract class BaseArtifactBuilder {
 		String fileName = (String) context.get("file-name"); //class name in case of java class
 		boolean overwrite = (boolean) context.get("overwrite");
 		
-		//Setting StringUtils in context, as this is to be used in VM
-		context.put("StringUtils", StringUtils.class);
+		//Setting BuilderUtil in context, as this is to be used in VM
 		context.put("BuilderUtil", BuilderUtil.class);
+		context.put("Random", new Random());
 		
 		String content = generateContentString();
 		
@@ -93,9 +92,6 @@ public abstract class BaseArtifactBuilder {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MethodInvocationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e) {

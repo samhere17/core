@@ -49,7 +49,7 @@ public abstract class Artifact {
 	 * @return String
 	 */
 	private String getFullFilePath() {
-		String fullFilePath = GeneratorContext.root;
+		String fullFilePath = GeneratorContext.destination_directory;
 		if (isJavaClass()) {
 			fullFilePath = fullFilePath + File.separator + GEN_SOURCE_FOLDER;
 		} else if (isJspFile()) {

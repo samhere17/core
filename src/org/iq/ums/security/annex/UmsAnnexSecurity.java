@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.iq.exception.BusinessException;
 import org.iq.exception.DbException;
+import org.iq.exception.RenderableException;
 import org.iq.ums.dao.UmsUserDao;
 import org.iq.ums.dao.impl.UmsUserDaoImpl;
 import org.iq.ums.exception.UmsException;
@@ -30,7 +31,7 @@ import org.iq.ums.vo.UmsUser;
 public class UmsAnnexSecurity implements UmsAnnexSecurityI {
 
 	@Override
-	public UmsUser authenticate(String userName, char[] password) throws UmsException {
+	public UmsUser authenticate(String userName, char[] password) throws UmsException, RenderableException {
 		UmsUser user = null;
 		try {
 			UmsUserDao userDao = new UmsUserDaoImpl(UmsDbProvider.getDbSession());
@@ -47,10 +48,11 @@ public class UmsAnnexSecurity implements UmsAnnexSecurityI {
 			if (authenticateUser) {
 				return user;
 			} else {
-				return null;
+				throw new RenderableException("Password was wrong");
 			}
 		}
-		return null;
+
+		throw new RenderableException("Username did not match any registered user");
 	}
 
 	@Override

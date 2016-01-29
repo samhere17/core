@@ -5,11 +5,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.iq.Constants;
 import org.iq.ServiceConstants;
 import org.iq.SystemContext;
+import org.iq.action.Actions;
+import org.iq.action.BaseAction;
+import org.iq.action.LaunchAction;
+import org.iq.action.RedirectAction;
+import org.iq.action.SubmitAction;
 import org.iq.cache.CacheHelper;
 import org.iq.exception.BaseException;
 import org.iq.exception.CacheException;
+import org.iq.exception.RenderableException;
 import org.iq.exception.ServiceException;
 import org.iq.logger.LocalLogger;
 import org.iq.service.BaseService;
@@ -28,38 +35,64 @@ public class RequestProcessor extends BaseProcessor {
 	/**
 	 * 
 	 */
-	private static final long	serialVersionUID		= -6193888847884264953L;
+	private static final long serialVersionUID = -6193888847884264953L;
 
-	private static final String	ERROR_MESSAGE_KEY		= "errorMessage";
-	private static final String	STACK_TRACE_KEY			= "stackTrace";
+	private static final String ERROR_MESSAGE_KEY = "errorMessage";
+	private static final String STACK_TRACE_KEY = "stackTrace";
 
-	private static final String	ERROR_PAGE				= "error.jsp";
+	private static final String ERROR_PAGE = "error.jsp";
 
 	/**
 	 * a unique identifier for each jSession
 	 */
-	protected String			jSessionId				= null;
+	protected String jSessionId = null;
 
 	/**
 	 * a unique identifier for each request
 	 */
-	protected String			requestId				= null;
+	protected String requestId = null;
 
 	/**
 	 * an identifier for request type
 	 */
-	protected RequestType		requestType				= null;
+	protected RequestType requestType = null;
+
+	
+	/**
+	 * requested action name
+	 */
+	protected String requestedActionName = null;
 
 	/**
 	 * requested service name
 	 */
-	protected String			requestedServiceName	= null;
+	protected String requestedServiceName = null;
+
+	/**
+	 * requested service
+	 */
+	protected BaseAction requestedAction = null;
+	
+	/**
+	 * requested service
+	 */
+	protected BaseService requestedService = null;
+	
+	/**
+	 * 
+	 */
+	protected UmsSession umsSession = null;
 
 	/**
 	 * 
 	 */
-	protected UmsSession		umsSession				= null;
-
+	Map<String, Object> inputMap = null;
+	
+	/**
+	 * 
+	 */
+	Map<String, Object> resultMap = null;
+	
 	/**
 	 * 
 	 */
@@ -89,21 +122,17 @@ public class RequestProcessor extends BaseProcessor {
 	 * @return Map<String, Object>
 	 */
 	public Map<String, Object> processRequest(Map<String, Object> input) {
-		requestedServiceName = StringUtil.getStringValue(input.get(ServiceConstants.REQUESTED_SERVICE_NAME_KEY));
-		Map<String, Object> resultMap = new HashMap<String, Object>();
+		requestedActionName = StringUtil.getStringValue(input.get(Constants.REQUESTED_ACTION_KEY));
 
-		LocalLogger.logDebug("######################################################################");
-		LocalLogger.logDebug("Request Type = " + requestType);
-		LocalLogger.logDebug("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
-		Set<String> paramNames = input.keySet();
-		for(String paramName : paramNames) {
-			LocalLogger.logDebug("Param Name:" + paramName + " and Param Value:" + input.get(paramName));
-		}
-		LocalLogger.logDebug("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
-		LocalLogger.logDebug(ServiceConstants.REQUESTED_SERVICE_NAME_KEY + " = " + requestedServiceName);
+		logParameters(input);
+
+		inputMap = input;
+		resultMap = new HashMap<String, Object>();
 
 		try {
-			if(isSessionCheckRequired()) {
+			prepareActionClass();
+			
+			if (requestedAction.isSessionRequired()) {
 				CacheHelper cacheHelper = new CacheHelper();
 				umsSession = (UmsSession) cacheHelper.getElement("UMS_SESSIONS", jSessionId);
 
@@ -119,95 +148,185 @@ public class RequestProcessor extends BaseProcessor {
 					return resultMap;
 				}
 			}
-
-			switch(requestType) {
-				case GET:
-					String requestedPath = StringUtil.getStringValue(input.get("path"));
-
-					if(StringUtil.isEmpty(requestedServiceName) == false) {
-						resultMap = executeService(input);
-					}
-
-					resultMap.put(ServiceConstants.REDIRECT_URL, requestedPath + ".jsp");
-					break;
-				case POST:
-					resultMap = executeService(input);
-					break;
-				default:
-					break;
+			
+			switch (requestType) {
+			case GET:
+				if (requestedAction instanceof RedirectAction) {
+					RedirectAction redirectAction = (RedirectAction) requestedAction;
+					processRedirectAction(redirectAction);
+				} else if (requestedAction instanceof LaunchAction) {
+					LaunchAction launchAction = (LaunchAction) requestedAction;
+					processLaunchAction(launchAction);
+				} else {
+					throw new ServiceException(
+							"HTTP request method GET only supports Redirect Actions and Launch Actions");
+				}
+				break;
+			case POST:
+				if (requestedAction instanceof SubmitAction) {
+					SubmitAction submitAction = (SubmitAction) requestedAction;
+					processSubmitAction(submitAction);
+				} else {
+					throw new ServiceException("HTTP request method POST only supports Submit Actions");
+				}
+				break;
+			default:
+				break;
 			}
 		} catch(UmsException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			resultMap.put(ERROR_MESSAGE_KEY, (e.getMessage() != null ? e.getMessage() : e.toString()));
 			resultMap.put(STACK_TRACE_KEY, BaseException.getStackTraceForWeb(e));
 			resultMap.put(ServiceConstants.REDIRECT_URL, ERROR_PAGE);
 		} catch(ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			resultMap.put(ERROR_MESSAGE_KEY, (e.getMessage() != null ? e.getMessage() : e.toString()));
 			resultMap.put(STACK_TRACE_KEY, BaseException.getStackTraceForWeb(e));
 			resultMap.put(ServiceConstants.REDIRECT_URL, ERROR_PAGE);
 		} catch(InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			resultMap.put(ERROR_MESSAGE_KEY, (e.getMessage() != null ? e.getMessage() : e.toString()));
 			resultMap.put(STACK_TRACE_KEY, BaseException.getStackTraceForWeb(e));
 			resultMap.put(ServiceConstants.REDIRECT_URL, ERROR_PAGE);
 		} catch(IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			resultMap.put(ERROR_MESSAGE_KEY, (e.getMessage() != null ? e.getMessage() : e.toString()));
 			resultMap.put(STACK_TRACE_KEY, BaseException.getStackTraceForWeb(e));
 			resultMap.put(ServiceConstants.REDIRECT_URL, ERROR_PAGE);
-		} catch(ServiceException e) {
+		} catch(RenderableException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+//			e.printStackTrace();
+//			resultMap.put(ERROR_MESSAGE_KEY, (e.getMessage() != null ? e.getMessage() : e.toString()));
+//			resultMap.put(STACK_TRACE_KEY, BaseException.getStackTraceForWeb(e));
+//			resultMap.put(ServiceConstants.REDIRECT_URL, ERROR_PAGE);
+		} catch(ServiceException e) {
 			resultMap.put(ERROR_MESSAGE_KEY, (e.getMessage() != null ? e.getMessage() : e.toString()));
 			resultMap.put(STACK_TRACE_KEY, BaseException.getStackTraceForWeb(e));
 			resultMap.put(ServiceConstants.REDIRECT_URL, ERROR_PAGE);
 		} catch(Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			resultMap.put(ERROR_MESSAGE_KEY, (e.getMessage() != null ? e.getMessage() : e.toString()));
 			resultMap.put(STACK_TRACE_KEY, BaseException.getStackTraceForWeb(e));
 			resultMap.put(ServiceConstants.REDIRECT_URL, ERROR_PAGE);
 		}
 
-		LocalLogger.logDebug("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
-		LocalLogger.logDebug("Result:");
-		Set<String> resultNames = resultMap.keySet();
-		for(String resultName : resultNames) {
-			LocalLogger.logDebug("Result Name:" + resultName + " and Result Value:" + resultMap.get(resultName));
-		}
-		LocalLogger.logDebug("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
-		LocalLogger
-				.logDebug("Redirect Url: " + StringUtil.getStringValue(resultMap.get(ServiceConstants.REDIRECT_URL)));
-		LocalLogger.logDebug("######################################################################");
-
+		logResults(resultMap);
+		
 		return resultMap;
 	}
+	
 
-	private boolean isSessionCheckRequired() {
+	/**
+	 * @throws ServiceException
+	 * @throws ClassNotFoundException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
+	private void prepareActionClass()
+			throws ServiceException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+		String requestedActionClassName = Actions.getActionClassName(requestedActionName);
+
+		if (StringUtil.isEmpty(requestedActionClassName)) {
+			throw new ServiceException("Class name not found for requested action = " + requestedActionName);
+		}
+		Class<?> actionClass = Class.forName(requestedActionClassName);
+		requestedAction = (BaseAction) actionClass.newInstance();
+	}
+
+	/**
+	 * @param requestedServiceName
+	 * @throws ServiceException
+	 * @throws ClassNotFoundException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
+	private void prepareServiceClass(String requestedServiceName)
+			throws ServiceException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+		this.requestedServiceName = requestedServiceName;
+		String requestedServiceClassName = ServicesDefinitions.getServiceClassName(this.requestedServiceName);
+		
+		if (StringUtil.isEmpty(requestedServiceClassName)) {
+			throw new ServiceException("Class name not found for requested service = " + this.requestedServiceName);
+		}
+		
+		Class<?> serviceClass = Class.forName(requestedServiceClassName);
+		requestedService = (BaseService) serviceClass.newInstance();
+		requestedService.setUmsSession(umsSession);
+	}
+	
+	/**
+	 * @param redirectAction
+	 */
+	private void processRedirectAction(RedirectAction redirectAction) {
+		//All redirects should go to <context path>/ui with a page id as parameter
+//		String redirectUrl = "ui?page="+redirectAction.getFormId();
+//		resultMap.put(ServiceConstants.REDIRECT_URL, redirectUrl);
+		
+		//below is the existing implementation
+		resultMap.put(ServiceConstants.REDIRECT_URL, redirectAction.getRedirectUrl() + ".jsp");
+	}
+
+	/**
+	 * @param launchAction
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 * @throws ClassNotFoundException 
+	 * @throws ServiceException 
+	 */
+	private void processLaunchAction(LaunchAction launchAction)
+			throws ServiceException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+		if (StringUtil.isEmpty(launchAction.getServiceName()) == false) {
+			prepareServiceClass(launchAction.getServiceName());
+			resultMap = executeService(inputMap);
+		} else {
+			throw new ServiceException("Launch Action must have a Service Name");
+		}
+//		processRedirectAction(launchAction.getRedirectAction());
+	}
+	
+	/**
+	 * @param submitAction
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 * @throws ClassNotFoundException 
+	 * @throws ServiceException 
+	 */
+	private void processSubmitAction(SubmitAction submitAction)
+			throws ServiceException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+		if (StringUtil.isEmpty(submitAction.getServiceName()) == false) {
+			prepareServiceClass(submitAction.getServiceName());
+			resultMap = executeService(inputMap);
+		} else {
+			throw new ServiceException("Submit Action must have a Service Name");
+		}
+
+		BaseAction baseAction = submitAction.getAction(requestedService.getRedirectUrlKey());
+
+		if (baseAction instanceof RedirectAction) {
+			RedirectAction redirectAction = (RedirectAction) baseAction;
+			processRedirectAction(redirectAction);
+		} else if (baseAction instanceof LaunchAction) {
+			LaunchAction launchAction = (LaunchAction) baseAction;
+			processLaunchAction(launchAction);
+		}
+	}
+
+
+	/**
+	 * @param input
+	 * @return Map<String, Object>
+	 * @throws ServiceException
+	 */
+	private Map<String, Object> executeService(Map<String, Object> input) throws ServiceException {
+		return requestedService.executeService((HashMap<String, Object>) input);
+	}
+
+
+
+/*	private boolean isSessionCheckRequired() {
 		// Checking if service is Authentication service or Registration service
 		// TODO forget password and/or any other service which do not require valid session
 		return ServiceConstants.AUTHENTICATION_SERVICE_NAME.equals(requestedServiceName) == false
 				&& ServiceConstants.REGISTRATION_SERVICE_NAME.equals(requestedServiceName) == false
 				&& ServiceConstants.VERIFICATION_SERVICE_NAME.equals(requestedServiceName) == false;
 	}
-
-	private Map<String, Object> executeService(Map<String, Object> input)
-			throws ClassNotFoundException, InstantiationException, IllegalAccessException, ServiceException {
-		String requestedServiceClassName = ServicesDefinitions.getServiceClassName(requestedServiceName);
-		if(StringUtil.isEmpty(requestedServiceClassName)) {
-			throw new ServiceException("Class name not found for requested service = " + requestedServiceName);
-		}
-		Class<?> serviceClass = Class.forName(requestedServiceClassName);
-		BaseService service = (BaseService) serviceClass.newInstance();
-		service.setUmsSession(umsSession);
-		return service.executeService((HashMap<String, Object>) input);
-	}
-
+*/
+	
 	/**
 	 * @author Sam
 	 *
@@ -312,5 +431,39 @@ public class RequestProcessor extends BaseProcessor {
 		BaseSystemService systemService = (BaseSystemService) serviceClass.newInstance();
 		systemService.setUmsSession(umsSession);
 		return systemService.executeService((HashMap<String, Object>) input);
+	}
+
+	/**
+	 * @param input
+	 */
+	private void logParameters(Map<String, Object> input) {
+		LocalLogger.logDebug("######################################################################");
+		LocalLogger.logDebug("JSESSION Id      = " + jSessionId);
+		LocalLogger.logDebug("Request Id       = " + requestId);
+		LocalLogger.logDebug("Request Type     = " + requestType);
+		LocalLogger.logDebug("Requested Action = " + requestedActionName);
+		LocalLogger.logDebug("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+		Set<String> paramNames = input.keySet();
+		for (String paramName : paramNames) {
+			LocalLogger.logDebug("Param Name:" + paramName + " and Param Value:" + input.get(paramName));
+		}
+		LocalLogger.logDebug("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+	}
+	
+	/**
+	 * @param resultMap
+	 */
+	private void logResults(Map<String, Object> resultMap) {
+		LocalLogger.logDebug("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+		LocalLogger.logDebug("Result:");
+		Set<String> resultNames = resultMap.keySet();
+		for(String resultName : resultNames) {
+			LocalLogger.logDebug("Result Name:" + resultName + " and Result Value:" + resultMap.get(resultName));
+		}
+		LocalLogger.logDebug("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+		LocalLogger
+				.logDebug("Redirect Url: " + StringUtil.getStringValue(resultMap.get(ServiceConstants.REDIRECT_URL)));
+		LocalLogger.logDebug("######################################################################");
+
 	}
 }

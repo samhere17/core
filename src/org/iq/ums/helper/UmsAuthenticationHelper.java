@@ -5,6 +5,7 @@ import java.util.Date;
 import org.iq.exception.BusinessException;
 import org.iq.exception.CacheException;
 import org.iq.exception.DbException;
+import org.iq.exception.RenderableException;
 import org.iq.helper.BaseHelper;
 import org.iq.logger.LocalLogger;
 import org.iq.ui.useragents.UserAgent;
@@ -61,10 +62,11 @@ public class UmsAuthenticationHelper extends BaseHelper {
 	 * @param userAgentString
 	 * @return UmsSession
 	 * @throws UmsException
+	 * @throws RenderableException 
 	 */
 	public UmsSession authenticate(String username, String password, String jSessionId, String accessIp,
 			String accessPort, String accessGateway, String actualAccessIP, String userAgentString)
-					throws UmsException {
+					throws UmsException, RenderableException {
 
 		UmsUser user = UmsContext.umsAnnexSecurity.authenticate(username, password.toCharArray());
 

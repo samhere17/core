@@ -4,7 +4,7 @@ package org.iq.exception;
  * @author
  * 
  */
-public class RenderingException extends ServiceException {
+public class RenderableException extends ServiceException {
 
   /**
    * 
@@ -14,21 +14,21 @@ public class RenderingException extends ServiceException {
   /**
    * 
    */
-  public RenderingException() {
+  public RenderableException() {
 	super();
   }
 
   /**
    * @param msg
    */
-  public RenderingException(String msg) {
+  public RenderableException(String msg) {
 	super(msg);
   }
 
   /**
    * @param msg
    */
-  public RenderingException(Throwable th) {
+  public RenderableException(Throwable th) {
 	super(th);
   }
 
@@ -36,7 +36,7 @@ public class RenderingException extends ServiceException {
    * @param msg
    * @param th
    */
-  public RenderingException(String msg, Throwable th) {
+  public RenderableException(String msg, Throwable th) {
 	super(msg, th);
   }
 }

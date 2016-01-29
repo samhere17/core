@@ -1,0 +1,1 @@
+<h1 style="color: red;">REDIRECT URL IS NOT PROVIDED</h1>
