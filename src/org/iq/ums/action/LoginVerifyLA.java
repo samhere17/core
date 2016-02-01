@@ -4,15 +4,14 @@
 package org.iq.ums.action;
 
 import org.iq.action.Action;
-import org.iq.action.RedirectAction;
-import org.iq.ums.UmsContext;
+import org.iq.action.LaunchAction;
 
 /**
  * @author Sam
  * 
  */
 @Action(name = "LoginVerify")
-public class LoginVerifyRA extends RedirectAction {
+public class LoginVerifyLA extends LaunchAction {
 
 	/**
 	 * 
@@ -22,7 +21,7 @@ public class LoginVerifyRA extends RedirectAction {
 	/**
 	 * 
 	 */
-	public LoginVerifyRA() {
+	public LoginVerifyLA() {
 		super();
 		setName("LoginVerify");
 		setRedirectUrl("verify");

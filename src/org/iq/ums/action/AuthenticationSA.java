@@ -30,11 +30,11 @@ public class AuthenticationSA extends SubmitAction {
 		setServiceName("Authentication");
 		
 		/*
-		 * Preparing the redirect actions map
+		 * Preparing the launch actions map
 		 */
-		addRedirectAction(LOGIN_SUCCESS_ACTION_KEY, new LoginSuccessRA());
-		addRedirectAction(LOGIN_FAILURE_ACTION_KEY, new LoginFailureRA());
-		addRedirectAction(LOGIN_VERIFY_ACTION_KEY, new LoginVerifyRA());
+		addLaunchAction(LOGIN_SUCCESS_ACTION_KEY, new LoginSuccessLA());
+		addLaunchAction(LOGIN_FAILURE_ACTION_KEY, new LoginFailureLA());
+		addLaunchAction(LOGIN_VERIFY_ACTION_KEY, new LoginVerifyLA());
 		
 		setSessionNotRequired();
 	}

@@ -5,13 +5,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.iq.Constants;
 import org.iq.ServiceConstants;
 import org.iq.SystemContext;
 import org.iq.action.Actions;
 import org.iq.action.BaseAction;
 import org.iq.action.LaunchAction;
-import org.iq.action.RedirectAction;
 import org.iq.action.SubmitAction;
 import org.iq.cache.CacheHelper;
 import org.iq.exception.BaseException;
@@ -137,13 +137,13 @@ public class RequestProcessor extends BaseProcessor {
 				umsSession = (UmsSession) cacheHelper.getElement("UMS_SESSIONS", jSessionId);
 
 				// If umsSession is not available, return to web context
-				if(umsSession == null) {
+				if (umsSession == null) {
 					resultMap.put(ServiceConstants.REDIRECT_URL, SystemContext.systemConfig.getWebContextRoot());
 					return resultMap;
 				}
 
 				// If SystemSessionId is not valid, return to web context
-				if(new UmsAuthenticationHelper().isTicketValid(umsSession.getSystemSessionId()) == false) {
+				if (new UmsAuthenticationHelper().isTicketValid(umsSession.getSystemSessionId()) == false) {
 					resultMap.put(ServiceConstants.REDIRECT_URL, SystemContext.systemConfig.getWebContextRoot());
 					return resultMap;
 				}
@@ -151,15 +151,11 @@ public class RequestProcessor extends BaseProcessor {
 			
 			switch (requestType) {
 			case GET:
-				if (requestedAction instanceof RedirectAction) {
-					RedirectAction redirectAction = (RedirectAction) requestedAction;
-					processRedirectAction(redirectAction);
-				} else if (requestedAction instanceof LaunchAction) {
+				if (requestedAction instanceof LaunchAction) {
 					LaunchAction launchAction = (LaunchAction) requestedAction;
 					processLaunchAction(launchAction);
 				} else {
-					throw new ServiceException(
-							"HTTP request method GET only supports Redirect Actions and Launch Actions");
+					throw new ServiceException("HTTP request method GET only supports Launch Actions");
 				}
 				break;
 			case POST:
@@ -250,18 +246,6 @@ public class RequestProcessor extends BaseProcessor {
 	}
 	
 	/**
-	 * @param redirectAction
-	 */
-	private void processRedirectAction(RedirectAction redirectAction) {
-		//All redirects should go to <context path>/ui with a page id as parameter
-//		String redirectUrl = "ui?page="+redirectAction.getFormId();
-//		resultMap.put(ServiceConstants.REDIRECT_URL, redirectUrl);
-		
-		//below is the existing implementation
-		resultMap.put(ServiceConstants.REDIRECT_URL, redirectAction.getRedirectUrl() + ".jsp");
-	}
-
-	/**
 	 * @param launchAction
 	 * @throws IllegalAccessException 
 	 * @throws InstantiationException 
@@ -270,39 +254,60 @@ public class RequestProcessor extends BaseProcessor {
 	 */
 	private void processLaunchAction(LaunchAction launchAction)
 			throws ServiceException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-		if (StringUtil.isEmpty(launchAction.getServiceName()) == false) {
-			prepareServiceClass(launchAction.getServiceName());
-			resultMap = executeService(inputMap);
+		if (launchAction != null) {
+			if (StringUtils.isNotEmpty(launchAction.getServiceName())) {
+				prepareServiceClass(launchAction.getServiceName());
+				resultMap = executeService(inputMap);
+			}
+			
+			/*
+			 * All redirects should go to <context path>/ui with a page id as
+			 * parameter. If page id is not passed system should redirect to the
+			 * redirect url provided.
+			 */
+			String redirectUrl = null;
+			
+			if (StringUtils.isNotEmpty(launchAction.getPageId())) {
+				redirectUrl = "ui?page="+launchAction.getPageId();
+			} else if (StringUtils.isNotEmpty(launchAction.getRedirectUrl())) {
+				redirectUrl = launchAction.getRedirectUrl();
+			}
+			
+			resultMap.put(ServiceConstants.REDIRECT_URL, redirectUrl);
+
 		} else {
-			throw new ServiceException("Launch Action must have a Service Name");
+
+			throw new ServiceException("Launch Action cannot be null");
+
 		}
-//		processRedirectAction(launchAction.getRedirectAction());
 	}
 	
 	/**
 	 * @param submitAction
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
-	 * @throws ClassNotFoundException 
-	 * @throws ServiceException 
+	 * @throws ServiceException
+	 * @throws ClassNotFoundException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
 	 */
 	private void processSubmitAction(SubmitAction submitAction)
 			throws ServiceException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-		if (StringUtil.isEmpty(submitAction.getServiceName()) == false) {
-			prepareServiceClass(submitAction.getServiceName());
-			resultMap = executeService(inputMap);
+		if (submitAction != null) {
+			if (StringUtils.isNotEmpty(submitAction.getServiceName())) {
+
+				prepareServiceClass(submitAction.getServiceName());
+				resultMap = executeService(inputMap);
+
+				processLaunchAction(submitAction.getLaunchAction(requestedService.getRedirectUrlKey()));
+
+			} else {
+
+				throw new ServiceException("Submit Action must have a Service Name");
+
+			}
 		} else {
-			throw new ServiceException("Submit Action must have a Service Name");
-		}
 
-		BaseAction baseAction = submitAction.getAction(requestedService.getRedirectUrlKey());
+			throw new ServiceException("Submit Action cannot be null");
 
-		if (baseAction instanceof RedirectAction) {
-			RedirectAction redirectAction = (RedirectAction) baseAction;
-			processRedirectAction(redirectAction);
-		} else if (baseAction instanceof LaunchAction) {
-			LaunchAction launchAction = (LaunchAction) baseAction;
-			processLaunchAction(launchAction);
 		}
 	}
 

@@ -18,7 +18,7 @@ public abstract class SubmitAction extends BaseAction {
 	private static final long serialVersionUID = -1193667392286754698L;
 	
 	private String serviceName;
-	private Map<String, BaseAction> actionMap;
+	private Map<String, LaunchAction> launchActionMap;
 
 	/**
 	 * @return the serviceName
@@ -36,20 +36,15 @@ public abstract class SubmitAction extends BaseAction {
 	}
 	
 	/**
-	 * @return the actionMap
+	 * @return the launchActionMap
 	 */
-	public final Map<String, BaseAction> getActionMap() {
-		return actionMap;
+	public final Map<String, LaunchAction> getLaunchActionMap() {
+		return launchActionMap;
 	}
 
-	public final BaseAction getAction(String actionKey) {
-		if (actionMap != null) {
-			BaseAction requestedAction = actionMap.get(actionKey);
-			if (requestedAction instanceof RedirectAction) {
-				return (RedirectAction) requestedAction;
-			} else if (requestedAction instanceof LaunchAction) {
-				return (LaunchAction) requestedAction;
-			}
+	public final LaunchAction getLaunchAction(String actionKey) {
+		if (launchActionMap != null) {
+			return launchActionMap.get(actionKey);
 		}
 		return null;
 	}
@@ -59,20 +54,9 @@ public abstract class SubmitAction extends BaseAction {
 	 * @param launchAction
 	 */
 	protected final void addLaunchAction(String actionKey, LaunchAction launchAction) {
-		if (actionMap == null) {
-			actionMap = new HashMap<String, BaseAction>();
+		if (launchActionMap == null) {
+			launchActionMap = new HashMap<String, LaunchAction>();
 		}
-		actionMap.put(actionKey, launchAction);
-	}
-
-	/**
-	 * @param actionKey
-	 * @param redirectAction
-	 */
-	protected final void addRedirectAction(String actionKey, RedirectAction redirectAction) {
-		if (actionMap == null) {
-			actionMap = new HashMap<String, BaseAction>();
-		}
-		actionMap.put(actionKey, redirectAction);
+		launchActionMap.put(actionKey, launchAction);
 	}
 }

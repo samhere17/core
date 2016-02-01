@@ -1,5 +1,5 @@
 /**
- * 
+ * Copyright (c) 2013, iquesters - All Rights Reserved.
  */
 package org.iq.action;
 
@@ -19,12 +19,17 @@ public abstract class LaunchAction extends BaseAction {
 	 * launched
 	 */
 	private String serviceName;
+
 	/**
-	 * ID of the form to be launched
+	 * ID of the page to be launched
 	 */
-	private String formId;
-	
-	private RedirectAction redirectAction;
+	private String pageId;
+
+	/**
+	 * URL of the page to be launched. This is only used if <code>pageId</code>
+	 * is not provided
+	 */
+	private String redirectUrl;
 
 	/**
 	 * @return the serviceName
@@ -42,16 +47,32 @@ public abstract class LaunchAction extends BaseAction {
 	}
 
 	/**
-	 * @return the redirectAction
+	 * @return the pageId
 	 */
-	public final RedirectAction getRedirectAction() {
-		return redirectAction;
+	public final String getPageId() {
+		return pageId;
 	}
 
 	/**
-	 * @param redirectAction the redirectAction to set
+	 * @param pageId
+	 *            the pageId to set
 	 */
-	protected final void setRedirectAction(RedirectAction redirectAction) {
-		this.redirectAction = redirectAction;
+	protected final void setPageId(String pageId) {
+		this.pageId = pageId;
+	}
+
+	/**
+	 * @return the redirectUrl
+	 */
+	public final String getRedirectUrl() {
+		return redirectUrl;
+	}
+
+	/**
+	 * @param redirectUrl
+	 *            the redirectUrl to set
+	 */
+	protected final void setRedirectUrl(String redirectUrl) {
+		this.redirectUrl = redirectUrl;
 	}
 }

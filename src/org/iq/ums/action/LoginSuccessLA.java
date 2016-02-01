@@ -4,7 +4,7 @@
 package org.iq.ums.action;
 
 import org.iq.action.Action;
-import org.iq.action.RedirectAction;
+import org.iq.action.LaunchAction;
 import org.iq.ums.UmsContext;
 
 /**
@@ -12,7 +12,7 @@ import org.iq.ums.UmsContext;
  * 
  */
 @Action(name = "LoginSuccess")
-public class LoginSuccessRA extends RedirectAction {
+public class LoginSuccessLA extends LaunchAction {
 
 	/**
 	 * 
@@ -22,7 +22,7 @@ public class LoginSuccessRA extends RedirectAction {
 	/**
 	 * 
 	 */
-	public LoginSuccessRA() {
+	public LoginSuccessLA() {
 		super();
 		setName("LoginSuccess");
 		setRedirectUrl(UmsContext.umsConfig.getLoginSuccessRedirectUrl());
