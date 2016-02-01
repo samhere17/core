@@ -136,6 +136,7 @@
 			<include name="mail-1.4.4.jar"/>
 			<include name="opencsv-3.6.jar"/>
 			<include name="commons-lang3-3.3.1.jar"/>
+			<include name="commons-collections4-4.1.jar"/>
 			
 			<!-- jersey related -->
 			<!--<include name="javax.ws.rs-api-2.0.1.jar"/>

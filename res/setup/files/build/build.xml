@@ -265,10 +265,10 @@
 	<!-- Extracting core war contents to ${dist.dir}/${proj.name}/temp/war-contents -->
 	<target name="extract.core.war">
 		<echo message="Extracting core war contents to ${dist.dir}/${proj.name}/temp/war-contents" />
-		<unzip dest="${dist.dir}/${proj.name}/temp/war-contents" src="core-war/core-1.0.0.0.war">
-			<patternset>
-				<include name="**/**" />
-			</patternset>
+		<unzip dest="${dist.dir}/${proj.name}/temp/war-contents">
+			<fileset dir="core-war">
+				<include name="core-*.war"/>
+			</fileset>
 		</unzip>
 	</target>
 

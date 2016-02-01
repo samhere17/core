@@ -14,5 +14,6 @@
 	<classpathentry kind="lib" path="lib/jstl-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/mail-1.4.4.jar"/>
 	<classpathentry kind="lib" path="lib/opencsv-3.6.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections4-4.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
