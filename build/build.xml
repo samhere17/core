@@ -236,6 +236,7 @@
 				<attribute name="Implementation-Version" value="${build.version}" />
 				<attribute name="Development-Version" value="${build.dev.version}" />
 				<attribute name="Implementation-Date" value="${build.date} ${build.time}" />
+				<attribute name="Built-using-java" value="${ant.java.version}" />
 			</manifest>
 		</jar>
 
@@ -259,6 +260,7 @@
 				<attribute name="Implementation-Version" value="${build.version}" />
 				<attribute name="Development-Version" value="${build.dev.version}" />
 				<attribute name="Implementation-Date" value="${build.date} ${build.time}" />
+				<attribute name="Built-using-java" value="${ant.java.version}" />
 			</manifest>
 		</jar>
 		
@@ -282,6 +284,7 @@
 				<attribute name="Implementation-Version" value="${build.version}" />
 				<attribute name="Development-Version" value="${build.dev.version}" />
 				<attribute name="Implementation-Date" value="${build.date} ${build.time}" />
+				<attribute name="Built-using-java" value="${ant.java.version}" />
 			</manifest>
 		</jar>
 		
@@ -316,6 +319,7 @@
 				<attribute name="Implementation-Version" value="${build.version}" />
 				<attribute name="Development-Version" value="${build.dev.version}" />
 				<attribute name="Implementation-Date" value="${build.date} ${build.time}" />
+				<attribute name="Built-using-java" value="${ant.java.version}" />
 			</manifest>
 		</jar>
 
@@ -338,6 +342,7 @@
 				<attribute name="Implementation-Version" value="${build.version}" />
 				<attribute name="Development-Version" value="${build.dev.version}" />
 				<attribute name="Implementation-Date" value="${build.date} ${build.time}" />
+				<attribute name="Built-using-java" value="${ant.java.version}" />
 			</manifest>
 		</jar>
 
@@ -378,6 +383,7 @@
 				<attribute name="Implementation-Version" value="${build.version}" />
 				<attribute name="Development-Version" value="${build.dev.version}" />
 				<attribute name="Implementation-Date" value="${build.date} ${build.time}" />
+				<attribute name="Built-using-java" value="${ant.java.version}" />
 			</manifest>
 		</war>
 	</target>

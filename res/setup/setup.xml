@@ -60,7 +60,9 @@
 				<include name="build.xml" />
 			</fileset>
 		</copy>
-		
+
+		<delete dir="../build/core-war" />
+
 		<echo message="Copying the core war to build folder of the project" />
 		<copy todir="../build/core-war" verbose="true">
 			<fileset dir="${release.pkg.dir}/war">
