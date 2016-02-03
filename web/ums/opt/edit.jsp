@@ -1,6 +1,6 @@
 <%@ include file="../../cmn/head.jsp"%>
 	<form method="post" action="${pageContext.request.contextPath}/adapter">
-		<input class="form-control" type="hidden" name="serviceName" value="UpdateOption">
+		<input class="form-control" type="hidden" name="requested-action" value="UpdateOption">
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<div class="panel-title">Edit Option</div>

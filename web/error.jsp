@@ -1,6 +1,6 @@
 <%@include file="cmn/head.jsp" %>
 <form class="" action="" method="post">
-	<input type="hidden" name="serviceName" value="">
+	<input type="hidden" name="requested-action" value="">
 	<input type="hidden" name="roleId" value="${umsSession.roleId}">
 	<input type="hidden" name="userId" value="${umsSession.userId}">
 	<input type="hidden" name="errorMessage" value="${errorMessage}">

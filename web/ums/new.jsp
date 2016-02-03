@@ -1,6 +1,6 @@
 <%@include file="../cmn/head.jsp"%>
 	<form method="post" action="${pageContext.request.contextPath}/adapter">
-		<input type="hidden" name="serviceName" value="InsertUser">
+		<input type="hidden" name="requested-action" value="InsertUser">
 
 		<%-- Additional ID selection for Super Admin --%>
 		<c:if test="${umsSession.roleId == 1}">

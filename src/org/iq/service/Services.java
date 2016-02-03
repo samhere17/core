@@ -14,7 +14,7 @@ import org.iq.version.Version;
 /**
  * @author Sam
  */
-final public class ServicesDefinitions {
+final public class Services {
 
 	private static final String SERVICES_JAR_ENDS_WITH = "-services.jar";
 	private static final Properties services= new Properties();
@@ -24,7 +24,7 @@ final public class ServicesDefinitions {
 	 */
 	public static void load() {
 		try {
-			ClassLoader cl = ServicesDefinitions.class.getClassLoader();
+			ClassLoader cl = Services.class.getClassLoader();
 			URL[] jarURLs = ((URLClassLoader) cl).getURLs();
 
 			String coreServicesJarName = "core-" + Version.coreVersionNumber + SERVICES_JAR_ENDS_WITH;

@@ -1,11 +1,11 @@
 <%@include file="../cmn/head.jsp" %>
 <c:choose>
-	<c:when test="${not empty param.mypage}">
-		<c:set var="mypageurl" value="../gen/${param.mypage}.jsp"></c:set>
-		<jsp:include page="${mypageurl}"/>
+	<c:when test="${not empty param.page}">
+		<c:set var="pageurl" value="../gen/${param.page}.jsp"></c:set>
+		<jsp:include page="${pageurl}"/>
 	</c:when>
 	<c:otherwise>
-		mypage parameter not passed
+		page parameter not passed
 	</c:otherwise>
 </c:choose>
 <%@include file="../cmn/tail.jsp" %>

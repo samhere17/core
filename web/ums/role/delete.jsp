@@ -1,6 +1,6 @@
 <%@ include file="../../cmn/head.jsp" %>
 <form method="post" action="${pageContext.request.contextPath}/adapter">
-	<input type="hidden" name="serviceName" value="DeleteRole">
+	<input type="hidden" name="requested-action" value="DeleteRole">
 	<input type="hidden" name="roleId" value="${role.roleId}">
 
 	<div class="alert alert-danger">

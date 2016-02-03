@@ -4,7 +4,7 @@ import org.iq.SystemContext;
 import org.iq.action.Actions;
 import org.iq.exception.ConfigException;
 import org.iq.exception.CoreException;
-import org.iq.service.ServicesDefinitions;
+import org.iq.service.Services;
 
 /**
  * @author Sam
@@ -22,8 +22,8 @@ public class SystemStartupAction extends StartupAction {
 			throw new CoreException(e);
 		}
 		
-		// Loading Services Definitions
-		ServicesDefinitions.load();
+		// Loading Services
+		Services.load();
 
 		// Loading Actions
 		Actions.load();

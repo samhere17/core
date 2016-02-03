@@ -42,14 +42,14 @@
 											<div class="row">
 												<div class="col-md-3 col-xs-3">
 													<form method="post" action="${pageContext.request.contextPath}/adapter">
-														<input type="hidden" name="serviceName" value="GetUser">
+														<input type="hidden" name="requested-action" value="GetUser">
 														<input class="btn btn-sm btn-primary" type="submit" value="View Profile">
 													</form>
 												</div>
 
 												<div class="col-md-3 col-xs-3 col-md-offset-1 col-xs-offset-2">
 													<form method="post" action="${pageContext.request.contextPath}/adapter">
-														<input type="hidden" name="serviceName" value="Logout">
+														<input type="hidden" name="requested-action" value="Logout">
 														<input type="hidden" name="jSessionId" value="${pageContext.session.id}">
 														<input class="btn btn-sm btn-primary" type="submit" value="Logout">
 													</form>
@@ -124,14 +124,14 @@
 											<div class="row">
 												<div class="col-md-3">
 													<form method="post" action="${pageContext.request.contextPath}/adapter">
-														<input type="hidden" name="serviceName" value="GetUser">
+														<input type="hidden" name="requested-action" value="GetUser">
 														<input class="btn btn-sm btn-primary" type="submit" value="View Profile">
 													</form>
 												</div>
 
 												<div class="col-md-3 col-md-offset-1">
 													<form method="post" action="${pageContext.request.contextPath}/adapter">
-														<input type="hidden" name="serviceName" value="Logout">
+														<input type="hidden" name="requested-action" value="Logout">
 														<input type="hidden" name="jSessionId" value="${pageContext.session.id}">
 														<input class="btn btn-sm btn-primary" type="submit" value="Logout">
 													</form>

@@ -10,7 +10,7 @@
 			<div id="criteria" class="panel-collapse collapse <c:if test="${!searchDone}">in</c:if>" role="tabpanel" aria-labelledby="criteria-heading">
 				<div class="panel-body">
 					<form method="post" action="${pageContext.request.contextPath}/adapter">
-						<input type="hidden" name="serviceName" value="SearchUser">
+						<input type="hidden" name="requested-action" value="SearchUser">
 						<h4>
 							<strong>User Details</strong>
 						</h4>
@@ -230,7 +230,7 @@
 
 											<td class="text-right">
 												<form method="get" action="${pageContext.request.contextPath}/adapter">
-													<input type="hidden" name="serviceName" value="GetUser">
+													<input type="hidden" name="requested-action" value="GetUser">
 													<input type="hidden" name="path" value="ums/details">
 													<input type="hidden" name="userId" value="${current.userId}">
 													<button class="btn btn-xs btn-warning" type="submit" title="Details">
@@ -239,7 +239,7 @@
 												</form>
 
 												<form method="get" action="${pageContext.request.contextPath}/adapter">
-													<input type="hidden" name="serviceName" value="GetUser">
+													<input type="hidden" name="requested-action" value="GetUser">
 													<input type="hidden" name="path" value="ums/edit">
 													<input type="hidden" name="userId" value="${current.userId}">
 													<button class="btn btn-xs btn-warning" type="submit" title="Edit">
@@ -249,7 +249,7 @@
 
 												<%-- Always displaying the delete button. This form is only for internal use --%>
 												<form method="get" action="${pageContext.request.contextPath}/adapter">
-													<input type="hidden" name="serviceName" value="GetUser">
+													<input type="hidden" name="requested-action" value="GetUser">
 													<input type="hidden" name="path" value="ums/delete">
 													<input type="hidden" name="userId" value="${current.userId}">
 													<button class="btn btn-xs btn-warning" type="submit" title="Delete">

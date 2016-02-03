@@ -1,6 +1,6 @@
 <%@ include file="../../cmn/head.jsp"%>
 <form method="post" action="${pageContext.request.contextPath}/adapter">
-	<input type="hidden" name="serviceName" value="SearchRole" />
+	<input type="hidden" name="requested-action" value="SearchRole" />
 
 	<div class="panel panel-default">
 		<div class="panel-heading">
@@ -53,7 +53,7 @@
 									<td>${current.roleStatus}</td>
 									<td>
 										<form method="get" action="${pageContext.request.contextPath}/adapter">
-											<input type="hidden" name="serviceName" value="GetRole">
+											<input type="hidden" name="requested-action" value="GetRole">
 											<input type="hidden" name="path" value="ums/role/details">
 											<input type="hidden" name="roleId" value="${current.roleId}">
 											<button class="btn btn-xs btn-warning" type="submit" title="Details">
@@ -61,7 +61,7 @@
 											</button>
 										</form>
 										<form method="get" action="${pageContext.request.contextPath}/adapter">
-											<input type="hidden" name="serviceName" value="GetRole">
+											<input type="hidden" name="requested-action" value="GetRole">
 												<input type="hidden" name="path" value="ums/role/edit">
 												<input type="hidden" name="roleId" value="${current.roleId}">
 											<button class="btn btn-xs btn-warning" type="submit" title="Edit">
@@ -70,7 +70,7 @@
 										</form>
 										<c:if test="${current.roleStatus != 'DELETED'}">
 											<form method="get" action="${pageContext.request.contextPath}/adapter">
-												<input type="hidden" name="serviceName" value="GetRole">
+												<input type="hidden" name="requested-action" value="GetRole">
 												<input type="hidden" name="path" value="ums/role/delete">
 												<input type="hidden" name="roleId" value="${current.roleId}">
 												<button class="btn btn-xs btn-warning" type="submit" title="Delete">

@@ -1,6 +1,6 @@
 <%@include file="../../cmn/head.jsp"%>
 	<form method="post" action="${pageContext.request.contextPath}/adapter">
-		<input class="form-control" type="hidden" name="serviceName" value="InsertOption">
+		<input class="form-control" type="hidden" name="requested-action" value="InsertOption">
 
 		<div class="panel panel-info">
 			<div class="panel-heading">

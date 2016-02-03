@@ -1,5 +1,5 @@
 <form method="post" action="${pageContext.request.contextPath}/adapter">
-	<input type="hidden" name="serviceName" value="VerifyUser">
+	<input type="hidden" name="requested-action" value="VerifyUser">
 
 	<c:if test="${not empty umsSession}">
 		<input type="hidden" name="userId" value="${umsSession.userId}">

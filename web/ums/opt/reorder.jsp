@@ -1,7 +1,7 @@
 <%@ include file="../../cmn/head.jsp" %>
 <c:if test="${not empty optionsList}">
 <form method="post" action="${pageContext.request.contextPath}/adapter">
-	<input type="hidden" name="serviceName" value="ReorderOptions">
+	<input type="hidden" name="requested-action" value="ReorderOptions">
 	<div class="panel-group" id="accordion-outer">
 		<c:forEach items="${optionsList}" var="currentParent">
 			<c:if test="${currentParent.optionType == 'MENU'}">
@@ -67,7 +67,7 @@
 </c:if>
 
 	<%-- <form method="post" action="${pageContext.request.contextPath}/adapter" class="form-horizontal">
-		<input type="hidden" name="serviceName" value="ReorderOptions">
+		<input type="hidden" name="requested-action" value="ReorderOptions">
 
 		<c:if test="${not empty optionsList}">
 			<c:forEach items="${optionsList}" var="currentParent">

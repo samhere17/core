@@ -85,7 +85,7 @@
 		<antcall target="build.core.config.jar"></antcall>
 		
 		<!-- Building core conf generator to ${dist.dir}/dist/jar -->
-		<antcall target="build.core.generator.jar"></antcall>
+		<!-- <antcall target="build.core.generator.jar"></antcall> -->
 		
 		<!-- Building core war to ${dist.dir}/dist/war -->
 		<antcall target="build.core.war"></antcall>
@@ -193,10 +193,10 @@
 	    <path id="project.classpath">
 	        <fileset dir="${dist.dir}/dist/lib">
 	        	<include name="**/*.jar"/>
-	        </fileset>
-	        <fileset dir="${setup.dir}/files/dev/lib">
-	        	<include name="**/*.jar"/>
-	        </fileset>
+			</fileset>
+			<!-- <fileset dir="${setup.dir}/files/dev/lib">
+				<include name="**/*.jar"/>
+			</fileset> -->
 	    </path>
 
         <!-- Compiling java files -->
@@ -227,7 +227,7 @@
 			<exclude name="org/iq/service/cache/**" />
 			<exclude name="org/iq/service/system/**" />
 			<exclude name="org/iq/ums/service/**" />
-			<exclude name="org/iq/action/**" />
+			<!-- <exclude name="org/iq/action/**" /> -->
 			<exclude name="org/iq/ums/action/**" />
 			<exclude name="org/iq/gen/**" />
 			<manifest>
@@ -276,7 +276,7 @@
 	<target name="build.core.actions.jar">
 		<!-- Building the core actions jar and placing it in ${dist.dir}/dist/jar -->
 		<jar destfile="${dist.dir}/dist/jar/${proj.name}-${build.version}-actions.jar" basedir="${dist.dir}/temp/bin">
-			<include name="org/iq/action/**" />
+			<!-- <include name="org/iq/action/**" /> -->
 			<include name="org/iq/ums/action/**" />
 			<manifest>
 				<attribute name="Implementation-Title" value="${proj.name}-${build.version}-actions.jar" />

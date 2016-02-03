@@ -1,5 +1,5 @@
 <form class="" method="post" action="${pageContext.request.contextPath}/adapter">
-	<input type="hidden" name="serviceName" value="Authentication">
+	<input type="hidden" name="requested-action" value="Authentication">
 	<input type="hidden" name="jSessionId" value="${pageContext.session.id}">
 	<input type="hidden" name="accessIP" value="<%=request.getRemoteAddr()%>">
 	<input type="hidden" name="accessPort" value="<%=request.getRemotePort()%>">

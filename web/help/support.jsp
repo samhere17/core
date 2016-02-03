@@ -1,6 +1,6 @@
 <%@include file="../cmn/head.jsp" %>
 <form class="" action="" method="post">
-	<input type="hidden" name="serviceName" value="">
+	<input type="hidden" name="requested-action" value="">
 	<div class="panel panel-info">
 		<div class="panel-heading">
 			<div class="panel-title">Contact AMS Support</div>

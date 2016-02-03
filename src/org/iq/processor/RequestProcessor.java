@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.iq.Constants;
 import org.iq.ServiceConstants;
 import org.iq.SystemContext;
@@ -20,7 +20,7 @@ import org.iq.exception.RenderableException;
 import org.iq.exception.ServiceException;
 import org.iq.logger.LocalLogger;
 import org.iq.service.BaseService;
-import org.iq.service.ServicesDefinitions;
+import org.iq.service.Services;
 import org.iq.service.system.BaseSystemService;
 import org.iq.ums.exception.UmsException;
 import org.iq.ums.helper.UmsAuthenticationHelper;
@@ -234,7 +234,7 @@ public class RequestProcessor extends BaseProcessor {
 	private void prepareServiceClass(String requestedServiceName)
 			throws ServiceException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 		this.requestedServiceName = requestedServiceName;
-		String requestedServiceClassName = ServicesDefinitions.getServiceClassName(this.requestedServiceName);
+		String requestedServiceClassName = Services.getServiceClassName(this.requestedServiceName);
 		
 		if (StringUtil.isEmpty(requestedServiceClassName)) {
 			throw new ServiceException("Class name not found for requested service = " + this.requestedServiceName);
@@ -432,7 +432,7 @@ public class RequestProcessor extends BaseProcessor {
 
 		String systemServiceName = StringUtil.getStringValue(input.get(ServiceConstants.REQUESTED_SERVICE_NAME_KEY));
 
-		Class<?> serviceClass = Class.forName(ServicesDefinitions.getServiceClassName(systemServiceName));
+		Class<?> serviceClass = Class.forName(Services.getServiceClassName(systemServiceName));
 		BaseSystemService systemService = (BaseSystemService) serviceClass.newInstance();
 		systemService.setUmsSession(umsSession);
 		return systemService.executeService((HashMap<String, Object>) input);

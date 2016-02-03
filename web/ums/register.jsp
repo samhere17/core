@@ -1,5 +1,5 @@
 <form method="post" action="${pageContext.request.contextPath}/adapter">
-	<input type="hidden" name="serviceName" value="Registration">
+	<input type="hidden" name="requested-action" value="Registration">
 	<input type="hidden" name="remote_addr" value="<%=request.getRemoteAddr()%>">
 	<div class="panel panel-info">
 		<div class="panel-heading">

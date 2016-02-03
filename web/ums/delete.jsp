@@ -1,6 +1,6 @@
 <%@ include file="../../cmn/head.jsp" %>
 <form method="post" action="${pageContext.request.contextPath}/adapter">
-	<input type="hidden" name="serviceName" value="DeleteUser">
+	<input type="hidden" name="requested-action" value="DeleteUser">
 	<div class="alert alert-danger">
 		You are about to delete the following user
 	</div>

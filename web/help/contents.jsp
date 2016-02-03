@@ -2,7 +2,7 @@
 				<div class="form-container">
 					<form method="post"
 						action="${pageContext.request.contextPath}/adapter">
-						<input type="hidden" name="serviceName" value="" />
+						<input type="hidden" name="requested-action" value="" />
 						<div class="form-header">
 							<img
 								src="${pageContext.request.contextPath}/__sys/img/help-16-16.png"

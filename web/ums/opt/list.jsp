@@ -80,7 +80,7 @@
 									<div class="col-md-12 form-group">
 										<form method="get"
 											action="${pageContext.request.contextPath}/adapter" style="display: inline-block;">
-											<input type="hidden" name="serviceName" value="GetOption" />
+											<input type="hidden" name="requested-action" value="GetOption" />
 											<input type="hidden" name="path" value="ums/opt/edit" /> <input
 												type="hidden" name="optId" value="${currentParent.optionId}" />
 											<button class="btn btn-warning" type="submit">
@@ -100,7 +100,7 @@
 											test="${displayDelete and currentParent.optionStatus != 'DELETED'}">
 											<form method="get"
 												action="${pageContext.request.contextPath}/adapter" style="display: inline-block;">
-												<input type="hidden" name="serviceName" value="GetOption" />
+												<input type="hidden" name="requested-action" value="GetOption" />
 												<input type="hidden" name="path" value="ums/opt/delete" />
 												<input type="hidden" name="optId"
 													value="${currentParent.optionId}" />
@@ -182,7 +182,7 @@
 																			<div class="col-md-12 form-group">
 																				<form method="get"
 																					action="${pageContext.request.contextPath}/adapter" style="display: inline-block;">
-																					<input type="hidden" name="serviceName" value="GetOption" />
+																					<input type="hidden" name="requested-action" value="GetOption" />
 																					<input type="hidden" name="path" value="ums/opt/edit" /> <input
 																						type="hidden" name="optId" value="${currentChild.optionId}" />
 																					<button class="btn btn-warning" type="submit">
@@ -194,7 +194,7 @@
 																					test="${currentChild.optionStatus != 'DELETED'}">
 																					<form method="get"
 																						action="${pageContext.request.contextPath}/adapter" style="display: inline-block;">
-																						<input type="hidden" name="serviceName" value="GetOption" />
+																						<input type="hidden" name="requested-action" value="GetOption" />
 																						<input type="hidden" name="path" value="ums/opt/delete" />
 																						<input type="hidden" name="optId"
 																							value="${currentChild.optionId}" />
@@ -251,7 +251,7 @@
 																			<div class="col-md-12 form-group">
 																				<form method="get"
 																					action="${pageContext.request.contextPath}/adapter" style="display: inline-block;">
-																					<input type="hidden" name="serviceName" value="GetOption" />
+																					<input type="hidden" name="requested-action" value="GetOption" />
 																					<input type="hidden" name="path" value="ums/opt/edit" /> <input
 																						type="hidden" name="optId" value="${currentChild.optionId}" />
 																					<button class="btn btn-warning" type="submit">
@@ -263,7 +263,7 @@
 																					test="${currentChild.optionStatus != 'DELETED'}">
 																					<form method="get"
 																						action="${pageContext.request.contextPath}/adapter" style="display: inline-block;">
-																						<input type="hidden" name="serviceName" value="GetOption" />
+																						<input type="hidden" name="requested-action" value="GetOption" />
 																						<input type="hidden" name="path" value="ums/opt/delete" />
 																						<input type="hidden" name="optId"
 																							value="${currentChild.optionId}" />
