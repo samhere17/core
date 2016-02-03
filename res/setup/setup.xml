@@ -56,6 +56,7 @@
 		<echo message="Copying build scripts to build folder of the project" />
 		<copy todir="../build" verbose="true">
 			<fileset dir="${release.pkg.dir}/setup/files/build">
+				<present present="srconly" targetdir="../build" />
 				<include name="build.properties" />
 				<include name="build.xml" />
 			</fileset>

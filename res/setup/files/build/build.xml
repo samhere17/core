@@ -27,6 +27,7 @@
 		<substring srcstring="${proj.dir}" substring="${proj.root}" property="proj.name" />
 
 		<property name="src.dir" value="${proj.dir}/src" />
+		<property name="gen.dir" value="${proj.dir}/gen" />
 		<property name="web.dir" value="${proj.dir}/web" />
 		<property name="lib.dir" value="${proj.dir}/lib" />
 		<property name="res.dir" value="${proj.dir}/res" />
@@ -78,16 +79,6 @@
 
 		<delete dir="${dist.dir}/${proj.name}" />
 
-		<!-- <mkdir dir="${dist.dir}/${proj.name}" />
-		<mkdir dir="${dist.dir}/${proj.name}/war" /> -->
-
-		<!-- <mkdir dir="${dist.dir}/${proj.name}/temp/core/war" /> -->
-
-		<!-- <mkdir dir="${dist.dir}/${proj.name}/temp/bin" />
-		<mkdir dir="${dist.dir}/${proj.name}/temp/lib" />
-		<mkdir dir="${dist.dir}/${proj.name}/temp/conf" /> -->
-
-
 
 		<!-- Copying required supporting libraries to ${dist.dir}/${proj.name}/temp/lib -->
 		<antcall target="copy.libraries" />
@@ -101,24 +92,27 @@
 		<!-- Building app services jar ${dist.dir}/${proj.name}/temp/lib -->
 		<antcall target="build.app.services.jar" />
 
+		<!-- Building app actions jar ${dist.dir}/${proj.name}/temp/lib -->
+		<antcall target="build.app.actions.jar" />
+
 		<!-- Building app conf jar to ${dist.dir}/${proj.name}/temp/lib -->
 		<antcall target="build.app.config.jar" />
 
 		<!-- Copying app web content to ${dist.dir}/${proj.name}/temp/web -->
 		<antcall target="copy.app.web.content" />
-		
+
 		<!-- ADDING CONTENT FROM THE CORE WAR -->
-		
+
 		<!-- Extracting core war contents to ${dist.dir}/${proj.name}/temp/war-contents -->
 		<antcall target="extract.core.war" />
-		
+
 		<!-- Copying core lib content to ${dist.dir}/${proj.name}/temp/lib -->
 		<antcall target="copy.core.lib.content" />
-		
+
 		<!-- Copying core web content to ${dist.dir}/${proj.name}/temp/web -->
 		<antcall target="copy.core.web.content" />
-		
-		
+
+
 		<!-- Building app war to ${dist.dir}/${proj.name}/war -->
 		<antcall target="build.app.war" />
 
@@ -162,17 +156,23 @@
 			</fileset>
 		</path>
 
+		<!-- Preparing source path reference variable -->
+		<path id="src.path">
+			<pathelement location="${src.dir}" />
+			<pathelement location="${gen.dir}" />
+		</path>
+
 		<!-- Compiling java files -->
 		<echo message="Using Java version ${ant.java.version}." />
-		<echo message="Compiling java files present in ${src.dir}" />
 		<mkdir dir="${dist.dir}/${proj.name}/temp/bin" />
 		<javac
-			srcdir="${src.dir}"
 			destdir="${dist.dir}/${proj.name}/temp/bin"
 			classpathref="project.classpath"
 			debug="true"
 			debuglevel="lines,vars,source"
-			includeantruntime="false" />
+			includeantruntime="false">
+			<src refid="src.path" />
+		</javac>
 
 		<!-- Copying other resource files present in ${src.dir} to ${dist.dir}/${proj.name}/temp/bin -->
 		<echo message="Copying other resource files present in ${src.dir} to ${dist.dir}/${proj.name}/temp/bin" />
@@ -189,7 +189,8 @@
 		<!-- Building the app jar and placing it in ${dist.dir}/${proj.name}/temp/lib -->
 		<jar destfile="${dist.dir}/${proj.name}/temp/lib/${proj.name}-${build.version}.jar" basedir="${dist.dir}/${proj.name}/temp/bin">
 			<include name="**" />
-			<exclude name="com/iq/ams/service/**" />
+			<exclude name="com/iq/${proj.name}/service/**" />
+			<exclude name="com/iq/${proj.name}/action/**" />
 			<manifest>
 				<attribute name="Implementation-Title" value="${proj.name}-${build.version}.jar" />
 				<attribute name="Implementation-Vendor" value="${comp.name}" />
@@ -204,7 +205,7 @@
 	<target name="build.app.services.jar">
 		<!-- Building the app services jar and placing it in ${dist.dir}/${proj.name}/temp/lib -->
 		<jar destfile="${dist.dir}/${proj.name}/temp/lib/${proj.name}-${build.version}-services.jar" basedir="${dist.dir}/${proj.name}/temp/bin">
-			<include name="com/iq/ams/service/**" />
+			<include name="com/iq/${proj.name}/service/**" />
 			<manifest>
 				<attribute name="Implementation-Title" value="${proj.name}-${build.version}-services.jar" />
 				<attribute name="Implementation-Vendor" value="${comp.name}" />
@@ -214,7 +215,22 @@
 			</manifest>
 		</jar>
 	</target>
-	
+
+	<!-- Building app actions jar ${dist.dir}/${proj.name}/temp/lib -->
+	<target name="build.app.actions.jar">
+		<!-- Building the app actions jar and placing it in ${dist.dir}/${proj.name}/temp/lib -->
+		<jar destfile="${dist.dir}/${proj.name}/temp/lib/${proj.name}-${build.version}-actions.jar" basedir="${dist.dir}/${proj.name}/temp/bin">
+			<include name="com/iq/${proj.name}/action/**" />
+			<manifest>
+				<attribute name="Implementation-Title" value="${proj.name}-${build.version}-actions.jar" />
+				<attribute name="Implementation-Vendor" value="${comp.name}" />
+				<attribute name="Implementation-Version" value="${build.version}" />
+				<attribute name="Development-Version" value="${build.dev.version}" />
+				<attribute name="Implementation-Date" value="${build.date} ${build.time}" />
+			</manifest>
+		</jar>
+	</target>
+
 	<!-- Building app conf jar to ${dist.dir}/${proj.name}/temp/lib -->
 	<target name="build.app.config.jar">
 		<!-- Copying conf files present in ${proj.name} project to ${dist.dir}/${proj.name}/temp/conf -->
