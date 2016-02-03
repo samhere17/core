@@ -1,4 +1,0 @@
-<?xml version="1.0"?>
-<devtasks>
-    <taskdef resource="org/iq/gen/ant/devtasks.properties"/>
-</devtasks>
