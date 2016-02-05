@@ -80,6 +80,8 @@
 			<fileset dir="${release.pkg.dir}/jar">
 				<include name="*.jar" />
 				<exclude name="*core*-config.jar" />
+				<exclude name="*core*-actions.jar" />
+				<exclude name="*core*-services.jar" />
 			</fileset>
 			<!-- Copying required supporting jars to project /lib -->
 			<fileset dir="${release.pkg.dir}/lib">
