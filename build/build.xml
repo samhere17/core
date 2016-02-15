@@ -389,25 +389,13 @@
 	</target>
 	
 	<!-- Copying db scripts (if any) to ${dist.dir}/dist/sql -->
-	<target name="copy.db.scripts" depends="db.scripts.dir.check, do.copy.db.scripts, dont.copy.db.scripts"></target>
-	
-	<target name="do.copy.db.scripts" depends="db.scripts.dir.check" if="db.scripts.dir.exists">
+	<target name="copy.db.scripts">
 		<copy todir="${dist.dir}/dist/sql" verbose="true">
-			<fileset dir="${sql.dir}/${build.version}">
+			<fileset dir="${sql.dir}">
 				<include name="**/*.sql"/>
+				<include name="readme.txt"/>
 			</fileset>
 		</copy>
-	</target>
-	
-	<target name="dont.copy.db.scripts" depends="db.scripts.dir.check" unless="db.scripts.dir.exists">
-		<echo>${sql.dir}/${build.version} missing</echo>
-		<echo file="${dist.dir}/dist/sql/no-db-changes.txt">Version ${build.version} do not have any database changes.</echo>
-	</target>
-	
-	<target name="db.scripts.dir.check">
-		<condition property="db.scripts.dir.exists">
-			<available file="${sql.dir}/${build.version}" type="dir"/>
-		</condition>
 	</target>
 	
 	<!-- Copying setup files -->

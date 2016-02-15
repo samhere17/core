@@ -51,9 +51,11 @@ files is mentioned below in the SETTING UP APPLICATION section.
  
 
 5. sql				<DIR>
-The sql directory will either contain "<filename>.sql" file(s) if any
-database patch needs to be applied for this particular release ver.
-Otherwise it will contain a "no-db-changes.txt" file.
+The sql directory will contain a set of directories named
+"<version-number>" and each directory will contain "<filename>.sql"
+file(s) if any database change needs to be applied for that
+particular release version. There will also be a readme.txt with
+usage instructions.
 
 
 6. src				<DIR>
