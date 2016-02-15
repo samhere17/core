@@ -1,0 +1,66 @@
+{
+  "id" : "4eea2ed1-76b1-45df-9b0a-40a3633cbf13",
+  "name" : "Sample Module",
+  "description" : "This module is just a sample test module",
+  "pages" : [ {
+    "id" : "b37b2bab-fad7-4f9e-b7f8-26080329985a",
+    "name" : "First Page",
+    "description" : "This is the first page"
+  }, {
+    "id" : "d8309761-508c-4e16-9cd5-4b6c9261a3fb",
+    "name" : "Greetings Page",
+    "description" : "This is the greetings page"
+  }, {
+    "id" : "d385d2e6-5235-4600-8faa-b2ee5199bb83",
+    "name" : "Failure Page",
+    "description" : "This is the failure page"
+  } ],
+  "services" : [ {
+    "id" : "56f73549-2907-4e2b-8665-3596473cbf28",
+    "name" : "Greetings",
+    "description" : "This service will add a greetings to the input name"
+  } ],
+  "actions" : [ {
+    "@class" : "org.iq.core.gen.data.action.LaunchAction",
+    "id" : "98025fec-f25c-4ec3-8a28-518de78bab2b",
+    "name" : "Launch First Page",
+    "description" : "This action is used to launch the first page",
+    "sessionRequired" : false,
+    "actionType" : "LAUNCH",
+    "serviceName" : null,
+    "pageId" : "b37b2bab-fad7-4f9e-b7f8-26080329985a",
+    "redirectUrl" : null
+  }, {
+    "@class" : "org.iq.core.gen.data.action.LaunchAction",
+    "id" : "61898fe8-b50f-410c-82b2-c58ebb0ae11d",
+    "name" : "Launch Greetings Page",
+    "description" : "This action is used to launch the greetings page",
+    "sessionRequired" : false,
+    "actionType" : "LAUNCH",
+    "serviceName" : null,
+    "pageId" : "d8309761-508c-4e16-9cd5-4b6c9261a3fb",
+    "redirectUrl" : null
+  }, {
+    "@class" : "org.iq.core.gen.data.action.LaunchAction",
+    "id" : "fa4b719f-9eca-48b1-ac9b-fba568529b88",
+    "name" : "Launch Failure Page",
+    "description" : "This action is used to launch the failure page",
+    "sessionRequired" : false,
+    "actionType" : "LAUNCH",
+    "serviceName" : null,
+    "pageId" : "d385d2e6-5235-4600-8faa-b2ee5199bb83",
+    "redirectUrl" : null
+  }, {
+    "@class" : "org.iq.core.gen.data.action.SubmitAction",
+    "id" : "711949b2-d872-4f76-92f7-09d020938742",
+    "name" : "Submit First Page",
+    "description" : "This action is used to submit the first page",
+    "sessionRequired" : true,
+    "actionType" : "SUBMIT",
+    "serviceName" : "56f73549-2907-4e2b-8665-3596473cbf28",
+    "launchActionIdMap" : {
+      "Submit Failure" : "fa4b719f-9eca-48b1-ac9b-fba568529b88",
+      "Submit Success" : "61898fe8-b50f-410c-82b2-c58ebb0ae11d"
+    }
+  } ]
+}

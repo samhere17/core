@@ -20,6 +20,8 @@
 
 		<!-- Copying version.properties to org/iq/version package -->
 		<antcall target="copy.version.properties"/>
+		
+		<mkdir dir="../gen"/>
 
 		<!-- Copying build scripts to project/build -->
 		<antcall target="copy.build.scripts"/>
@@ -29,6 +31,9 @@
 
 		<!-- Copying resources to project/res -->
 		<antcall target="copy.resources"/>
+
+		<!-- Copying resources to project/generator -->
+		<antcall target="copy.generator"/>
 
 		<!-- Creating project/sql/0.0.0.0 -->
 		<antcall target="create.sql.dir"/>
@@ -96,6 +101,17 @@
 		<copy todir="../res/conf" verbose="true">
 			<fileset dir="${release.pkg.dir}/conf">
 				<present present="srconly" targetdir="../res/conf" />
+				<include name="**/**" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- Copying required resources to project/generator -->
+	<target name="copy.generator">
+		<echo message="Copying generator to generator folder of the project" />
+		<copy todir="../generator" verbose="true">
+			<fileset dir="${release.pkg.dir}/setup/files/generator">
+				<present present="srconly" targetdir="../generator" />
 				<include name="**/**" />
 			</fileset>
 		</copy>
