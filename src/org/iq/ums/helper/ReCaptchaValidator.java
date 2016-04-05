@@ -8,6 +8,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Scanner;
 
+import org.iq.ums.UmsContext;
 import org.iq.ums.exception.UmsException;
 import org.iq.util.StringUtil;
 
@@ -20,21 +21,13 @@ public class ReCaptchaValidator {
 
 	private String privateKey = null;
 
-	//for testing from office
-	private String proxyHost = "proxy.techm";
-	private String proxyPort = "80";
-
 	/**
 	 * 
 	 */
 	public ReCaptchaValidator() {
-		//for testing from office
-		if (StringUtil.isEmpty(proxyHost) == false) {
-			System.setProperty("http.proxyHost", proxyHost);
-		}
-		//for testing from office
-		if (StringUtil.isEmpty(proxyPort) == false) {
-			System.setProperty("http.proxyPort", proxyPort);
+		if (UmsContext.umsConfig.isUmsUseProxy()) {
+			System.setProperty("http.proxyHost", UmsContext.umsConfig.getUmsProxyHost());
+			System.setProperty("http.proxyPort", StringUtil.getStringValue(UmsContext.umsConfig.getUmsProxyPort()));
 		}
 	}
 
@@ -147,21 +140,5 @@ public class ReCaptchaValidator {
 	 */
 	public void setPrivateKey(String privateKey) {
 		this.privateKey = privateKey;
-	}
-
-	/**
-	 * @param proxyHost
-	 *            the proxyHost to set
-	 */
-	public void setProxyHost(String proxyHost) {
-		this.proxyHost = proxyHost;
-	}
-
-	/**
-	 * @param proxyPort
-	 *            the proxyPort to set
-	 */
-	public void setProxyPort(String proxyPort) {
-		this.proxyPort = proxyPort;
 	}
 }
