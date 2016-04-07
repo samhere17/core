@@ -10,7 +10,7 @@ import org.iq.action.SubmitAction;
  * @author Sam
  * 
  */
-@Action(name = "Authentication")
+@Action(id = "Authentication")
 public class AuthenticationSA extends SubmitAction {
 
 	/**
@@ -28,13 +28,6 @@ public class AuthenticationSA extends SubmitAction {
 	public AuthenticationSA() {
 		setName("Authentication");
 		setServiceName("Authentication");
-		
-		/*
-		 * Preparing the launch actions map
-		 */
-		addLaunchAction(LOGIN_SUCCESS_ACTION_KEY, new LoginSuccessLA());
-		addLaunchAction(LOGIN_FAILURE_ACTION_KEY, new LoginFailureLA());
-		addLaunchAction(LOGIN_VERIFY_ACTION_KEY, new LoginVerifyLA());
 		
 		setSessionNotRequired();
 	}

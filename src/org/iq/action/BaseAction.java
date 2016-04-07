@@ -4,7 +4,6 @@
 package org.iq.action;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 /**
  * @author Sam
@@ -17,7 +16,7 @@ public abstract class BaseAction implements Serializable, Cloneable {
 	 */
 	private static final long serialVersionUID = 5936157222059047864L;
 
-	private final String id = UUID.randomUUID().toString();
+	private String id;
 	private String name;
 	private boolean sessionRequired = true;
 
@@ -26,6 +25,13 @@ public abstract class BaseAction implements Serializable, Cloneable {
 	 */
 	public final String getId() {
 		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	protected final void setId(String id) {
+		this.id = id;
 	}
 
 	/**

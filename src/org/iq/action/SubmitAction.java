@@ -3,8 +3,7 @@
  */
 package org.iq.action;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  * @author Sam
@@ -18,7 +17,8 @@ public abstract class SubmitAction extends BaseAction {
 	private static final long serialVersionUID = -1193667392286754698L;
 	
 	private String serviceName;
-	private Map<String, LaunchAction> launchActionMap;
+//	private Map<String, String> launchActionIdMap;
+	private List<String> launchActionIdList;
 
 	/**
 	 * @return the serviceName
@@ -36,27 +36,41 @@ public abstract class SubmitAction extends BaseAction {
 	}
 	
 	/**
-	 * @return the launchActionMap
+	 * @return the launchActionIdList
 	 */
-	public final Map<String, LaunchAction> getLaunchActionMap() {
-		return launchActionMap;
+	public final List<String> getLaunchActionIdList() {
+		return launchActionIdList;
 	}
 
-	public final LaunchAction getLaunchAction(String actionKey) {
-		if (launchActionMap != null) {
-			return launchActionMap.get(actionKey);
+	/**
+	 * @param launchActionIdList the launchActionIdList to set
+	 */
+	protected final void setLaunchActionIdList(List<String> launchActionIdList) {
+		this.launchActionIdList = launchActionIdList;
+	}
+
+	/**
+	 * @return the launchActionMap
+	 */
+	/*public final Map<String, String> getLaunchActionIdMap() {
+		return launchActionIdMap;
+	}
+
+	public final String getLaunchActionId(String actionKey) {
+		if (launchActionIdMap != null) {
+			return launchActionIdMap.get(actionKey);
 		}
 		return null;
-	}
+	}*/
 
 	/**
 	 * @param actionKey
 	 * @param launchAction
 	 */
-	protected final void addLaunchAction(String actionKey, LaunchAction launchAction) {
-		if (launchActionMap == null) {
-			launchActionMap = new HashMap<String, LaunchAction>();
+	/*protected final void addLaunchActionId(String actionKey, String actionId) {
+		if (launchActionIdMap == null) {
+			launchActionIdMap = new HashMap<String, String>();
 		}
-		launchActionMap.put(actionKey, launchAction);
-	}
+		launchActionIdMap.put(actionKey, actionId);
+	}*/
 }

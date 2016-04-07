@@ -11,7 +11,7 @@ import org.iq.ums.UmsContext;
  * @author Sam
  * 
  */
-@Action(name = "LoginSuccess")
+@Action(id = "LoginSuccess")
 public class LoginSuccessLA extends LaunchAction {
 
 	/**
@@ -24,7 +24,10 @@ public class LoginSuccessLA extends LaunchAction {
 	 */
 	public LoginSuccessLA() {
 		super();
+		setId("LoginSuccess");
 		setName("LoginSuccess");
+		setServiceName("");
+		setPageId("");
 		setRedirectUrl(UmsContext.umsConfig.getLoginSuccessRedirectUrl());
 	}
 }

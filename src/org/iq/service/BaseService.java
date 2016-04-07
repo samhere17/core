@@ -27,7 +27,8 @@ public abstract class BaseService implements Cloneable, Serializable {
 	private HashMap<String, Object> resultMap = new HashMap<String, Object>();
 	protected HashMap<String, Object> resultAttributes = new HashMap<String, Object>();
 	protected String redirectUrl = null;
-	protected String redirectUrlKey = null;
+//	protected String redirectUrlKey = null;
+	protected String redirectLaunchActionId = null;
 //	protected DbSession dbSession = null;
 	protected UmsSession umsSession = null;
 	protected LocalLogger logger = null;
@@ -56,16 +57,32 @@ public abstract class BaseService implements Cloneable, Serializable {
 	/**
 	 * @return the redirectUrlKey
 	 */
-	public final String getRedirectUrlKey() {
+/*	public final String getRedirectUrlKey() {
 		return redirectUrlKey;
 	}
-
+*/
 	/**
 	 * @param redirectUrlKey
 	 *            the redirectUrlKey to set
 	 */
-	protected final void setRedirectUrlKey(String redirectUrlKey) {
+/*	protected final void setRedirectUrlKey(String redirectUrlKey) {
 		this.redirectUrlKey = redirectUrlKey;
+	}
+*/	
+	
+
+	/**
+	 * @return the redirectLaunchActionId
+	 */
+	public final String getRedirectLaunchActionId() {
+		return redirectLaunchActionId;
+	}
+
+	/**
+	 * @param redirectLaunchActionId the redirectLaunchActionId to set
+	 */
+	protected final void setRedirectLaunchActionId(String redirectLaunchActionId) {
+		this.redirectLaunchActionId = redirectLaunchActionId;
 	}
 
 	/**

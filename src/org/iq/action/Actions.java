@@ -9,6 +9,8 @@ import java.util.Properties;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import org.iq.exception.ServiceException;
+import org.iq.util.StringUtil;
 import org.iq.version.Version;
 
 /**
@@ -45,7 +47,7 @@ final public class Actions {
 								Class<?> clazz = Class.forName(classname);
 								if (clazz.isAnnotationPresent(Action.class)) {
 									Action action = clazz.getAnnotation(Action.class);
-									actions.put(action.name(), clazz.getName());
+									actions.put(action.id(), clazz.getName());
 								}
 							} catch (Throwable e) {
 								System.out.println("WARNING: failed to instantiate " + classname + " from " + name);
@@ -61,9 +63,29 @@ final public class Actions {
 	}
 	
 	/**
-	 * 
+	 * @param actionId
+	 * @return String
 	 */
-	public static String getActionClassName(String requestedActionName) {
-		return actions.getProperty(requestedActionName);
+	public static String getActionClassName(String actionId) {
+		return actions.getProperty(actionId);
+	}
+	
+	/**
+	 * @param actionId
+	 * @return BaseAction
+	 * @throws ServiceException
+	 * @throws ClassNotFoundException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
+	public static BaseAction getActionClass(String actionId)
+			throws ServiceException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+		String requestedActionClassName = getActionClassName(actionId);
+
+		if (StringUtil.isEmpty(requestedActionClassName)) {
+			throw new ServiceException("Class name not found for requested action id = " + actionId);
+		}
+		Class<?> actionClass = Class.forName(requestedActionClassName);
+		return (BaseAction) actionClass.newInstance();
 	}
 }

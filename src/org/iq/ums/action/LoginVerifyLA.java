@@ -10,7 +10,7 @@ import org.iq.action.LaunchAction;
  * @author Sam
  * 
  */
-@Action(name = "LoginVerify")
+@Action(id = "LoginVerify")
 public class LoginVerifyLA extends LaunchAction {
 
 	/**
@@ -23,7 +23,10 @@ public class LoginVerifyLA extends LaunchAction {
 	 */
 	public LoginVerifyLA() {
 		super();
+		setId("LoginVerify");
 		setName("LoginVerify");
+		setServiceName("");
+		setPageId("");
 		setRedirectUrl("verify");
 	}
 }

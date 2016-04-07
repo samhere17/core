@@ -130,7 +130,7 @@ public class RequestProcessor extends BaseProcessor {
 		resultMap = new HashMap<String, Object>();
 
 		try {
-			prepareActionClass();
+			requestedAction = Actions.getActionClass(requestedActionName);
 			
 			if (requestedAction.isSessionRequired()) {
 				CacheHelper cacheHelper = new CacheHelper();
@@ -208,23 +208,6 @@ public class RequestProcessor extends BaseProcessor {
 	
 
 	/**
-	 * @throws ServiceException
-	 * @throws ClassNotFoundException
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
-	 */
-	private void prepareActionClass()
-			throws ServiceException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-		String requestedActionClassName = Actions.getActionClassName(requestedActionName);
-
-		if (StringUtil.isEmpty(requestedActionClassName)) {
-			throw new ServiceException("Class name not found for requested action = " + requestedActionName);
-		}
-		Class<?> actionClass = Class.forName(requestedActionClassName);
-		requestedAction = (BaseAction) actionClass.newInstance();
-	}
-
-	/**
 	 * @param requestedServiceName
 	 * @throws ServiceException
 	 * @throws ClassNotFoundException
@@ -297,17 +280,14 @@ public class RequestProcessor extends BaseProcessor {
 				prepareServiceClass(submitAction.getServiceName());
 				resultMap = executeService(inputMap);
 
-				processLaunchAction(submitAction.getLaunchAction(requestedService.getRedirectUrlKey()));
+				processLaunchAction(
+						(LaunchAction) Actions.getActionClass(requestedService.getRedirectLaunchActionId()));
 
 			} else {
-
 				throw new ServiceException("Submit Action must have a Service Name");
-
 			}
 		} else {
-
 			throw new ServiceException("Submit Action cannot be null");
-
 		}
 	}
 

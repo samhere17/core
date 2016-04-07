@@ -72,18 +72,21 @@ public class AuthenticationService extends BaseService {
 		/* If login was successful */
 		if(umsSession.isSessionValid()) {
 //			redirectUrl = UmsContext.umsConfig.getLoginSuccessRedirectUrl();
-			setRedirectUrlKey(AuthenticationSA.LOGIN_SUCCESS_ACTION_KEY);
+//			setRedirectUrlKey(AuthenticationSA.LOGIN_SUCCESS_ACTION_KEY);
+			setRedirectLaunchActionId(AuthenticationSA.LOGIN_SUCCESS_ACTION_KEY);
 		}
 
 		/* If login was unsuccessful */
 		else {
 //			redirectUrl = UmsContext.umsConfig.getLoginFailureRedirectUrl();
-			setRedirectUrlKey(AuthenticationSA.LOGIN_FAILURE_ACTION_KEY);
+//			setRedirectUrlKey(AuthenticationSA.LOGIN_FAILURE_ACTION_KEY);
+			setRedirectLaunchActionId(AuthenticationSA.LOGIN_FAILURE_ACTION_KEY);
 		}
 
 		if(umsSession.getUserStatus() == UserStatus.NEW) {
 //			redirectUrl = "verify.jsp";
-			setRedirectUrlKey(AuthenticationSA.LOGIN_VERIFY_ACTION_KEY);
+//			setRedirectUrlKey(AuthenticationSA.LOGIN_VERIFY_ACTION_KEY);
+			setRedirectLaunchActionId(AuthenticationSA.LOGIN_VERIFY_ACTION_KEY);
 		}
 
 		LocalLogger.logMethodEnd();

@@ -11,7 +11,7 @@ import org.iq.ums.UmsContext;
  * @author Sam
  * 
  */
-@Action(name = "LoginFailure")
+@Action(id = "LoginFailure")
 public class LoginFailureLA extends LaunchAction {
 
 	/**
@@ -24,7 +24,10 @@ public class LoginFailureLA extends LaunchAction {
 	 */
 	public LoginFailureLA() {
 		super();
+		setId("LoginFailure");
 		setName("LoginFailure");
+		setServiceName("");
+		setPageId("");
 		setRedirectUrl(UmsContext.umsConfig.getLoginFailureRedirectUrl());
 	}
 }
