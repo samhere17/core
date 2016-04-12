@@ -19,6 +19,11 @@ final public class UmsConfig extends BaseConfig {
 	private String				umsDbUser;
 	private String				umsDbPass;
 	private String				umsDbName;
+
+	private Boolean				umsUseProxy;
+	private String				umsProxyHost;
+	private Short				umsProxyPort;
+
 	private String				umsAnnexSecurityClass;
 
 	private String				registerSuccessRedirectUrl;
@@ -45,6 +50,11 @@ final public class UmsConfig extends BaseConfig {
 		private static final String	UMS_DB_USER_KEY							= "iq.ums.db.user";
 		private static final String	UMS_DB_PASS_KEY							= "iq.ums.db.pass";
 		private static final String	UMS_DB_NAME_KEY							= "iq.ums.db.name";
+		
+		private static final String	UMS_USE_PROXY							= "iq.ums.use.proxy";
+		private static final String	UMS_PROXY_HOST							= "iq.ums.proxy.host";
+		private static final String	UMS_PROXY_PORT							= "iq.ums.proxy.port";
+
 		private static final String	UMS_ANNEX_SECURITY_CLASS_KEY			= "iq.ums.annex.security.class";
 
 		private static final String	UMS_REGISTER_SUCCESS_REDIRECT_URL_KEY	= "register.success.redirect.url";
@@ -74,6 +84,11 @@ final public class UmsConfig extends BaseConfig {
 			setUmsDbUser(properties.getProperty(UMS_DB_USER_KEY));
 			setUmsDbPass(properties.getProperty(UMS_DB_PASS_KEY));
 			setUmsDbName(properties.getProperty(UMS_DB_NAME_KEY));
+			
+			setUmsUseProxy(Boolean.valueOf(properties.getProperty(UMS_USE_PROXY)));
+			setUmsProxyHost(properties.getProperty(UMS_PROXY_HOST));
+			String proxyPortStr = StringUtil.getStringValue(properties.getProperty(UMS_PROXY_PORT));
+			setUmsProxyPort(Short.valueOf(StringUtil.isEmpty(proxyPortStr) ? "-1" : proxyPortStr));
 
 			setUmsAnnexSecurityClass(properties.getProperty(UMS_ANNEX_SECURITY_CLASS_KEY));
 
@@ -137,6 +152,27 @@ final public class UmsConfig extends BaseConfig {
 	 */
 	public String getUmsDbName() {
 		return umsDbName;
+	}
+
+	/**
+	 * @return the umsUseProxy
+	 */
+	public Boolean isUmsUseProxy() {
+		return umsUseProxy;
+	}
+
+	/**
+	 * @return the umsProxyHost
+	 */
+	public String getUmsProxyHost() {
+		return umsProxyHost;
+	}
+
+	/**
+	 * @return the umsProxyPort
+	 */
+	public Short getUmsProxyPort() {
+		return umsProxyPort;
 	}
 
 	/**
@@ -206,6 +242,27 @@ final public class UmsConfig extends BaseConfig {
 	 */
 	private void setUmsDbName(String umsDbName) {
 		this.umsDbName = umsDbName;
+	}
+	
+	/**
+	 * @param umsUseProxy the umsUseProxy to set
+	 */
+	private void setUmsUseProxy(Boolean umsUseProxy) {
+		this.umsUseProxy = umsUseProxy;
+	}
+
+	/**
+	 * @param umsProxyHost the umsProxyHost to set
+	 */
+	private void setUmsProxyHost(String umsProxyHost) {
+		this.umsProxyHost = umsProxyHost;
+	}
+
+	/**
+	 * @param umsProxyPort the umsProxyPort to set
+	 */
+	private void setUmsProxyPort(Short umsProxyPort) {
+		this.umsProxyPort = umsProxyPort;
 	}
 
 	/**
