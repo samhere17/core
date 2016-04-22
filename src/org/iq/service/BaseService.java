@@ -88,7 +88,7 @@ public abstract class BaseService implements Cloneable, Serializable {
 	/**
 	 * @param input
 	 * @return HashMap
-	 * @throws AmspServiceException
+	 * @throws ServiceException
 	 */
 	public abstract void execute(HashMap<String, Object> input)
 			throws ServiceException;
@@ -96,7 +96,7 @@ public abstract class BaseService implements Cloneable, Serializable {
 	/**
 	 * @param input
 	 * @return HashMap
-	 * @throws AmspServiceException
+	 * @throws ServiceException
 	 */
 	public HashMap<String, Object> executeService(HashMap<String, Object> input)
 			throws ServiceException {
@@ -111,7 +111,7 @@ public abstract class BaseService implements Cloneable, Serializable {
 
 	/**
 	 * @param input
-	 * @throws AmspServiceException
+	 * @throws ServiceException
 	 */
 	public void init(HashMap<String, Object> input) throws ServiceException {
 //		dbSession = DbSessionFactory.getDbSession();
@@ -120,7 +120,7 @@ public abstract class BaseService implements Cloneable, Serializable {
 	/**
 	 * @param input
 	 * @param key
-	 * @throws AmspServiceException
+	 * @throws ServiceException
 	 */
 	protected void validateInput(HashMap<String, Object> input, String key)
 			throws ServiceException {
@@ -133,7 +133,7 @@ public abstract class BaseService implements Cloneable, Serializable {
 
 	/**
 	 * @param input
-	 * @throws AmspServiceException
+	 * @throws ServiceException
 	 */
 	protected void validateAllInput(HashMap<String, Object> input)
 			throws ServiceException {

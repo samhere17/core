@@ -3,7 +3,7 @@
 	<input type="hidden" name="requested-action" value="">
 	<div class="panel panel-info">
 		<div class="panel-heading">
-			<div class="panel-title">Contact AMS Support</div>
+			<div class="panel-title">Contact Support</div>
 		</div>
 		<div class="panel-body">
 			<div class="row">

@@ -51,7 +51,7 @@ public abstract class BaseSystemService implements Cloneable, Serializable {
 	/**
 	 * @param input
 	 * @return HashMap
-	 * @throws AmspServiceException
+	 * @throws ServiceException
 	 */
 	public abstract void execute(HashMap<String, Object> input)
 			throws ServiceException;
@@ -59,7 +59,7 @@ public abstract class BaseSystemService implements Cloneable, Serializable {
 	/**
 	 * @param input
 	 * @return HashMap
-	 * @throws AmspServiceException
+	 * @throws ServiceException
 	 */
 	public HashMap<String, Object> executeService(HashMap<String, Object> input)
 			throws ServiceException {
@@ -71,7 +71,7 @@ public abstract class BaseSystemService implements Cloneable, Serializable {
 
 	/**
 	 * @param input
-	 * @throws AmspServiceException
+	 * @throws ServiceException
 	 */
 	public void init(HashMap<String, Object> input) throws ServiceException {
 //		dbSession = DbSessionFactory.getDbSession();

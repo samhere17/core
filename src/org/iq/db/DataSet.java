@@ -323,10 +323,6 @@ public class DataSet {
 		HashMap<String, Object> row = rows.get(rowIndex);
 		Object val = row.get(columnName);
 		String retVal = (String) val;
-		/*
-		 * String retVal = null; if (val != null) { retVal =
-		 * AmspUtil.convertString(val.toString(), clientLocale); }
-		 */
 		return retVal;
 	}
 
@@ -454,10 +450,7 @@ public class DataSet {
 				bufferRead = new BufferedReader(clobData.getCharacterStream());
 
 				while ((ruleStr = bufferRead.readLine()) != null) {
-					ruleBuffer.append(/* AmspUtil.convertString( */ruleStr/*
-																			 * ,clientLocale
-																			 * )
-																			 */);
+					ruleBuffer.append(ruleStr);
 				}
 				retVal = ruleBuffer.toString();
 			} else {
