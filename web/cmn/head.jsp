@@ -12,7 +12,8 @@
 
         <%@ include file="styles.jsp" %>
 
-        <title>Apartment Management System</title>
+        <title>${systemConfig.applicationName}</title>
+        
     </head>
 
     <body>

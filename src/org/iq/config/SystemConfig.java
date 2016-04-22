@@ -18,6 +18,7 @@ final public class SystemConfig extends BaseConfig {
 	private static final String SYSTEM_CONFIG_NAME = "system";
 
 	private String applicationName;
+	private String applicationAlias;
 	private boolean userStartupActionsEnabled;
 
 	private String dbSessionClassname;
@@ -47,6 +48,7 @@ final public class SystemConfig extends BaseConfig {
 	class SystemConfigHandler extends PropertiesHandler<SystemConfig> {
 
 		private static final String APPLICATION_NAME_PARAM_KEY = "application.name";
+		private static final String APPLICATION_ALIAS_PARAM_KEY = "application.alias";
 		private static final String USER_STARTUP_ACTIONS_ENABLED_PARAM_KEY = "user.startup.actions.enabled";
 
 		private static final String DB_TYPE_PARAM_KEY = "db.type";
@@ -87,6 +89,7 @@ final public class SystemConfig extends BaseConfig {
 			 * Setting system level configurations
 			 */
 			setApplicationName(properties.getProperty(APPLICATION_NAME_PARAM_KEY, DEFAULT_APPLICATION_NAME));
+			setApplicationAlias(properties.getProperty(APPLICATION_ALIAS_PARAM_KEY, DEFAULT_APPLICATION_NAME));
 			setUserStartupActionsEnabled(Boolean.parseBoolean(properties
 					.getProperty(USER_STARTUP_ACTIONS_ENABLED_PARAM_KEY, DEFAULT_USER_STARTUP_ACTIONS_ENABLED)));
 
@@ -139,6 +142,13 @@ final public class SystemConfig extends BaseConfig {
 	 */
 	public String getApplicationName() {
 		return applicationName;
+	}
+
+	/**
+	 * @return the applicationAlias
+	 */
+	public String getApplicationAlias() {
+		return applicationAlias;
 	}
 
 	/**
@@ -266,6 +276,13 @@ final public class SystemConfig extends BaseConfig {
 	 */
 	private void setApplicationName(String applicationName) {
 		this.applicationName = applicationName;
+	}
+
+	/**
+	 * @param applicationAlias the applicationAlias to set
+	 */
+	private void setApplicationAlias(String applicationAlias) {
+		this.applicationAlias = applicationAlias;
 	}
 
 	/**

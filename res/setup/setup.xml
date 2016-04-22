@@ -44,9 +44,9 @@
 	<!-- Copying version.properties to org/iq/version package -->
 	<target name="copy.version.properties">
 		<echo message="Copying version.properties to org/iq/version package" />
-		<copy todir="../src/org/iq/version" verbose="true">
-			<fileset dir="${release.pkg.dir}/setup/files">
-				<include name="version.properties" />
+		<copy todir="../src" verbose="true">
+			<fileset dir="${release.pkg.dir}/setup/files/src">
+				<include name="**/version.properties" />
 			</fileset>
 		</copy>
 	</target>
@@ -55,7 +55,8 @@
 	<target name="copy.build.scripts">
 		<echo message="Copying build scripts to build folder of the project" />
 		<copy todir="../build" verbose="true">
-			<fileset dir="${release.pkg.dir}/setup/files">
+			<fileset dir="${release.pkg.dir}/setup/files/build">
+				<present present="srconly" targetdir="../build" />
 				<include name="build.properties" />
 				<include name="build.xml" />
 			</fileset>
@@ -106,7 +107,7 @@
 		<!-- Copying example index.html to project/web -->
 		<echo message="Copying example index.html to project/web" />
 		<copy todir="../web" verbose="true">
-			<fileset dir="${release.pkg.dir}/setup/files">
+			<fileset dir="${release.pkg.dir}/setup/files/web">
 				<present present="srconly" targetdir="../web" />
 				<include name="index.html" />
 			</fileset>

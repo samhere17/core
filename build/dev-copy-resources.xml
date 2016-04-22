@@ -3,7 +3,7 @@
 		
 		<property environment="env"/>
 		<property file="build.properties" />
-		<property name="context.dir" value="core" />
+		<property name="context.dir" value="oms" />
 		
 		<echo message="${env.CATALINA_HOME}"/>
 		<echo message="${web.dir}"/>
