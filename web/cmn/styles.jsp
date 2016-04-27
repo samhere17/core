@@ -6,6 +6,8 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/jquery-ui.structure.min.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/jquery-ui.theme.min.css">
 
+<!-- File drag and drop -->
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/core-file-drag-n-drop.css">
 
 <!-- Sidr -->
 <%-- <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sidr.light.css"> --%>

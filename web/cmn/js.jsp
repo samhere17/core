@@ -70,3 +70,6 @@
 				$(".panel-collapse.collapse").removeClass("in");
 			})
         </script>
+
+<!-- File drag and drop -->
+<script src="${pageContext.request.contextPath}/js/core-file-drag-n-drop.js"></script>
