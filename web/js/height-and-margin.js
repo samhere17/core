@@ -1,4 +1,12 @@
 $(window).on("load", function() {
+	adjustHeight()
+})
+
+$(window).resize(function() {
+	adjustHeight()
+})
+
+adjustHeight = function() {
 	var heightOfHeader = $("header").innerHeight()
 	var heightOfFooter = $("footer").innerHeight()
 	var height = $(window).height() - heightOfHeader - heightOfFooter
@@ -12,4 +20,4 @@ $(window).on("load", function() {
 	/* Setting the margin */
 	$("main").css("height", height)
 	$("aside").css("height", height)
-})
+}
