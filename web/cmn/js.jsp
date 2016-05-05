@@ -18,8 +18,6 @@
         <script src="${pageContext.request.contextPath}/js/bootstrap-toggle.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/sidr.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/touchwipe.min.js"></script>
-        <script src="${pageContext.request.contextPath}/js/tablesorter.min.js"></script>
-        <script src="${pageContext.request.contextPath}/js/custom-table-sorter.js"></script>
         <%-- <script src="${pageContext.request.contextPath}/js/custom-sidr.js"></script> --%>
 
 
@@ -73,3 +71,8 @@
 
 <!-- File drag and drop -->
 <script src="${pageContext.request.contextPath}/js/core-file-drag-n-drop.js"></script>
+
+<!-- Tables -->
+<script src="${pageContext.request.contextPath}/js/core-table.js"></script>
+<script src="${pageContext.request.contextPath}/js/tablesorter.min.js"></script>
+<%-- <script src="${pageContext.request.contextPath}/js/custom-table-sorter.js"></script> --%>

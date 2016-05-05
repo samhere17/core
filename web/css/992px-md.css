@@ -28,19 +28,3 @@ ul.nav > li > a {
 	display: flex;
 	align-items: flex-end;
 }
-
-footer {
-	background-color: #dddddd;
-	height: 25px;
-	padding: 5px;
-}
-
-footer #status-bar {
-	display: flex;
-	justify-content: flex-start;
-}
-
-footer #copyright-strip {
-	display: flex;
-	justify-content: flex-end;
-}
