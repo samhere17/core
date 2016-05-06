@@ -27,6 +27,7 @@
         <script src="${pageContext.request.contextPath}/js/height-and-margin.js"></script>
         <script src="${pageContext.request.contextPath}/js/bootstrap-filestyle.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/validation.js"></script>
+		<script src="${pageContext.request.contextPath}/js/oms.js"></script>
 
         <script>
             $(".dropdown-menu").click(function(e) {
