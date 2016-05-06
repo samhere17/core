@@ -8,16 +8,14 @@ ul.nav > li > a {
 
 footer {
 	background-color: #dddddd;
-	height: 25px;
+	/* height: 25px; */
 	padding: 5px;
 }
 
 footer #status-bar {
-	display: flex;
 	justify-content: flex-start;
 }
 
 footer #copyright-strip {
-	display: flex;
 	justify-content: flex-end;
 }
