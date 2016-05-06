@@ -189,7 +189,7 @@
 		<!-- Building the app jar and placing it in ${dist.dir}/${proj.name}/temp/lib -->
 		<jar destfile="${dist.dir}/${proj.name}/temp/lib/${proj.name}-${build.version}.jar" basedir="${dist.dir}/${proj.name}/temp/bin">
 			<include name="**" />
-			<exclude name="com/iq/ams/service/**" />
+			<exclude name="com/iq/*/service/**" />
 			<manifest>
 				<attribute name="Implementation-Title" value="${proj.name}-${build.version}.jar" />
 				<attribute name="Implementation-Vendor" value="${comp.name}" />
@@ -204,7 +204,7 @@
 	<target name="build.app.services.jar">
 		<!-- Building the app services jar and placing it in ${dist.dir}/${proj.name}/temp/lib -->
 		<jar destfile="${dist.dir}/${proj.name}/temp/lib/${proj.name}-${build.version}-services.jar" basedir="${dist.dir}/${proj.name}/temp/bin">
-			<include name="com/iq/ams/service/**" />
+			<include name="com/iq/*/service/**" />
 			<manifest>
 				<attribute name="Implementation-Title" value="${proj.name}-${build.version}-services.jar" />
 				<attribute name="Implementation-Vendor" value="${comp.name}" />
