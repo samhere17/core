@@ -65,8 +65,12 @@ final public class Actions {
 	/**
 	 * @param actionId
 	 * @return String
+	 * @throws ServiceException 
 	 */
-	public static String getActionClassName(String actionId) {
+	public static String getActionClassName(String actionId) throws ServiceException {
+		if (StringUtil.isEmpty(actionId)) {
+			throw new ServiceException("Requested action id cannot be null or blank");
+		}
 		return actions.getProperty(actionId);
 	}
 	

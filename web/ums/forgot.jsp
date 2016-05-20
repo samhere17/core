@@ -2,7 +2,7 @@
 	<div class="panel panel-info">
 		<div class="panel-heading">
 			<h4 class="panel-title">
-				Enter email address
+				Forgot Password
 			</h4>
 		</div>
 
@@ -10,7 +10,7 @@
 			<div class="row">
 				<div class="col-md-12">
 					<div class="form-group has-feedback">
-						<label class="control-label" for="email">Registered email address</label>
+						<label class="control-label" for="email">Registered Email</label>
 						<input id="email" class="form-control" type="email" name="email" required>
 
 						<span class="glyphicon glyphicon-ok form-control-feedback hidden"></span>

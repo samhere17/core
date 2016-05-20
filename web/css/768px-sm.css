@@ -6,12 +6,6 @@ ul.nav > li > a {
 	line-height: 30px;
 }
 
-footer {
-	background-color: #dddddd;
-	/* height: 25px; */
-	padding: 5px;
-}
-
 footer #status-bar {
 	justify-content: flex-start;
 }

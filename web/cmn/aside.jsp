@@ -1,5 +1,5 @@
 <aside class="col-md-3 hidden-xs hidden-sm">
-	<div class="panel panel-info">
+	<%-- <div class="panel panel-info">
 		<div class="panel-heading">
 			<div class="panel-title">
 				<span class="fa fa-users fa-fw"></span> Community <c:if test="${true}"><span class="fa fa-asterisk fa-fw pull-right"></span></c:if>
@@ -81,14 +81,14 @@
 		<div class="panel-body">
 			Information
 		</div>
-	</div>
+	</div> --%>
 
 	<div class="panel panel-danger">
 		<div class="panel-heading">
-			<div class="panel-title">Toolbox Name</div>
+			<div class="panel-title">Dangerous Alert</div>
 		</div>
 		<div class="panel-body">
-			Information
+			Dangerous stuff occurred!!!
 		</div>
 	</div>
 </aside>

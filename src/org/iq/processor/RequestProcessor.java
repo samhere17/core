@@ -369,6 +369,7 @@ public class RequestProcessor extends BaseProcessor {
 			umsSession = (UmsSession) cacheHelper.getElement("UMS_SESSIONS", jSessionId);
 
 			if(umsSession == null) {
+				resultMap.put(ServiceConstants.REDIRECT_URL, SystemContext.systemConfig.getWebContextRoot());
 				return returnMap;
 			}
 

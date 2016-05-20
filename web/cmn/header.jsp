@@ -41,10 +41,16 @@
 										<li class="container-fluid">
 											<div class="row">
 												<div class="col-md-3 col-xs-3">
-													<form method="post" action="${pageContext.request.contextPath}/adapter">
-														<input type="hidden" name="requested-action" value="GetUser">
+													<%-- <a href="${pageContext.request.contextPath}/adapter?requested-action=UserDetails" data-launch-action="UserDetails">
+														<input class="btn btn-sm btn-primary" type="button" value="View Profile">
+													</a> --%>
+													<a href="javascript:void(0)" data-launch-action="UserDetails">
+														<input class="btn btn-sm btn-primary" type="button" value="View Profile">
+													</a>
+													<%-- <form method="get" action="${pageContext.request.contextPath}/adapter">
+														<input type="hidden" name="requested-action" value="UserDetails">
 														<input class="btn btn-sm btn-primary" type="submit" value="View Profile">
-													</form>
+													</form> --%>
 												</div>
 
 												<div class="col-md-3 col-xs-3 col-md-offset-1 col-xs-offset-2">
@@ -123,10 +129,16 @@
 										<li class="container-fluid">
 											<div class="row">
 												<div class="col-sm-3">
-													<form method="post" action="${pageContext.request.contextPath}/adapter">
-														<input type="hidden" name="requested-action" value="GetUser">
+													<%-- <a href="${pageContext.request.contextPath}/adapter?requested-action=UserDetails">
+														<input class="btn btn-sm btn-primary" type="button" value="View Profile">
+													</a> --%>
+													<a href="javascript:void(0)" data-launch-action="UserDetails">
+														<input class="btn btn-sm btn-primary" type="button" value="View Profile">
+													</a>
+													<%-- <form method="get" action="${pageContext.request.contextPath}/adapter">
+														<input type="hidden" name="requested-action" value="UserDetails">
 														<input class="btn btn-sm btn-primary" type="submit" value="View Profile">
-													</form>
+													</form> --%>
 												</div>
 
 												<div class="col-sm-3 col-sm-offset-1">
