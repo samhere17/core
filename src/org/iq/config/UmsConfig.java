@@ -9,64 +9,68 @@ import org.iq.util.handlers.PropertiesHandler;
  * @author Sam
  */
 final public class UmsConfig extends BaseConfig {
-	private static final long	serialVersionUID	= -8595191746954249989L;
+	private static final long serialVersionUID = -8595191746954249989L;
 
-	private static final String	UMS_CONFIG_NAME		= "ums";
+	private static final String UMS_CONFIG_NAME = "ums";
 
-	private String				umsDbSessionClassName;
-	private String				umsDbHost;
-	private Short				umsDbPort;
-	private String				umsDbUser;
-	private String				umsDbPass;
-	private String				umsDbName;
+	private String umsDbSessionClassName;
+	private String umsDbHost;
+	private Short umsDbPort;
+	private String umsDbUser;
+	private String umsDbPass;
+	private String umsDbName;
 
-	private Boolean				umsUseProxy;
-	private String				umsProxyHost;
-	private Short				umsProxyPort;
+	private Boolean umsUseProxy;
+	private String umsProxyHost;
+	private Short umsProxyPort;
 
-	private String				umsAnnexSecurityClass;
+	private String umsAnnexSecurityClass;
 
-	private String				registerSuccessRedirectUrl;
-	private String				registerFailureRedirectUrl;
+	private String registerSuccessRedirectUrl;
+	private String registerFailureRedirectUrl;
 
-	private String				loginSuccessRedirectUrl;
-	private String				loginFailureRedirectUrl;
+	private String loginSuccessRedirectUrl;
+	private String loginFailureRedirectUrl;
 
-	private String				logoutSuccessRedirectUrl;
-	private String				logoutFailureRedirectUrl;
+	private String logoutSuccessRedirectUrl;
+	private String logoutFailureRedirectUrl;
 
 	/* For new users */
-	private int					newlyRegisteredDefaultRole;
+	private int newlyRegisteredDefaultRole;
 
+	private String validSessionContextRoot;
+	
 	public UmsConfig() throws ConfigException {
 		super(UMS_CONFIG_NAME);
 	}
 
 	class UmsConfigHandler extends PropertiesHandler<UmsConfig> {
 
-		private static final String	UMS_DB_TYPE_KEY							= "iq.ums.db.type";
-		private static final String	UMS_DB_HOST_KEY							= "iq.ums.db.host";
-		private static final String	UMS_DB_PORT_KEY							= "iq.ums.db.port";
-		private static final String	UMS_DB_USER_KEY							= "iq.ums.db.user";
-		private static final String	UMS_DB_PASS_KEY							= "iq.ums.db.pass";
-		private static final String	UMS_DB_NAME_KEY							= "iq.ums.db.name";
-		
-		private static final String	UMS_USE_PROXY							= "iq.ums.use.proxy";
-		private static final String	UMS_PROXY_HOST							= "iq.ums.proxy.host";
-		private static final String	UMS_PROXY_PORT							= "iq.ums.proxy.port";
+		private static final String UMS_DB_TYPE_KEY = "iq.ums.db.type";
+		private static final String UMS_DB_HOST_KEY = "iq.ums.db.host";
+		private static final String UMS_DB_PORT_KEY = "iq.ums.db.port";
+		private static final String UMS_DB_USER_KEY = "iq.ums.db.user";
+		private static final String UMS_DB_PASS_KEY = "iq.ums.db.pass";
+		private static final String UMS_DB_NAME_KEY = "iq.ums.db.name";
 
-		private static final String	UMS_ANNEX_SECURITY_CLASS_KEY			= "iq.ums.annex.security.class";
+		private static final String UMS_USE_PROXY = "iq.ums.use.proxy";
+		private static final String UMS_PROXY_HOST = "iq.ums.proxy.host";
+		private static final String UMS_PROXY_PORT = "iq.ums.proxy.port";
 
-		private static final String	UMS_REGISTER_SUCCESS_REDIRECT_URL_KEY	= "register.success.redirect.url";
-		private static final String	UMS_REGISTER_FAILURE_REDIRECT_URL_KEY	= "register.failure.redirect.url";
+		private static final String UMS_ANNEX_SECURITY_CLASS_KEY = "iq.ums.annex.security.class";
 
-		private static final String	UMS_LOGIN_SUCCESS_REDIRECT_URL_KEY		= "existinguser.login.success.redirect.url";
-		private static final String	UMS_LOGIN_FAILURE_REDIRECT_URL_KEY		= "existinguser.login.failure.redirect.url";
+		private static final String UMS_REGISTER_SUCCESS_REDIRECT_URL_KEY = "register.success.redirect.url";
+		private static final String UMS_REGISTER_FAILURE_REDIRECT_URL_KEY = "register.failure.redirect.url";
 
-		private static final String	UMS_LOGOUT_SUCCESS_REDIRECT_URL_KEY		= "logout.success.redirect.url";
-		private static final String	UMS_LOGOUT_FAILURE_REDIRECT_URL_KEY		= "logout.failure.redirect.url";
+		private static final String UMS_LOGIN_SUCCESS_REDIRECT_URL_KEY = "existinguser.login.success.redirect.url";
+		private static final String UMS_LOGIN_FAILURE_REDIRECT_URL_KEY = "existinguser.login.failure.redirect.url";
 
-		private static final String	NEWLY_REGISTERED_DEFAULT_ROLE			= "newuser.registration.default.role.id";
+		private static final String UMS_LOGOUT_SUCCESS_REDIRECT_URL_KEY = "logout.success.redirect.url";
+		private static final String UMS_LOGOUT_FAILURE_REDIRECT_URL_KEY = "logout.failure.redirect.url";
+
+		private static final String NEWLY_REGISTERED_DEFAULT_ROLE = "newuser.registration.default.role.id";
+
+		private static final String VALID_SESSION_CONTEXT_ROOT = "valid.session.context.root";
 
 		public UmsConfigHandler() {
 			super(confInputStream);
@@ -102,6 +106,8 @@ final public class UmsConfig extends BaseConfig {
 			setLogoutFailureRedirectUrl(properties.getProperty(UMS_LOGOUT_FAILURE_REDIRECT_URL_KEY));
 
 			setNewlyRegisteredDefaultRole(Integer.valueOf(properties.getProperty(NEWLY_REGISTERED_DEFAULT_ROLE)));
+			
+			setValidSessionContextRoot(properties.getProperty(VALID_SESSION_CONTEXT_ROOT));
 		}
 
 		@Override
@@ -335,6 +341,20 @@ final public class UmsConfig extends BaseConfig {
 
 	public void setLoginFailureRedirectUrl(String loginFailureRedirectUrl) {
 		this.loginFailureRedirectUrl = loginFailureRedirectUrl;
+	}
+
+	/**
+	 * @return the validSessionContextRoot
+	 */
+	public String getValidSessionContextRoot() {
+		return validSessionContextRoot;
+	}
+
+	/**
+	 * @param validSessionContextRoot the validSessionContextRoot to set
+	 */
+	public void setValidSessionContextRoot(String validSessionContextRoot) {
+		this.validSessionContextRoot = validSessionContextRoot;
 	}
 
 }

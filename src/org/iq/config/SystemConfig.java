@@ -18,6 +18,8 @@ final public class SystemConfig extends BaseConfig {
 	private static final String SYSTEM_CONFIG_NAME = "system";
 
 	private String applicationName;
+	private String applicationAlias;
+	private String applicationDesc;
 	private boolean userStartupActionsEnabled;
 
 	private String dbSessionClassname;
@@ -47,6 +49,9 @@ final public class SystemConfig extends BaseConfig {
 	class SystemConfigHandler extends PropertiesHandler<SystemConfig> {
 
 		private static final String APPLICATION_NAME_PARAM_KEY = "application.name";
+		private static final String APPLICATION_ALIAS_PARAM_KEY = "application.alias";
+		private static final String APPLICATION_DESC_PARAM_KEY = "application.desc";
+		
 		private static final String USER_STARTUP_ACTIONS_ENABLED_PARAM_KEY = "user.startup.actions.enabled";
 
 		private static final String DB_TYPE_PARAM_KEY = "db.type";
@@ -68,6 +73,7 @@ final public class SystemConfig extends BaseConfig {
 		private static final String MAIL_SMTP_PORT = "mail.smtp.port";
 
 		private static final String DEFAULT_APPLICATION_NAME = "Core Application::iquesters";
+		private static final String DEFAULT_APPLICATION_DESC = "This is an application built on the iquesters core framework";
 		private static final String DEFAULT_USER_STARTUP_ACTIONS_ENABLED = "false";
 		
 		private static final String WEB_CONTEXT_ROOT = "web.context.root"; 
@@ -87,6 +93,9 @@ final public class SystemConfig extends BaseConfig {
 			 * Setting system level configurations
 			 */
 			setApplicationName(properties.getProperty(APPLICATION_NAME_PARAM_KEY, DEFAULT_APPLICATION_NAME));
+			setApplicationAlias(properties.getProperty(APPLICATION_ALIAS_PARAM_KEY, DEFAULT_APPLICATION_NAME));
+			setApplicationDesc(properties.getProperty(APPLICATION_DESC_PARAM_KEY, DEFAULT_APPLICATION_DESC));
+			
 			setUserStartupActionsEnabled(Boolean.parseBoolean(properties
 					.getProperty(USER_STARTUP_ACTIONS_ENABLED_PARAM_KEY, DEFAULT_USER_STARTUP_ACTIONS_ENABLED)));
 
@@ -139,6 +148,20 @@ final public class SystemConfig extends BaseConfig {
 	 */
 	public String getApplicationName() {
 		return applicationName;
+	}
+
+	/**
+	 * @return the applicationAlias
+	 */
+	public String getApplicationAlias() {
+		return applicationAlias;
+	}
+	
+	/**
+	 * @return the applicationDesc
+	 */
+	public String getApplicationDesc() {
+		return applicationDesc;
 	}
 
 	/**
@@ -266,6 +289,20 @@ final public class SystemConfig extends BaseConfig {
 	 */
 	private void setApplicationName(String applicationName) {
 		this.applicationName = applicationName;
+	}
+
+	/**
+	 * @param applicationAlias the applicationAlias to set
+	 */
+	private void setApplicationAlias(String applicationAlias) {
+		this.applicationAlias = applicationAlias;
+	}
+
+	/**
+	 * @param applicationDesc the applicationDesc to set
+	 */
+	private void setApplicationDesc(String applicationDesc) {
+		this.applicationDesc = applicationDesc;
 	}
 
 	/**

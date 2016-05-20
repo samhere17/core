@@ -23,9 +23,11 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.iq.ServiceConstants;
+import org.iq.SystemContext;
 import org.iq.processor.RequestProcessor;
 import org.iq.processor.RequestProcessor.RequestType;
 import org.iq.ums.UmsConstants;
+import org.iq.ums.UmsContext;
 import org.iq.util.StringUtil;
 
 /**
@@ -291,6 +293,10 @@ public class ServerAdapter extends HttpServlet {
 		for(String paramName : paramNames) {
 			httpSession.setAttribute(paramName, resultMap.get(paramName));
 		}
+		
+		httpSession.setAttribute("systemConfig", SystemContext.systemConfig);
+		httpSession.setAttribute("umsConfig", UmsContext.umsConfig);
+		
 	}
 
 	/**

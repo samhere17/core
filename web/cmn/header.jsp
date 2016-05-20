@@ -5,11 +5,11 @@
 				<nav class="navbar navbar-inverse">
 					<div class="container-fluid">
 						<div class="navbar-header">
-							<ul class="nav navbar-nav navbar-right hidden-md hidden-lg">
+							<ul class="nav navbar-nav navbar-right hidden-sm hidden-md hidden-lg">
 								<li class="dropdown" id="logged-in-user-on-header">
 									<a href="#" class="dropdown-toggle text-center" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 										<img id="user-thumbnail" class="img-circle center-block" src="https://placehold.it/30x30">
-										<div class="hidden-sm hidden-xs">${umsSession.username}</div>
+										<%-- <div class="hidden-sm hidden-xs">${umsSession.username}</div> --%>
 									</a>
 
 									<ul class="dropdown-menu">
@@ -79,8 +79,8 @@
 								<span class="icon-bar"></span>
 							</button>
 
-							<a href="${pageContext.request.contextPath}/dashboard.jsp" class="navbar-brand hidden-xs hidden-sm">Apartment Management System</a>
-							<a href="${pageContext.request.contextPath}/dashboard.jsp" class="navbar-brand hidden-md hidden-lg">AMS</a>
+							<a href="${pageContext.request.contextPath}/${umsConfig.validSessionContextRoot}" class="navbar-brand hidden-xs hidden-sm">${systemConfig.applicationName}</a>
+							<a href="${pageContext.request.contextPath}/${umsConfig.validSessionContextRoot}" class="navbar-brand hidden-md hidden-lg">${systemConfig.applicationAlias}</a>
 						</div>
 
 						<div class="collapse navbar-collapse" id="menubar">
@@ -91,7 +91,7 @@
 								<li class="dropdown" id="logged-in-user">
 									<a href="#" class="dropdown-toggle text-center" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 										<img id="user-thumbnail" class="img-circle center-block" src="https://placehold.it/30x30">
-										<div>${umsSession.username}</div>
+										<div class="hidden-sm">${umsSession.username}</div>
 									</a>
 
 									<ul class="dropdown-menu">
@@ -122,14 +122,14 @@
 
 										<li class="container-fluid">
 											<div class="row">
-												<div class="col-md-3">
+												<div class="col-sm-3">
 													<form method="post" action="${pageContext.request.contextPath}/adapter">
 														<input type="hidden" name="requested-action" value="GetUser">
 														<input class="btn btn-sm btn-primary" type="submit" value="View Profile">
 													</form>
 												</div>
 
-												<div class="col-md-3 col-md-offset-1">
+												<div class="col-sm-3 col-sm-offset-1">
 													<form method="post" action="${pageContext.request.contextPath}/adapter">
 														<input type="hidden" name="requested-action" value="Logout">
 														<input type="hidden" name="jSessionId" value="${pageContext.session.id}">
@@ -162,7 +162,7 @@
 
 			<c:otherwise>
 				<c:if test="${pageContext.request.servletPath ne '/error.jsp'}">
-					<c:redirect url="/login.jsp" context="${pageContext.request.contextPath}"></c:redirect>
+					<c:redirect url="/${systemConfig.webContextRoot}" context="${pageContext.request.contextPath}"></c:redirect>
 				</c:if>
 			</c:otherwise>
 		</c:choose>
@@ -170,7 +170,7 @@
 
 	<c:otherwise>
 		<c:if test="${pageContext.request.servletPath ne '/error.jsp'}">
-			<c:redirect url="/login.jsp" context="${pageContext.request.contextPath}"></c:redirect>
+			<c:redirect url="/${systemConfig.webContextRoot}" context="${pageContext.request.contextPath}"></c:redirect>
 		</c:if>
 	</c:otherwise>
 </c:choose>
