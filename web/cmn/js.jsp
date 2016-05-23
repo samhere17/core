@@ -78,4 +78,5 @@
 <%-- <script src="${pageContext.request.contextPath}/js/custom-table-sorter.js"></script> --%>
 
 <!-- Hyperlinks -->
+<script src="${pageContext.request.contextPath}/js/core-client-adapter.js"></script>
 <script src="${pageContext.request.contextPath}/js/core-hyperlink.js"></script>

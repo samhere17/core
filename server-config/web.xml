@@ -3,8 +3,8 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
 	version="2.4">
 
-	<display-name>Apartment Management System</display-name>
-	<description>This is Apartment Management System application</description>
+	<display-name>Core Application::iquesters</display-name>
+	<description>This is an application built on the iquesters core framework</description>
 
 	<servlet>
 		<servlet-name>StartupServlet</servlet-name>
